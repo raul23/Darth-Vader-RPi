@@ -1,8 +1,6 @@
 import threading
 import time
 
-# import ipdb
-
 import pygame
 import RPi.GPIO as GPIO
 
