@@ -1,8 +1,12 @@
+import os
 import threading
 import time
 
 import pygame
 import RPi.GPIO as GPIO
+
+
+SOUNDS_DIR = os.path.expanduser('~/Data/star_wars_sound_effects')
 
 
 def run_leds_sequence(leds):
@@ -71,27 +75,32 @@ def start():
 	print("Loading songs...")
 	
 	# Darth Vader breathing sound
-	breathing_sound = pygame.mixer.Sound('darth_vader_breathing_GOOD.ogg')
+	print(os.path.join(SOUNDS_DIR, 'darth_vader_breathing_GOOD.ogg'))
+	breathing_sound = pygame.mixer.Sound(
+		os.path.join(SOUNDS_DIR, 'darth_vader_breathing_GOOD.ogg'))
 	channel1.play(breathing_sound, -1)  # loop indefinitely
 	
 	# Lightsaber sounds
-	lightsaber_open_sound = pygame.mixer.Sound('lightsaber_darth_vader_opening.ogg')
-	lightsaber_running_sound = pygame.mixer.Sound('lightsaber_darth_vader_running.ogg')
-	lightsaber_close_sound = pygame.mixer.Sound('lightsaber_darth_vader_retraction.ogg')
+	lightsaber_open_sound = pygame.mixer.Sound(
+		os.path.join(SOUNDS_DIR, 'lightsaber_darth_vader_opening.ogg'))
+	lightsaber_running_sound = pygame.mixer.Sound(
+		os.path.join(SOUNDS_DIR, 'lightsaber_darth_vader_running.ogg'))
+	lightsaber_close_sound = pygame.mixer.Sound(
+		os.path.join(SOUNDS_DIR, 'lightsaber_darth_vader_retraction.ogg'))
 	
 	# Imperial March song
 	# imperial_march_song = pygame.mixer.Sound('song_the_imperial_march.ogg')
 	
 	# Darth Vader quotes
-	quotes = []
-	quotes.append(pygame.mixer.Sound('quote_i_am_your_father_1.ogg'))
-	quotes.append(pygame.mixer.Sound('quote_i_am_your_father_2_with_music_at_the_end.ogg'))
-	quotes.append(pygame.mixer.Sound('quote_dont_make_me_destroy_you.ogg'))
-	quotes.append(pygame.mixer.Sound('quote_give_yourself_to_the_dark_side.ogg'))
-	quotes.append(pygame.mixer.Sound('quote_if_you_only_knew_the_power_of_the_dark_side.ogg'))
-	quotes.append(pygame.mixer.Sound('quote_nooooo.ogg'))
-	quotes.append(pygame.mixer.Sound('quote_there_is_no_escape.ogg'))
-	quotes.append(pygame.mixer.Sound('quote_your_lack_of_faith_is_disturbing.ogg'))
+	quotes = [
+		pygame.mixer.Sound(os.path.join(SOUNDS_DIR, 'quote_i_am_your_father_1.ogg')),
+		pygame.mixer.Sound(os.path.join(SOUNDS_DIR, 'quote_i_am_your_father_2_with_music_at_the_end.ogg')),
+		pygame.mixer.Sound(os.path.join(SOUNDS_DIR, 'quote_dont_make_me_destroy_you.ogg')),
+		pygame.mixer.Sound(os.path.join(SOUNDS_DIR, 'quote_give_yourself_to_the_dark_side.ogg')),
+		pygame.mixer.Sound(os.path.join(SOUNDS_DIR, 'quote_if_you_only_knew_the_power_of_the_dark_side.ogg')),
+		pygame.mixer.Sound(os.path.join(SOUNDS_DIR, 'quote_nooooo.ogg')),
+		pygame.mixer.Sound(os.path.join(SOUNDS_DIR, 'quote_there_is_no_escape.ogg')),
+		pygame.mixer.Sound(os.path.join(SOUNDS_DIR, 'quote_your_lack_of_faith_is_disturbing.ogg'))]
 	
 	leds = {'top': top_led, 'middle': middle_led, 'bottom': bottom_led}
 	th = threading.Thread(target=run_leds_sequence, args=(leds,))
