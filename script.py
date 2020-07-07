@@ -131,7 +131,7 @@ def start():
 	except KeyboardInterrupt:
 		print("\nExiting...")
 		
-	print("Cleanup")
+	print("Cleanup...")
 	th.do_run = False
 	th.join()
 	off(top_led)
