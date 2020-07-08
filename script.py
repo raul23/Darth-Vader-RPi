@@ -138,6 +138,7 @@ def start():
 				time.sleep(0.2)		
 	except Exception as e:
 		print("Error: ", e)
+		print("\nExiting...")
 	except KeyboardInterrupt:
 		print("\nExiting...")
 		
