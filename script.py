@@ -89,8 +89,8 @@ def start():
 		os.path.join(SOUNDS_DIR, 'lightsaber_darth_vader_retraction.ogg'))
 	
 	# Imperial March song
-	imperial_march_song = pygame.mixer.Sound(
-		os.path.join(SOUNDS_DIR, 'song_the_imperial_march.ogg'))
+	#imperial_march_song = pygame.mixer.Sound(
+	#	os.path.join(SOUNDS_DIR, 'song_the_imperial_march.ogg'))
 	
 	# Darth Vader quotes
 	quotes = [
