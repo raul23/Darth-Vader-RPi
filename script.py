@@ -129,7 +129,6 @@ def start():
                 loaded_sounds['quotes'].append(
                     SoundWrapper(quote[0], quote[1], quote[2]))
     quotes = loaded_sounds['quotes']
-    ipdb.set_trace()
 
     leds = {'top': top_led, 'middle': middle_led, 'bottom': bottom_led}
     th = threading.Thread(target=run_leds_sequence, args=(leds,))
