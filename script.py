@@ -2,10 +2,8 @@ import os
 import threading
 import time
 
-import ipdb
-
 import pygame
-# import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 
 
 SOUNDS_DIR = os.path.expanduser('~/Data/star_wars_sound_effects/ogg')
@@ -63,15 +61,12 @@ def start():
     print("Starting...")
 
     print("RPi initialization...")
-    """
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
-    """
     # LEDs
     top_led = 11
     middle_led = 9
     bottom_led = 10
-    """
     GPIO.setup(top_led, GPIO.OUT)
     GPIO.setup(middle_led, GPIO.OUT)
     GPIO.setup(bottom_led, GPIO.OUT)
@@ -80,7 +75,6 @@ def start():
     GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.setup(24, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.setup(25, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    """
 
     print("pygame initialization...")
     pygame.init()
