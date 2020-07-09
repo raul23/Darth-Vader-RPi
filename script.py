@@ -72,8 +72,7 @@ def start():
     channel2 = pygame.mixer.Channel(1)
     channel3 = pygame.mixer.Channel(3)
 
-    print("Loading songs...")
-
+    print("Loading sound effects...")
     # Darth Vader breathing sound
     print(os.path.join(SOUNDS_DIR, 'darth_vader_breathing_GOOD.ogg'))
     breathing_sound = pygame.mixer.Sound(
@@ -89,10 +88,15 @@ def start():
         os.path.join(SOUNDS_DIR, 'lightsaber_darth_vader_retraction.ogg'))
 
     # Imperial March song
-    # imperial_march_song = pygame.mixer.Sound(
-    # os.path.join(SOUNDS_DIR, 'song_the_imperial_march.ogg'))
+    print("Loading song...")
+    imperial_march_song = None
+    """
+    imperial_march_song = pygame.mixer.Sound(
+        os.path.join(SOUNDS_DIR, 'song_the_imperial_march.ogg'))
+    """
 
     # Darth Vader quotes
+    print("Loading quotes...")
     quotes = [
         pygame.mixer.Sound(os.path.join(SOUNDS_DIR, 'quote_i_am_your_father_1.ogg')),
         pygame.mixer.Sound(os.path.join(SOUNDS_DIR, 'quote_i_am_your_father_2_with_music_at_the_end.ogg')),
@@ -128,7 +132,7 @@ def start():
                 time.sleep(0.2)
             elif not GPIO.input(24):
                 print("Button 24 pressed...")
-                # channel2.play(imperial_march_song)
+                channel2.play(imperial_march_song)
                 time.sleep(0.2)
             elif not GPIO.input(25):
                 print("Button 25 pressed...")
@@ -155,4 +159,5 @@ def start():
     channel3.stop()
 
 
-start()
+if __name__ == 'main':
+    start()
