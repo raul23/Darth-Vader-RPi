@@ -3,7 +3,6 @@ import threading
 import time
 
 import pygame
-import RPi.GPIO as GPIO
 
 
 SOUNDS_DIR = os.path.expanduser('~/Data/star_wars_sound_effects/ogg')
@@ -25,36 +24,36 @@ class SoundWrapper:
         self.channel.stop()
 
 
-def run_leds_sequence(leds):
+def run_led_sequence(led_channels):
     t = threading.currentThread()
     seq_idx = 0
-    sequence = [[leds['top'], leds['bottom']],
-                [leds['top']],
-                [leds['bottom']],
-                [leds['middle'], leds['bottom']],
-                [leds['middle']],
-                [leds['top'], leds['middle']],
-                [leds['top'], leds['middle'], leds['bottom']]]
+    sequence = [[led_channels['top'], led_channels['bottom']],
+                [led_channels['top']],
+                [led_channels['bottom']],
+                [led_channels['middle'], led_channels['bottom']],
+                [led_channels['middle']],
+                [led_channels['top'], led_channels['middle']],
+                [led_channels['top'], led_channels['middle'], led_channels['bottom']]]
     while getattr(t, "do_run", True):
-        list_leds = sequence[seq_idx % len(sequence)]
+        leds_step = sequence[seq_idx % len(sequence)]
         seq_idx += 1
-        turn_off(leds['top'])
-        turn_off(leds['middle'])
-        turn_off(leds['bottom'])
-        for led in list_leds:
-            turn_on(led)
+        turn_off_led(led_channels['top'])
+        turn_off_led(led_channels['middle'])
+        turn_off_led(led_channels['bottom'])
+        for channel in leds_step:
+            turn_on_led(channel)
         time.sleep(2)
-    print("Stopping thread")
+    print("Stopping thread: run_leds_sequence()")
 
 
-def turn_off(led):
-    print("LED {} off".format(led))
-    GPIO.output(led, GPIO.LOW)
+def turn_off_led(channel):
+    # print("LED {} off".format(led))
+    GPIO.output(channel, GPIO.LOW)
 
 
-def turn_on(led):
-    print("LED {} on".format(led))
-    GPIO.output(led, GPIO.HIGH)
+def turn_on_led(channel):
+    # print("LED {} on".format(led))
+    GPIO.output(channel, GPIO.HIGH)
 
  
 def start():
@@ -70,15 +69,11 @@ def start():
     GPIO.setup(top_led, GPIO.OUT)
     GPIO.setup(middle_led, GPIO.OUT)
     GPIO.setup(bottom_led, GPIO.OUT)
-    GPIO.setup(22, GPIO.OUT)
+    GPIO.setup(22, GPIO.OUT)  # lightsaber
     # Buttons
-    GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.setup(24, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.setup(25, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-
-    print("pygame initialization...")
-    pygame.init()
-    pygame.mixer.init()
+    GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # lightsaber
+    GPIO.setup(24, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # song
+    GPIO.setup(25, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # quotes
 
     ### Sound
     # Create separate channel
@@ -97,7 +92,7 @@ def start():
          channel3, False),
         ('lightsaber_close_sound', 'lightsaber_darth_vader_retraction.ogg',
          channel3, False),
-        # ('imperial_march_song', 'song_the_imperial_march.ogg', channel2, False),
+        ('imperial_march_song', 'song_the_imperial_march.ogg', channel2, False),
         {'quotes': [
             ('i_am_your_father',
              'quote_i_am_your_father_2_with_music_at_the_end.ogg',
@@ -130,52 +125,53 @@ def start():
                     SoundWrapper(quote[0], quote[1], quote[2]))
     quotes = loaded_sounds['quotes']
 
-    leds = {'top': top_led, 'middle': middle_led, 'bottom': bottom_led}
-    th = threading.Thread(target=run_leds_sequence, args=(leds,))
+    led_channels = {'top': top_led, 'middle': middle_led, 'bottom': bottom_led}
+    th = threading.Thread(target=run_led_sequence, args=(led_channels,))
     th.start()
 
     print("Press any button")
     pressed_lightsaber = False
     quote_idx = 0
+
     try:
         while True:
             if not GPIO.input(23):
-                print("Button 23 pressed...")
+                # print("Button 23 pressed...")
                 if pressed_lightsaber:
                     pressed_lightsaber = False
                     loaded_sounds['lightsaber_close_sound'].play()
                     time.sleep(0.3)
-                    turn_off(22)
+                    turn_off_led(22)
                 else:
                     pressed_lightsaber = True
                     loaded_sounds['lightsaber_open_sound'].play()
                     loaded_sounds['lightsaber_running_sound'].play(-1)
                     time.sleep(0.3)
-                    turn_on(22)
+                    turn_on_led(22)
                 time.sleep(0.2)
             elif not GPIO.input(24):
-                print("Button 24 pressed...")
+                # print("Button 24 pressed...")
                 loaded_sounds['imperial_march_song'].play()
                 time.sleep(0.2)
             elif not GPIO.input(25):
-                print("Button 25 pressed...")
+                # print("Button 25 pressed...")
                 quote = quotes[quote_idx % len(quotes)]
                 quote_idx += 1
                 quote.play()
                 time.sleep(0.2)
     except Exception as e:
-        print("Error: ", e)
-        print("\nExiting...")
+        print("\nError: ", e)
+        print("Exiting...")
     except KeyboardInterrupt:
         print("\nExiting...")
 
     print("Cleanup...")
     th.do_run = False
     th.join()
-    turn_off(top_led)
-    turn_off(middle_led)
-    turn_off(bottom_led)
-    turn_off(22)
+    turn_off_led(top_led)
+    turn_off_led(middle_led)
+    turn_off_led(bottom_led)
+    turn_off_led(22)
     GPIO.cleanup()
     channel1.stop()
     channel2.stop()
@@ -183,4 +179,12 @@ def start():
 
 
 if __name__ == '__main__':
+    debug = True
+    if debug:
+        print("pygame initialization...")
+        pygame.init()
+        pygame.mixer.init()
+        import SimulRPi.GPIO as GPIO
+    else:
+        import RPi.GPIO as GPIO
     start()
