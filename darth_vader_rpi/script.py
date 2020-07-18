@@ -1,10 +1,17 @@
+import json
+import logging
 import os
 import threading
 import time
 
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 
+from logging import NullHandler
 
+
+logger = logging.getLogger(__name__)
+logger.addHandler(NullHandler())
 SOUNDS_DIR = os.path.expanduser('~/Data/star_wars_sound_effects/ogg')
 
 
@@ -43,23 +50,23 @@ def run_led_sequence(led_channels):
         for channel in leds_step:
             turn_on_led(channel)
         time.sleep(2)
-    print("Stopping thread: run_leds_sequence()")
+    logger.info("Stopping thread: run_leds_sequence()")
 
 
 def turn_off_led(channel):
-    # print("LED {} off".format(led))
+    # logger.debug("LED {} off".format(led))
     GPIO.output(channel, GPIO.LOW)
 
 
 def turn_on_led(channel):
-    # print("LED {} on".format(led))
+    # logger.debug("LED {} on".format(led))
     GPIO.output(channel, GPIO.HIGH)
 
  
 def start():
-    print("Starting...")
+    logger.info("Starting...")
 
-    print("RPi initialization...")
+    logger.info("RPi initialization...")
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
     # LEDs
@@ -110,16 +117,16 @@ def start():
          }
     ]
     loaded_sounds = {}
-    print("Loading sound effects...")
+    logger.info("Loading sound effects...")
     for s in sounds_to_load:
         if isinstance(s, tuple):
-            print("Loading {}...".format(s[0]))
+            logger.info("Loading {}...".format(s[0]))
             loaded_sounds.setdefault(s[0], SoundWrapper(s[0], s[1], s[2]))
             if s[3]:
                 loaded_sounds[s[0]].play(s[4])
         else:
             for quote in s['quotes']:
-                print("Loading {}...".format(quote[0]))
+                logger.info("Loading {}...".format(quote[0]))
                 loaded_sounds.setdefault('quotes', [])
                 loaded_sounds['quotes'].append(
                     SoundWrapper(quote[0], quote[1], quote[2]))
@@ -129,14 +136,14 @@ def start():
     th = threading.Thread(target=run_led_sequence, args=(led_channels,))
     th.start()
 
-    print("Press any button")
+    logger.info("Press any button")
     pressed_lightsaber = False
     quote_idx = 0
 
     try:
         while True:
             if not GPIO.input(23):
-                # print("Button 23 pressed...")
+                logger.debug("Button 23 pressed...")
                 if pressed_lightsaber:
                     pressed_lightsaber = False
                     loaded_sounds['lightsaber_close_sound'].play()
@@ -150,22 +157,22 @@ def start():
                     turn_on_led(22)
                 time.sleep(0.2)
             elif not GPIO.input(24):
-                # print("Button 24 pressed...")
+                logger.debug("Button 24 pressed...")
                 loaded_sounds['imperial_march_song'].play()
                 time.sleep(0.2)
             elif not GPIO.input(25):
-                # print("Button 25 pressed...")
+                logger.debug("Button 25 pressed...")
                 quote = quotes[quote_idx % len(quotes)]
                 quote_idx += 1
                 quote.play()
                 time.sleep(0.2)
     except Exception as e:
-        print("\nError: ", e)
-        print("Exiting...")
+        logger.exception("\nError: ", e)
+        logger.warning("Exiting...")
     except KeyboardInterrupt:
-        print("\nExiting...")
+        logger.warning("\nExiting...")
 
-    print("Cleanup...")
+    logger.info("Cleanup...")
     th.do_run = False
     th.join()
     turn_off_led(top_led)
@@ -179,7 +186,17 @@ def start():
 
 
 if __name__ == '__main__':
-    print("pygame initialization...")
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+    # Setup console handler
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.DEBUG)
+
+    formatter = logging.Formatter("%(levelname)-8s %(message)s")
+    ch.setFormatter(formatter)
+    logger.addHandler(ch)
+
+    logger.info("pygame initialization...")
     pygame.init()
     pygame.mixer.init()
 
