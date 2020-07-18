@@ -133,3 +133,6 @@ dmypy.json
 
 # macOS files
 .DS_Store
+
+# Test files/folders
+testing/

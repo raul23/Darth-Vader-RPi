@@ -185,10 +185,7 @@ if __name__ == '__main__':
 
     debug = True
     if debug:
-        # import multiprocessing
-        # multiprocessing.set_start_method('spawn')
         import SimulRPi.GPIO as GPIO
-        # GPIO.gpio.start()
     else:
         import RPi.GPIO as GPIO
 
