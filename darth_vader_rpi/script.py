@@ -174,10 +174,14 @@ def start():
     except Exception as e:
         logger.exception(msg_with_spaces("Error: {}".format(e)))
         logger.info(msg_with_spaces("Exiting..."))
+        # logger.info("Error: {}".format(e))
+        # logger.info("Exiting...")
     except KeyboardInterrupt:
         logger.info(msg_with_spaces("Exiting..."))
+        # logger.info("Exiting...")
 
     logger.info(msg_with_spaces("Cleanup..."))
+    # logger.info("Cleanup...")
     turn_off_led(top_led)
     turn_off_led(middle_led)
     turn_off_led(bottom_led)
