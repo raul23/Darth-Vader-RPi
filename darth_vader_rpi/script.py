@@ -31,6 +31,10 @@ class SoundWrapper:
         self.channel.stop()
 
 
+def msg_with_spaces(msg, nb_spaces=20):
+    return "{}{}".format(msg, " " * nb_spaces)
+
+
 def run_led_sequence(led_channels):
     t = threading.currentThread()
     seq_idx = 0
@@ -118,7 +122,7 @@ def start():
     ]
     loaded_sounds = {}
     logger.info("Loading sound effects")
-    for s in sounds_to_load:
+    for i, s in enumerate(sounds_to_load):
         if isinstance(s, tuple):
             logger.info("Loading {}...".format(s[0]))
             loaded_sounds.setdefault(s[0], SoundWrapper(s[0], s[1], s[2]))
@@ -137,7 +141,7 @@ def start():
     th.start()
 
     logger.info("")
-    logger.info("Press any button")
+    logger.info(msg_with_spaces("Press any button"))
     pressed_lightsaber = False
     quote_idx = 0
 
@@ -168,19 +172,19 @@ def start():
                 quote.play()
                 time.sleep(0.2)
     except Exception as e:
-        logger.exception("\nError: ", e)
-        logger.warning("Exiting...")
+        logger.exception(msg_with_spaces("Error: {}".format(e)))
+        logger.info(msg_with_spaces("Exiting..."))
     except KeyboardInterrupt:
-        logger.warning("\nExiting...")
+        logger.info(msg_with_spaces("Exiting..."))
 
-    logger.info("Cleanup...")
-    th.do_run = False
-    th.join()
+    logger.info(msg_with_spaces("Cleanup..."))
     turn_off_led(top_led)
     turn_off_led(middle_led)
     turn_off_led(bottom_led)
     turn_off_led(22)
     GPIO.cleanup()
+    th.do_run = False
+    th.join()
     channel1.stop()
     channel2.stop()
     channel3.stop()
@@ -188,7 +192,7 @@ def start():
 
 if __name__ == '__main__':
     logger = logging.getLogger(__name__)
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.INFO)
     # Setup console handler
     ch = logging.StreamHandler()
     ch.setLevel(logging.DEBUG)
