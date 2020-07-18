@@ -1,3 +1,4 @@
+import argparse
 import json
 import logging
 import os
@@ -8,6 +9,8 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 
 from logging import NullHandler
+
+from  darth_vader_rpi import __name__ as package_name, __version__
 
 
 logger = logging.getLogger(__name__)
@@ -55,6 +58,27 @@ def run_led_sequence(led_channels):
             turn_on_led(channel)
         time.sleep(2)
     logger.info("Stopping thread: run_leds_sequence()")
+
+
+def setup_argparser():
+    # Setup the parser
+    parser = argparse.ArgumentParser(
+        # usage="%(prog)s [OPTIONS]",
+        prog=package_name,
+        description='''\
+    WRITEME''',
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+    # ===============
+    # General options
+    # ===============
+    parser.add_argument("--version", action='version',
+                        version='%(prog)s {}'.format(__version__))
+    parser.add_argument("-q", "--quiet", action="store_true",
+                        help="Enable quiet mode, i.e. nothing will be print.")
+    parser.add_argument("-v", "--verbose", action="store_true",
+                        help="Print various debugging information, e.g. print "
+                             "traceback when there is an exception.")
+    return parser.parse_args()
 
 
 def turn_off_led(channel):
@@ -195,12 +219,14 @@ def start():
 
 
 if __name__ == '__main__':
+    args = setup_argparser()
+
+    # Setup logger
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
     # Setup console handler
     ch = logging.StreamHandler()
     ch.setLevel(logging.DEBUG)
-
     formatter = logging.Formatter("%(levelname)-8s %(message)s")
     ch.setFormatter(formatter)
     logger.addHandler(ch)
