@@ -64,9 +64,9 @@ def turn_on_led(channel):
 
  
 def start():
-    logger.info("Starting...")
+    logger.info("Starting")
 
-    logger.info("RPi initialization...")
+    logger.info("RPi initialization")
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
     # LEDs
@@ -117,7 +117,7 @@ def start():
          }
     ]
     loaded_sounds = {}
-    logger.info("Loading sound effects...")
+    logger.info("Loading sound effects")
     for s in sounds_to_load:
         if isinstance(s, tuple):
             logger.info("Loading {}...".format(s[0]))
@@ -136,6 +136,7 @@ def start():
     th = threading.Thread(target=run_led_sequence, args=(led_channels,))
     th.start()
 
+    logger.info("")
     logger.info("Press any button")
     pressed_lightsaber = False
     quote_idx = 0
@@ -143,7 +144,7 @@ def start():
     try:
         while True:
             if not GPIO.input(23):
-                logger.debug("Button 23 pressed...")
+                logger.debug("\n\nButton 23 pressed...")
                 if pressed_lightsaber:
                     pressed_lightsaber = False
                     loaded_sounds['lightsaber_close_sound'].play()
@@ -157,11 +158,11 @@ def start():
                     turn_on_led(22)
                 time.sleep(0.2)
             elif not GPIO.input(24):
-                logger.debug("Button 24 pressed...")
+                logger.debug("\n\nButton 24 pressed...")
                 loaded_sounds['imperial_march_song'].play()
                 time.sleep(0.2)
             elif not GPIO.input(25):
-                logger.debug("Button 25 pressed...")
+                logger.debug("\n\nButton 25 pressed...")
                 quote = quotes[quote_idx % len(quotes)]
                 quote_idx += 1
                 quote.play()
