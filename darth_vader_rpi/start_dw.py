@@ -1,7 +1,7 @@
 import argparse
 import codecs
 import json
-import logging
+import logging.config
 import os
 import threading
 import time
@@ -18,14 +18,12 @@ from darth_vader_rpi import __name__ as package_name, __version__, configs
 
 logger = logging.getLogger(__name__)
 logger.addHandler(NullHandler())
-SOUNDS_DIR = ""
 
 
 class SoundWrapper:
-    def __init__(self, name, filename, channel_obj):
+    def __init__(self, name, filepath, channel_obj):
         self.name = name
-        self.filename = filename
-        self.filepath = os.path.join(SOUNDS_DIR, filename)
+        self.filepath = filepath
         self.channel_obj = channel_obj
         # Load sound file
         self.pygame_sound = pygame.mixer.Sound(self.filepath)
@@ -146,36 +144,40 @@ def start(main_cfg):
     loaded_sounds = {}
     logger.info("Loading sound effects")
 
+    sounds_dir = os.path.expanduser(main_cfg_dict['sounds_directory'])
+
     def load_sounds(sounds):
-        for i, s in enumerate(sounds):
-            if s.get('quotes'):
-                for quote in s['quotes']:
+        for i, s_dict in enumerate(sounds):
+            if s_dict.get('quotes'):
+                for quote in s_dict['quotes']:
                     logger.info("Loading {}...".format(quote['name']))
                     loaded_sounds.setdefault('quotes', [])
+                    filepath = os.path.join(sounds_dir, quote['filename'])
                     channel_obj = channels[quote['channel']]
                     loaded_sounds['quotes'].append(
-                        SoundWrapper(quote['name'], quote['filename'], channel_obj))
+                        SoundWrapper(quote['name'], filepath, channel_obj))
             else:
-                if s.get('imperial_march_song'):
-                    s_list = [s]
+                if s_dict.get('imperial_march_song'):
+                    s_list = [s_dict]
                 else:
-                    s_list = s['sound_effects']
+                    s_list = s_dict['sound_effects']
                 for s in s_list:
                     sound = s.popitem()
                     sound_name = sound[0]
                     sound_info = sound[1]
                     logger.info("Loading {}...".format(sound[0]))
+                    filepath = os.path.join(sounds_dir, sound_info['filename'])
                     channel_obj = channels[sound_info['channel']]
                     loaded_sounds.setdefault(sound_name,
                                              SoundWrapper(sound_name,
-                                                          sound_info['filename'],
+                                                          filepath,
                                                           channel_obj))
                     if sound_info.get('play'):
                         loops = sound_info.get('loops', -1)
                         loaded_sounds[sound_name].play(loops)
 
-    sounds = [{"quotes": main_cfg['quotes']},
-              {"imperial_march_song": main_cfg['imperial_march_song']},
+    sounds = [{"imperial_march_song": main_cfg['imperial_march_song']},
+              {"quotes": main_cfg['quotes']},
               {"sound_effects": main_cfg['sound_effects']}]
     load_sounds(sounds)
     quotes = loaded_sounds['quotes']
@@ -240,21 +242,19 @@ def start(main_cfg):
 
 if __name__ == '__main__':
     args = setup_argparser()
+
+    # Load main config file
     main_cfg_filepath = os.path.join(configs.__path__[0], "main_cfg.json")
     main_cfg_dict = load_json(main_cfg_filepath)
-    SOUNDS_DIR = os.path.expanduser(main_cfg_dict['sounds_directory'])
-    logging_filepath = os.path.join(configs.__path__[0], "logging.json")
-    # log_dict = load_json(logging_filepath)
 
     # Setup logger
-    logger = logging.getLogger(__name__)
-    logger.setLevel(logging.INFO)
-    # Setup console handler
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.DEBUG)
-    formatter = logging.Formatter("%(levelname)-8s %(message)s")
-    ch.setFormatter(formatter)
-    logger.addHandler(ch)
+    logger_name = "{}.{}".format(
+        package_name,
+        os.path.splitext(__file__)[0])
+    logger = logging.getLogger(logger_name)
+    logging_filepath = os.path.join(configs.__path__[0], "logging.json")
+    log_dict = load_json(logging_filepath)
+    logging.config.dictConfig(log_dict)
 
     logger.info("pygame initialization...")
     pygame.init()
@@ -262,6 +262,7 @@ if __name__ == '__main__':
 
     if args.debug:
         import SimulRPi.GPIO as GPIO
+        GPIO.setkeys(main_cfg_dict['key_to_channel_mapping'])
         logger.info("Debug mode enabled")
     else:
         import RPi.GPIO as GPIO
