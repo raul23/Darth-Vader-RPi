@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "add_datetime": true,
+  "disable_existing_loggers": false,
+  "formatters":
+  {
+    "console":
+    {
+      "format": "[%(name)s] %(message)s"
+    },
+    "simple":
+    {
+      "format": "%(levelname)-8s %(message)s"
+    },
+    "verbose":
+    {
+      "format": "%(asctime)s | %(name)-42s | %(levelname)-8s | %(message)s"
+    }
+  },
+
+  "handlers":
+  {
+    "console":
+    {
+      "level": "INFO",
+      "class": "logging.StreamHandler",
+      "formatter": "simple"
+    },
+    "file":
+    {
+      "level": "INFO",
+      "class": "logging.FileHandler",
+      "filename": "debug.log",
+      "mode": "a",
+      "formatter": "simple"
+    }
+  },
+
+  "loggers":
+  {
+    "darth_vader_rpi.start_dw'":
+    {
+      "level": "INFO",
+      "handlers": ["console"],
+      "propagate": false
+    },
+    "SimulRPi.GPIO'":
+    {
+      "level": "INFO",
+      "handlers": ["console"],
+      "propagate": false
+    }
+  },
+
+  "root":
+  {
+    "level": "DEBUG",
+    "handlers": ["console"],
+    "propagate": false
+  }
+}

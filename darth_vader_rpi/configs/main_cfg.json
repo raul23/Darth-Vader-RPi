@@ -1,10 +1,13 @@
 {
   "debug_mode": false,
   "sounds_directory": "~/Data/star_wars_sound_effects/ogg",
-
   "channel1_volume": 0.2,
   "channel2_volume": 1.0,
   "channel3_volume": 1.0,
+  "imperial_march_song": {
+    "filename": "song_the_imperial_march.ogg",
+    "channel": 2
+  },
 
   "quotes": [
     {
@@ -44,15 +47,9 @@
     }
   ],
 
-  "imperial_march_song": {
-    "filename": "song_the_imperial_march.ogg",
-    "channel": 2
-  },
-
   "sound_effects": [
     {
-      "breathing_sound":
-      {
+      "breathing_sound": {
         "filename": "darth_vader_breathing_GOOD.ogg",
         "channel": 1,
         "play": true,
@@ -87,5 +84,12 @@
     "lightsaber_button": 23,
     "song_button": 24,
     "quotes_button": 25
+  },
+
+  "key_to_channel_mapping":
+  {
+    "f": 23,
+    "g": 24,
+    "h": 25
   }
 }
