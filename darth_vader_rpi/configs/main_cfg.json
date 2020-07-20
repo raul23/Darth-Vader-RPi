@@ -55,7 +55,7 @@
       {
         "filename": "darth_vader_breathing_GOOD.ogg",
         "channel": 1,
-        "play": false,
+        "play": true,
         "loops": -1
       }
     },

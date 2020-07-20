@@ -18,7 +18,7 @@ from darth_vader_rpi import __name__ as package_name, __version__, configs
 
 logger = logging.getLogger(__name__)
 logger.addHandler(NullHandler())
-SOUNDS_DIR = os.path.expanduser('~/Data/star_wars_sound_effects/ogg')
+SOUNDS_DIR = ""
 
 
 class SoundWrapper:
@@ -242,6 +242,7 @@ if __name__ == '__main__':
     args = setup_argparser()
     main_cfg_filepath = os.path.join(configs.__path__[0], "main_cfg.json")
     main_cfg_dict = load_json(main_cfg_filepath)
+    SOUNDS_DIR = os.path.expanduser(main_cfg_dict['sounds_directory'])
     logging_filepath = os.path.join(configs.__path__[0], "logging.json")
     # log_dict = load_json(logging_filepath)
 
