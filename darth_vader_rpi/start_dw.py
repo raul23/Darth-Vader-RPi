@@ -139,26 +139,21 @@ def start(main_cfg):
     channels[3].set_volume(main_cfg['channel3_volume'])
 
     loaded_sounds = {}
+    sounds_dir = os.path.expanduser(main_cfg_dict['sounds_directory'])
     logger.info("Loading sound effects...")
 
-    sounds_dir = os.path.expanduser(main_cfg_dict['sounds_directory'])
-
-    def load_sounds(sounds):
-        for i, s_dict in enumerate(sounds):
-            if s_dict.get('quotes'):
-                for quote in s_dict['quotes']:
+    def load_sounds():
+        for sound_type in ['quotes', 'songs', 'sound_effects']:
+            if sound_type == 'quotes':
+                for quote in main_cfg_dict[sound_type]:
                     logger.info("Loading {}".format(quote['name']))
                     loaded_sounds.setdefault('quotes', [])
                     filepath = os.path.join(sounds_dir, quote['filename'])
                     channel_obj = channels[quote['channel']]
                     loaded_sounds['quotes'].append(
                         SoundWrapper(quote['name'], filepath, channel_obj))
-            else:
-                if s_dict.get('imperial_march_song'):
-                    s_list = [s_dict]
-                else:
-                    s_list = s_dict['sound_effects']
-                for s in s_list:
+            elif sound_type in ['songs', 'sound_effects']:
+                for s in main_cfg_dict[sound_type]:
                     sound = s.popitem()
                     sound_name = sound[0]
                     sound_info = sound[1]
@@ -173,10 +168,7 @@ def start(main_cfg):
                         loops = sound_info.get('loops', -1)
                         loaded_sounds[sound_name].play(loops)
 
-    sounds = [{"imperial_march_song": main_cfg['imperial_march_song']},
-              {"quotes": main_cfg['quotes']},
-              {"sound_effects": main_cfg['sound_effects']}]
-    load_sounds(sounds)
+    load_sounds()
     quotes = loaded_sounds['quotes']
 
     led_channels = {'top': top_led, 'middle': middle_led, 'bottom': bottom_led}
@@ -238,7 +230,7 @@ def start(main_cfg):
 
 
 def override_config_with_args(config, args):
-    msg = "Config options overriden by command-line options:\n"
+    msg = "Config options overriden by command-line arguments:\n"
     count = 0
     for k, new_v in args.__dict__.items():
         old_v = config.get(k)
@@ -248,8 +240,8 @@ def override_config_with_args(config, args):
                 msg += "{}: {} --> {}".format(k, old_v, new_v)
                 count += 1
         else:
-            raise KeyError("Command-line option '{}' not found in JSON config "
-                           "file".format(k))
+            raise KeyError("Command-line argument '{}' not found in JSON "
+                           "config file".format(k))
     if count:
         logger.debug(msg)
 
