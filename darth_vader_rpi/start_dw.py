@@ -6,8 +6,6 @@ import os
 import threading
 import time
 
-# import ipdb
-
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 
@@ -256,6 +254,8 @@ if __name__ == '__main__':
     log_dict = load_json(logging_filepath)
     logging.config.dictConfig(log_dict)
 
+    # Override logging configuration with command-line arguments
+
     logger.info("pygame initialization...")
     pygame.init()
     pygame.mixer.init()
@@ -263,6 +263,8 @@ if __name__ == '__main__':
     if args.debug:
         import SimulRPi.GPIO as GPIO
         GPIO.setkeys(main_cfg_dict['key_to_channel_mapping'])
+        if args.quiet:
+            GPIO.disableprinting()
         logger.info("Debug mode enabled")
     else:
         import RPi.GPIO as GPIO
