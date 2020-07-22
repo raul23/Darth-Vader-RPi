@@ -48,6 +48,23 @@ def msg_with_spaces(msg, nb_spaces=20):
     return "{}{}".format(msg, " " * nb_spaces)
 
 
+def override_config_with_args(config, args):
+    msg = "Config options overriden by command-line arguments:\n"
+    count = 0
+    for k, new_v in args.__dict__.items():
+        old_v = config.get(k)
+        if old_v is not None:
+            if new_v != old_v:
+                config[k] = new_v
+                msg += "{}: {} --> {}".format(k, old_v, new_v)
+                count += 1
+        else:
+            raise KeyError("Command-line argument '{}' not found in JSON "
+                           "config file".format(k))
+    if count:
+        logger.debug(msg)
+
+
 def run_led_sequence(led_channels):
     # TODO: assert led_channels, i.e. keys (top, ...)
     t = threading.currentThread()
@@ -229,23 +246,6 @@ def start(main_cfg):
     channel3.stop()
 
 
-def override_config_with_args(config, args):
-    msg = "Config options overriden by command-line arguments:\n"
-    count = 0
-    for k, new_v in args.__dict__.items():
-        old_v = config.get(k)
-        if old_v is not None:
-            if new_v != old_v:
-                config[k] = new_v
-                msg += "{}: {} --> {}".format(k, old_v, new_v)
-                count += 1
-        else:
-            raise KeyError("Command-line argument '{}' not found in JSON "
-                           "config file".format(k))
-    if count:
-        logger.debug(msg)
-
-
 if __name__ == '__main__':
     args = setup_argparser()
 
@@ -253,17 +253,18 @@ if __name__ == '__main__':
     main_cfg_filepath = os.path.join(configs.__path__[0], "main_cfg.json")
     main_cfg_dict = load_json(main_cfg_filepath)
 
-    # Setup logger
-    logging_filepath = os.path.join(configs.__path__[0], "logging.json")
-    log_dict = load_json(logging_filepath)
-    logging.config.dictConfig(log_dict)
-    logger_name = "{}.{}".format(
-        package_name,
-        os.path.splitext(__file__)[0])
-    logger = logging.getLogger(logger_name)
-
     # Override logging configuration with command-line arguments
     override_config_with_args(main_cfg_dict, args)
+
+    if not main_cfg_dict['quiet']:
+        # Setup logger
+        logging_filepath = os.path.join(configs.__path__[0], "logging.json")
+        log_dict = load_json(logging_filepath)
+        logging.config.dictConfig(log_dict)
+        logger_name = "{}.{}".format(
+            package_name,
+            os.path.splitext(__file__)[0])
+        logger = logging.getLogger(logger_name)
 
     logger.info("pygame initialization...")
     pygame.init()
@@ -279,3 +280,5 @@ if __name__ == '__main__':
         import RPi.GPIO as GPIO
 
     start(main_cfg_dict)
+    if main_cfg_dict['quiet']:
+        print()
