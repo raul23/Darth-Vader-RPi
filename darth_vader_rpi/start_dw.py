@@ -85,12 +85,13 @@ def setup_argparser():
     parser.add_argument("--version", action='version',
                         version='%(prog)s {}'.format(__version__))
     parser.add_argument("-q", "--quiet", action="store_true",
-                        help="Enable quiet mode, i.e. nothing will be print.")
+                        help="Enable quiet mode, i.e. nothing will be printed.")
+    parser.add_argument("-s", "--simulation", action="store_true",
+                        help="Enable simulation mode, i.e. SimulRPi.GPIO wil be "
+                             "used for simulating RPi.GPIO.")
     parser.add_argument("-v", "--verbose", action="store_true",
                         help="Print various debugging information, e.g. print "
                              "traceback when there is an exception."),
-    parser.add_argument("-d", "--debug", action="store_true",
-                        help="WRITEME.")
     return parser.parse_args()
 
 
@@ -246,15 +247,17 @@ if __name__ == '__main__':
     main_cfg_dict = load_json(main_cfg_filepath)
 
     # Setup logger
+    logging_filepath = os.path.join(configs.__path__[0], "logging.json")
+    log_dict = load_json(logging_filepath)
+    logging.config.dictConfig(log_dict)
     logger_name = "{}.{}".format(
         package_name,
         os.path.splitext(__file__)[0])
     logger = logging.getLogger(logger_name)
-    logging_filepath = os.path.join(configs.__path__[0], "logging.json")
-    log_dict = load_json(logging_filepath)
-    logging.config.dictConfig(log_dict)
 
     # Override logging configuration with command-line arguments
+    import ipdb
+    ipdb.set_trace()
 
     logger.info("pygame initialization...")
     pygame.init()
