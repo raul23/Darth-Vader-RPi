@@ -106,8 +106,6 @@ def turn_on_led(channel):
 
  
 def start(main_cfg):
-    logger.info("Starting")
-
     logger.info("RPi initialization")
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
@@ -141,7 +139,7 @@ def start(main_cfg):
     channels[3].set_volume(main_cfg['channel3_volume'])
 
     loaded_sounds = {}
-    logger.info("Loading sound effects")
+    logger.info("Loading sound effects...")
 
     sounds_dir = os.path.expanduser(main_cfg_dict['sounds_directory'])
 
@@ -149,7 +147,7 @@ def start(main_cfg):
         for i, s_dict in enumerate(sounds):
             if s_dict.get('quotes'):
                 for quote in s_dict['quotes']:
-                    logger.info("Loading {}...".format(quote['name']))
+                    logger.info("Loading {}".format(quote['name']))
                     loaded_sounds.setdefault('quotes', [])
                     filepath = os.path.join(sounds_dir, quote['filename'])
                     channel_obj = channels[quote['channel']]
@@ -164,7 +162,7 @@ def start(main_cfg):
                     sound = s.popitem()
                     sound_name = sound[0]
                     sound_info = sound[1]
-                    logger.info("Loading {}...".format(sound[0]))
+                    logger.info("Loading {}".format(sound[0]))
                     filepath = os.path.join(sounds_dir, sound_info['filename'])
                     channel_obj = channels[sound_info['channel']]
                     loaded_sounds.setdefault(sound_name,
@@ -239,6 +237,23 @@ def start(main_cfg):
     channel3.stop()
 
 
+def override_config_with_args(config, args):
+    msg = "Config options overriden by command-line options:\n"
+    count = 0
+    for k, new_v in args.__dict__.items():
+        old_v = config.get(k)
+        if old_v is not None:
+            if new_v != old_v:
+                config[k] = new_v
+                msg += "{}: {} --> {}".format(k, old_v, new_v)
+                count += 1
+        else:
+            raise KeyError("Command-line option '{}' not found in JSON config "
+                           "file".format(k))
+    if count:
+        logger.debug(msg)
+
+
 if __name__ == '__main__':
     args = setup_argparser()
 
@@ -256,19 +271,18 @@ if __name__ == '__main__':
     logger = logging.getLogger(logger_name)
 
     # Override logging configuration with command-line arguments
-    import ipdb
-    ipdb.set_trace()
+    override_config_with_args(main_cfg_dict, args)
 
     logger.info("pygame initialization...")
     pygame.init()
     pygame.mixer.init()
 
-    if args.debug:
+    if main_cfg_dict['simul']:
         import SimulRPi.GPIO as GPIO
         GPIO.setkeys(main_cfg_dict['key_to_channel_mapping'])
-        if args.quiet:
+        if main_cfg_dict['quiet']:
             GPIO.disableprinting()
-        logger.info("Debug mode enabled")
+        logger.info("Simulation mode enabled")
     else:
         import RPi.GPIO as GPIO
 
