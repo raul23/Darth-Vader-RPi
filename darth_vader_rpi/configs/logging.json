@@ -1,6 +1,5 @@
 {
   "version": 1,
-  "add_datetime": true,
   "disable_existing_loggers": false,
   "formatters":
   {
@@ -32,7 +31,8 @@
       "class": "logging.FileHandler",
       "filename": "debug.log",
       "mode": "a",
-      "formatter": "simple"
+      "formatter": "simple",
+      "delay": true
     }
   },
 
@@ -44,7 +44,7 @@
       "handlers": ["console"],
       "propagate": false
     },
-    "SimulRPi.GPIO'":
+    "SimulRPi.GPIO":
     {
       "level": "INFO",
       "handlers": ["console"],
