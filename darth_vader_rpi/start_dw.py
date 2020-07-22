@@ -59,8 +59,8 @@ def override_config_with_args(config, args):
                 msg += "{}: {} --> {}".format(k, old_v, new_v)
                 count += 1
         else:
-            raise KeyError("Command-line argument '{}' not found in JSON "
-                           "config file".format(k))
+            logger.debug("Command-line argument '{}' not found in JSON config "
+                         "file".format(k))
     if count:
         logger.debug(msg)
 
@@ -89,6 +89,9 @@ def run_led_sequence(led_channels):
 
 
 def setup_argparser():
+    # Help message that is used in various arguments
+    common_help = '''Provide 'log' (without the quotes) for the logging config 
+        file or 'main' (without the quotes) for the main config file.'''
     # Setup the parser
     parser = argparse.ArgumentParser(
         # usage="%(prog)s [OPTIONS]",
@@ -108,7 +111,33 @@ def setup_argparser():
                              "used for simulating RPi.GPIO.")
     parser.add_argument("-v", "--verbose", action="store_true",
                         help="Print various debugging information, e.g. print "
-                             "traceback when there is an exception."),
+                             "traceback when there is an exception.")
+    # Group arguments that are closely related
+    # ===========
+    # Edit config
+    # ===========
+    edit_group = parser.add_argument_group('Edit a configuration file')
+    edit_group.add_argument(
+        "-e", "--edit", choices=["log", "main"],
+        help="Edit a configuration file. {}".format(common_help))
+    edit_group.add_argument(
+        "-a", "--app-name", default=None, dest="app",
+        help='''Name of the application to use for editing the file. If no 
+            name is given, then the default application for opening this type of 
+            file will be used.''')
+    # =================
+    # Reset/Undo config
+    # =================
+    reset_group = parser.add_argument_group(
+        'Reset or undo a configuration file')
+    reset_group.add_argument(
+        "-r", "--reset", choices=["log", "main"],
+        help='''Reset a configuration file with factory default values. 
+            {}'''.format(common_help))
+    reset_group.add_argument(
+        "-u", "--undo", choices=["log", "main"],
+        help='''Undo the LAST RESET. Thus, the config file will be restored 
+            to what it was before the LAST reset. {}'''.format(common_help))
     return parser.parse_args()
 
 
@@ -122,7 +151,9 @@ def turn_on_led(channel):
     GPIO.output(channel, GPIO.HIGH)
 
  
-def start(main_cfg):
+def start_dw(main_cfg):
+    logger.info("pygame mixer initialization")
+    pygame.mixer.init()
     logger.info("RPi initialization")
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
@@ -245,6 +276,8 @@ def start(main_cfg):
     channel2.stop()
     channel3.stop()
 
+    return 0
+
 
 if __name__ == '__main__':
     args = setup_argparser()
@@ -256,6 +289,11 @@ if __name__ == '__main__':
     # Override logging configuration with command-line arguments
     override_config_with_args(main_cfg_dict, args)
 
+    # ==============
+    # Logging config
+    # ==============
+    # NOTE: if quiet and verbose are both activated, only quiet will have an
+    # effect
     if not main_cfg_dict['quiet']:
         # Setup logger
         logging_filepath = os.path.join(configs.__path__[0], "logging.json")
@@ -265,20 +303,42 @@ if __name__ == '__main__':
             package_name,
             os.path.splitext(__file__)[0])
         logger = logging.getLogger(logger_name)
-
-    logger.info("pygame initialization...")
-    pygame.init()
-    pygame.mixer.init()
-
-    if main_cfg_dict['simulation']:
-        import SimulRPi.GPIO as GPIO
-        GPIO.setkeys(main_cfg_dict['key_to_channel_mapping'])
+        if main_cfg_dict['verbose']:
+            # TODO
+            pass
+    # =======
+    # Actions
+    # =======
+    retcode = 1
+    try:
+        if args.edit:
+            # TODO
+            pass
+        elif args.reset:
+            # TODO
+            pass
+        else:
+            if main_cfg_dict['simulation']:
+                import SimulRPi.GPIO as GPIO
+                GPIO.setkeys(main_cfg_dict['key_to_channel_mapping'])
+                if main_cfg_dict['quiet']:
+                    GPIO.disableprinting()
+                logger.info("Simulation mode enabled")
+            else:
+                import RPi.GPIO as GPIO
+            retcode = start_dw(main_cfg_dict)
+    except (AssertionError, AttributeError, KeyError, OSError) as e:
+        # TODO: explain this line
+        # traceback.print_exc()
+        if args.verbose:
+            logger.exception(e)
+        else:
+            logger.error(e.__repr__())
+    finally:
+        msg = "Program exited with {}".format(retcode)
+        if retcode == 1:
+            logger.error(msg)
+        else:
+            logger.debug(msg)
         if main_cfg_dict['quiet']:
-            GPIO.disableprinting()
-        logger.info("Simulation mode enabled")
-    else:
-        import RPi.GPIO as GPIO
-
-    start(main_cfg_dict)
-    if main_cfg_dict['quiet']:
-        print()
+            print()
