@@ -1,5 +1,5 @@
 {
-  "debug_mode": false,
+  "simulation": false,
   "quiet": false,
   "verbose": false,
   "sounds_directory": "~/Data/star_wars_sound_effects/ogg",
