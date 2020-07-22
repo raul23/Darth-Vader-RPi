@@ -38,7 +38,7 @@
 
   "loggers":
   {
-    "darth_vader_rpi.start_dw'":
+    "darth_vader_rpi.start_dw":
     {
       "level": "INFO",
       "handlers": ["console"],
@@ -51,11 +51,10 @@
       "propagate": false
     }
   },
-
   "root":
-  {
-    "level": "DEBUG",
-    "handlers": ["console"],
-    "propagate": false
-  }
+    {
+      "level": "INFO",
+      "handlers": ["console"],
+      "propagate": false
+    }
 }
