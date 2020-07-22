@@ -1,15 +1,11 @@
 {
-  "simulation": false,
   "quiet": false,
+  "simulation": false,
   "verbose": false,
   "sounds_directory": "~/Data/star_wars_sound_effects/ogg",
   "channel1_volume": 0.2,
   "channel2_volume": 1.0,
   "channel3_volume": 1.0,
-  "imperial_march_song": {
-    "filename": "song_the_imperial_march.ogg",
-    "channel": 2
-  },
 
   "quotes": [
     {
@@ -46,6 +42,15 @@
       "name": "your_lack_of_faith_is_disturbing",
       "filename": "quote_your_lack_of_faith_is_disturbing.ogg",
       "channel": 2
+    }
+  ],
+
+  "songs": [
+    {
+      "imperial_march_song": {
+        "filename": "song_the_imperial_march.ogg",
+        "channel": 2
+      }
     }
   ],
 
