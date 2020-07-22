@@ -277,7 +277,7 @@ if __name__ == '__main__':
     pygame.init()
     pygame.mixer.init()
 
-    if main_cfg_dict['simul']:
+    if main_cfg_dict['simulation']:
         import SimulRPi.GPIO as GPIO
         GPIO.setkeys(main_cfg_dict['key_to_channel_mapping'])
         if main_cfg_dict['quiet']:
