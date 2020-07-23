@@ -128,7 +128,7 @@ def edit_config(cfg_type, app=None):
         # on the terminal
         # e.g. TextEdit can't be run on the terminal but atom can since the
         # latter refers to an executable.
-        # To open TextEdit from the terminal, the command `open -a {app_name}`
+        # To open TextEdit from the terminal, the command `open -a TextEdit`
         # must be used on macOS.
         if platform.system() == 'Darwin':
             # Get the command to open the file with the user-specified app
