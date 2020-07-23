@@ -19,16 +19,22 @@ def msg_with_spaces(msg, nb_spaces=20):
     return "{}{}".format(msg, " " * nb_spaces)
 
 
-def override_config_with_args(config, args):
+def override_config_with_args(config, parser):
+    args = parser.parse_args().__dict__
+    parser_actions = parser.__dict__['_actions']
     retval = namedtuple("retval", "args_not_found config_opts_overidden")
     retval.args_not_found = []
     retval.config_opts_overidden = []
-    for k, new_v in args.__dict__.items():
-        old_v = config.get(k)
-        if old_v is not None:
-            if new_v != old_v:
-                config[k] = new_v
-                retval.config_opts_overidden.append((k, old_v, new_v))
+    for action in parser_actions:
+        opt_name = action.dest
+        old_val = config.get(opt_name)
+        if old_val is None:
+            retval.args_not_found.append(opt_name)
         else:
-            retval.args_not_found.append(k)
+            new_val = args.get(opt_name)
+            if new_val is None:
+                continue
+            if new_val != action.default and new_val != old_val:
+                config[opt_name] = new_val
+                retval.config_opts_overidden.append((opt_name, old_val, new_val))
     return retval
