@@ -131,9 +131,9 @@ def edit_config(cfg_type, app=None):
         # To open TextEdit from the terminal, the command `open -a TextEdit`
         # must be used on macOS.
         # TODO: add the open commands for the other OSes
-        specific_app_dict = {'Darwin': 'open -a {app}'.format(app=app)}
+        specific_cmd_dict = {'Darwin': 'open -a {app}'.format(app=app)}
         # Get the command to open the file with the user-specified app
-        cmd = specific_app_dict.get(platform.system(), app) + " " + filepath
+        cmd = specific_cmd_dict.get(platform.system(), app) + " " + filepath
         # TODO: explain DEVNULL, suppress stderr since we will display the error
         result = run_cmd(cmd)  # stderr=subprocess.DEVNULL)
         retcode = result.returncode
