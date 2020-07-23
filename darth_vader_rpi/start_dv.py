@@ -124,21 +124,19 @@ def edit_config(cfg_type, app=None):
         result = run_cmd(cmd.format(filepath=filepath))
         retcode = result.returncode
     except FileNotFoundError:
-        # This happens if the name of the app can't be called as an executable
-        # on the terminal
+        # This error happens if the name of the app can't be called as an
+        # executable on the terminal
         # e.g. TextEdit can't be run on the terminal but atom can since the
         # latter refers to an executable.
         # To open TextEdit from the terminal, the command `open -a TextEdit`
         # must be used on macOS.
-        if platform.system() == 'Darwin':
-            # Get the command to open the file with the user-specified app
-            # TODO: add the open commands for the other OSes
-            specific_app_dict = {'Darwin': 'open -a {app}'.format(app=app)}
-            cmd = specific_app_dict.get(platform.system(), app) + " " + filepath
-            # TODO: explain DEVNULL, suppress stderr since we will display the
-            # error
-            result = run_cmd(cmd)  # stderr=subprocess.DEVNULL)
-            retcode = result.returncode
+        # TODO: add the open commands for the other OSes
+        specific_app_dict = {'Darwin': 'open -a {app}'.format(app=app)}
+        # Get the command to open the file with the user-specified app
+        cmd = specific_app_dict.get(platform.system(), app) + " " + filepath
+        # TODO: explain DEVNULL, suppress stderr since we will display the error
+        result = run_cmd(cmd)  # stderr=subprocess.DEVNULL)
+        retcode = result.returncode
     if retcode == 0:
         logger.info("Opening the {} configuration file ...".format(cfg_type))
     else:
