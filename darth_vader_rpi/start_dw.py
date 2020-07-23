@@ -1,6 +1,7 @@
 import argparse
 import logging.config
 import os
+import platform
 import threading
 import time
 
@@ -9,8 +10,10 @@ import pygame
 
 from logging import NullHandler
 
-from darth_vader_rpi import __name__ as package_name, __version__, configs
-from darth_vader_rpi.utils import load_json, msg_with_spaces, override_config_with_args
+from darth_vader_rpi import __name__ as package_name, __version__
+from darth_vader_rpi.utils import (get_cfg_filepath, load_json,
+                                   msg_with_spaces, override_config_with_args,
+                                   run_cmd)
 
 
 logger = logging.getLogger(__name__)
@@ -53,6 +56,96 @@ def run_led_sequence(led_channels):
             turn_on_led(channel)
         time.sleep(2)
     logger.info("Stopping thread: run_leds_sequence()")
+
+
+def turn_off_led(channel):
+    # logger.debug("LED {} off".format(led))
+    GPIO.output(channel, GPIO.LOW)
+
+
+def turn_on_led(channel):
+    # logger.debug("LED {} on".format(led))
+    GPIO.output(channel, GPIO.HIGH)
+
+
+def edit_config(cfg_type, app=None):
+    """Edit a configuration file.
+
+    The user chooses what type of config file (`cfg_type`) to edit: 'log' for
+    the logging config file and 'main' for the main config file.
+
+    The configuration file can be opened by a user-specified application (`app`)
+    or a default program associated with this type of file (when `app` is None).
+
+    Parameters
+    ----------
+    cfg_type : str, {'log', 'main'}
+        The type of configuration file we want to edit. 'log' refers to the
+        logging config file, and 'main' to the main config file used to setup a
+        the Darth-Vader-RPi project such as the sound effects or the GPIO
+        channels.
+    app : str
+        Name of the application to use for opening the config file, e.g. TextEdit
+        (the default value is None which implies that the default application
+        will be used to open the config file).
+
+    Returns
+    -------
+    retcode : int
+        If there is a `subprocess
+        <https://docs.python.org/3/library/subprocess.html#subprocess.CalledProcessError>`_
+        -related error, the return code is non-zero. Otherwise, it is 0 if the
+        file could be successfully opened with an external program.
+
+    """
+    # Get path to user-defined config file
+    filepath = get_cfg_filepath(cfg_type)
+    # Command to open the config file with the default application in the
+    # OS or the user-specified app, e.g. `open filepath` in macOS opens the
+    # file with the default app (e.g. atom)
+    default_cmd_dict = {'Darwin': 'open {filepath}',
+                        'Linux': 'xdg-open {filepath}',
+                        'Windows': 'cmd /c start "" "{filepath}"'}
+    # NOTE: check https://bit.ly/31htaOT (pymotw) for output from
+    # platform.system on three OSes
+    default_cmd = default_cmd_dict.get(platform.system())
+    # NOTES:
+    # - `app is None` implies that the default app will be used
+    # - Otherwise, the user-specified app will be used
+    cmd = default_cmd if app is None else app + " " + filepath
+    retcode = 1
+    result = None
+    try:
+        # IMPORTANT: if the user provided the name of an app, it will be used as
+        # a command along with the file path, e.g. `$ atom {filepath}`. However,
+        # this case might not work if the user provided an app name that doesn't
+        # refer to an executable, e.g. `$ TextEdit {filepath}` won't work. The
+        # failed case is further processed in `except FileNotFoundError`.
+        result = run_cmd(cmd.format(filepath=filepath))
+        retcode = result.returncode
+    except FileNotFoundError:
+        # This happens if the name of the app can't be called as an executable
+        # on the terminal
+        # e.g. TextEdit can't be run on the terminal but atom can since the
+        # latter refers to an executable.
+        # To open TextEdit from the terminal, the command `open -a {app_name}`
+        # must be used on macOS.
+        if platform.system() == 'Darwin':
+            # Get the command to open the file with the user-specified app
+            # TODO: add the open commands for the other OSes
+            specific_app_dict = {'Darwin': 'open -a {app}'.format(app=app)}
+            cmd = specific_app_dict.get(platform.system(), app) + " " + filepath
+            # TODO: explain DEVNULL, suppress stderr since we will display the
+            # error
+            result = run_cmd(cmd)  # stderr=subprocess.DEVNULL)
+            retcode = result.returncode
+    if retcode == 0:
+        logger.info("Opening the {} configuration file ...".format(cfg_type))
+    else:
+        if result:
+            err = result.stderr.decode().strip()
+            logger.error(err)
+    return retcode
 
 
 def setup_argparser():
@@ -106,16 +199,6 @@ def setup_argparser():
         help='''Undo the LAST RESET. Thus, the config file will be restored 
             to what it was before the LAST reset. {}'''.format(common_help))
     return parser
-
-
-def turn_off_led(channel):
-    # logger.debug("LED {} off".format(led))
-    GPIO.output(channel, GPIO.LOW)
-
-
-def turn_on_led(channel):
-    # logger.debug("LED {} on".format(led))
-    GPIO.output(channel, GPIO.HIGH)
 
  
 def start_dw(main_cfg):
@@ -224,14 +307,10 @@ def start_dw(main_cfg):
     except Exception as e:
         logger.exception(msg_with_spaces("Error: {}".format(e)))
         logger.info(msg_with_spaces("Exiting..."))
-        # logger.info("Error: {}".format(e))
-        # logger.info("Exiting...")
     except KeyboardInterrupt:
         logger.info(msg_with_spaces("Exiting..."))
-        # logger.info("Exiting...")
 
     logger.info(msg_with_spaces("Cleanup..."))
-    # logger.info("Cleanup...")
     turn_off_led(top_led)
     turn_off_led(middle_led)
     turn_off_led(bottom_led)
@@ -264,7 +343,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # Load main config file
-    main_cfg_filepath = os.path.join(configs.__path__[0], "main_cfg.json")
+    main_cfg_filepath = get_cfg_filepath("main")
     main_cfg_dict = load_json(main_cfg_filepath)
 
     # Override logging configuration with command-line arguments
@@ -279,7 +358,7 @@ if __name__ == '__main__':
         logger.disabled = True
     else:
         # Setup logger
-        logging_filepath = os.path.join(configs.__path__[0], "logging.json")
+        logging_filepath = get_cfg_filepath("log")
         log_dict = load_json(logging_filepath)
         if main_cfg_dict['verbose']:
             keys = ['handlers', 'loggers']
@@ -305,10 +384,14 @@ if __name__ == '__main__':
     retcode = 1
     try:
         if args.edit:
-            # TODO
-            pass
+            retcode = edit_config(args.edit, args.app)
         elif args.reset:
             # TODO
+            # retcode = reset_config(args.reset)
+            pass
+        elif args.undo:
+            # TODO
+            # retcode = undo_config(args.undo)
             pass
         else:
             if main_cfg_dict['simulation']:
