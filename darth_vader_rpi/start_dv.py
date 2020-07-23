@@ -188,6 +188,7 @@ def setup_argparser():
     # =================
     # Reset/Undo config
     # =================
+    """
     reset_group = parser.add_argument_group(
         'Reset or undo a configuration file')
     reset_group.add_argument(
@@ -198,6 +199,8 @@ def setup_argparser():
         "-u", "--undo", choices=["log", "main"],
         help='''Undo the LAST RESET. Thus, the config file will be restored 
             to what it was before the LAST reset. {}'''.format(common_help))
+    
+    """
     return parser
 
  
@@ -385,14 +388,12 @@ if __name__ == '__main__':
     try:
         if args.edit:
             retcode = edit_config(args.edit, args.app)
-        elif args.reset:
-            # TODO
-            # retcode = reset_config(args.reset)
-            pass
-        elif args.undo:
-            # TODO
-            # retcode = undo_config(args.undo)
-            pass
+            """
+            elif args.reset:
+                retcode = reset_config(args.reset)
+            elif args.undo:
+                retcode = undo_config(args.undo)
+            """
         else:
             if main_cfg_dict['simulation']:
                 import SimulRPi.GPIO as GPIO
