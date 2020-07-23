@@ -105,7 +105,7 @@ def setup_argparser():
         "-u", "--undo", choices=["log", "main"],
         help='''Undo the LAST RESET. Thus, the config file will be restored 
             to what it was before the LAST reset. {}'''.format(common_help))
-    return parser.parse_args()
+    return parser
 
 
 def turn_off_led(channel):
@@ -260,21 +260,24 @@ if __name__ == '__main__':
     ch.setFormatter(formatter)
     logger.addHandler(ch)
 
-    args = setup_argparser()
+    parser = setup_argparser()
+    args = parser.parse_args()
 
     # Load main config file
     main_cfg_filepath = os.path.join(configs.__path__[0], "main_cfg.json")
     main_cfg_dict = load_json(main_cfg_filepath)
 
     # Override logging configuration with command-line arguments
-    retval = override_config_with_args(main_cfg_dict, args)
+    retval = override_config_with_args(main_cfg_dict, parser)
 
     # ==============
     # Logging config
     # ==============
     # NOTE: if quiet and verbose are both activated, only quiet will have an
     # effect
-    if not main_cfg_dict['quiet']:
+    if main_cfg_dict['quiet']:
+        logger.disabled = True
+    else:
         # Setup logger
         logging_filepath = os.path.join(configs.__path__[0], "logging.json")
         log_dict = load_json(logging_filepath)
