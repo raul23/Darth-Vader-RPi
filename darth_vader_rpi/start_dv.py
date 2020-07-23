@@ -201,7 +201,7 @@ def setup_argparser():
     return parser
 
  
-def start_dw(main_cfg):
+def start_dv(main_cfg):
     logger.info("pygame mixer initialization")
     pygame.mixer.init()
     logger.info("RPi initialization")
@@ -402,7 +402,7 @@ if __name__ == '__main__':
                 logger.info("Simulation mode enabled")
             else:
                 import RPi.GPIO as GPIO
-            retcode = start_dw(main_cfg_dict)
+            retcode = start_dv(main_cfg_dict)
     except (AssertionError, AttributeError, KeyError, OSError) as e:
         # TODO: explain this line
         # traceback.print_exc()
