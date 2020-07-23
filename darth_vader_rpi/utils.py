@@ -1,12 +1,7 @@
 import codecs
 import json
-import logging
 
 from collections import namedtuple
-from logging import NullHandler
-
-logger = logging.getLogger(__name__)
-logger.addHandler(NullHandler())
 
 
 # TODO: use load_json() from pyutils
