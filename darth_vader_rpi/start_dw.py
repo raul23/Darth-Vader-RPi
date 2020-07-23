@@ -1,6 +1,4 @@
 import argparse
-import codecs
-import json
 import logging.config
 import os
 import threading
@@ -12,6 +10,7 @@ import pygame
 from logging import NullHandler
 
 from darth_vader_rpi import __name__ as package_name, __version__, configs
+from darth_vader_rpi.utils import load_json, msg_with_spaces, override_config_with_args
 
 
 logger = logging.getLogger(__name__)
@@ -31,38 +30,6 @@ class SoundWrapper:
 
     def stop(self):
         self.channel_obj.stop()
-
-
-# TODO: use load_json() from pyutils
-def load_json(filepath, encoding='utf8'):
-    try:
-        with codecs.open(filepath, 'r', encoding) as f:
-            data = json.load(f)
-    except OSError:
-        raise
-    else:
-        return data
-
-
-def msg_with_spaces(msg, nb_spaces=20):
-    return "{}{}".format(msg, " " * nb_spaces)
-
-
-def override_config_with_args(config, args):
-    msg = "Config options overriden by command-line arguments:\n"
-    count = 0
-    for k, new_v in args.__dict__.items():
-        old_v = config.get(k)
-        if old_v is not None:
-            if new_v != old_v:
-                config[k] = new_v
-                msg += "{}: {} --> {}".format(k, old_v, new_v)
-                count += 1
-        else:
-            logger.debug("Command-line argument '{}' not found in JSON config "
-                         "file".format(k))
-    if count:
-        logger.debug(msg)
 
 
 def run_led_sequence(led_channels):
@@ -280,6 +247,19 @@ def start_dw(main_cfg):
 
 
 if __name__ == '__main__':
+    # Setup the default logger (whose name is __main__ since this file is run
+    # as a script) which will be used for printing to the console before all
+    # loggers defined in the JSON file will be configured. The printing with
+    # this default logger will only be done in the cases that the user allows
+    # it, e.g. the verbose option is enabled.
+    # IMPORTANT: the config options need to be read before using any logger
+    logger.setLevel(logging.DEBUG)
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.DEBUG)
+    formatter = logging.Formatter("%(levelname)-8s %(message)s")
+    ch.setFormatter(formatter)
+    logger.addHandler(ch)
+
     args = setup_argparser()
 
     # Load main config file
@@ -287,7 +267,7 @@ if __name__ == '__main__':
     main_cfg_dict = load_json(main_cfg_filepath)
 
     # Override logging configuration with command-line arguments
-    override_config_with_args(main_cfg_dict, args)
+    retval = override_config_with_args(main_cfg_dict, args)
 
     # ==============
     # Logging config
@@ -298,14 +278,24 @@ if __name__ == '__main__':
         # Setup logger
         logging_filepath = os.path.join(configs.__path__[0], "logging.json")
         log_dict = load_json(logging_filepath)
+        if main_cfg_dict['verbose']:
+            keys = ['handlers', 'loggers']
+            for k in keys:
+                for name, val in log_dict[k].items():
+                    val['level'] = "DEBUG"
+            logger.info("Verbose option enabled")
         logging.config.dictConfig(log_dict)
         logger_name = "{}.{}".format(
             package_name,
             os.path.splitext(__file__)[0])
         logger = logging.getLogger(logger_name)
-        if main_cfg_dict['verbose']:
-            # TODO
-            pass
+        msg1 = "Config options overriden by command-line arguments:\n"
+        for cfg_name, old_v, new_v in retval.config_opts_overidden:
+            msg1 += "{}: {} --> {}\n".format(cfg_name, old_v, new_v)
+        msg2 = "Command-line arguments not found in JSON config file: " \
+               "{}".format(retval.args_not_found)
+        logger.debug(msg1)
+        logger.debug(msg2)
     # =======
     # Actions
     # =======
