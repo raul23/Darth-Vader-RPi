@@ -1,0 +1,102 @@
+{
+  "quiet": false,
+  "simulation": false,
+  "verbose": false,
+  "sounds_directory": "~/Data/star_wars_sound_effects/ogg",
+  "channel1_volume": 0.2,
+  "channel2_volume": 1.0,
+  "channel3_volume": 1.0,
+
+  "quotes": [
+    {
+      "name": "i_am_your_father",
+      "filename": "quote_i_am_your_father_2_with_music_at_the_end.ogg",
+      "channel": 2
+    },
+    {
+      "name": "dont_make_me_destroy_you",
+      "filename": "quote_dont_make_me_destroy_you.ogg",
+      "channel": 2
+    },
+    {
+      "name": "give_yourself_to_the_dark_side",
+      "filename": "quote_give_yourself_to_the_dark_side.ogg",
+      "channel": 2
+    },
+    {
+      "name": "if_you_only_knew_the_power_of_the_dark_side",
+      "filename": "quote_if_you_only_knew_the_power_of_the_dark_side.ogg",
+      "channel": 2
+    },
+    {
+      "name": "nooooo",
+      "filename": "quote_nooooo.ogg",
+      "channel": 2
+    },
+    {
+      "name": "there_is_no_escape",
+      "filename": "quote_there_is_no_escape.ogg",
+      "channel": 2
+    },
+    {
+      "name": "your_lack_of_faith_is_disturbing",
+      "filename": "quote_your_lack_of_faith_is_disturbing.ogg",
+      "channel": 2
+    }
+  ],
+
+  "songs": [
+    {
+      "imperial_march_song": {
+        "filename": "song_the_imperial_march.ogg",
+        "channel": 2
+      }
+    }
+  ],
+
+  "sound_effects": [
+    {
+      "breathing_sound": {
+        "filename": "darth_vader_breathing_GOOD.ogg",
+        "channel": 1,
+        "play": true,
+        "loops": -1
+      }
+    },
+    {
+      "lightsaber_open_sound": {
+        "filename": "lightsaber_darth_vader_opening.ogg",
+        "channel": 3
+      }
+    },
+    {
+      "lightsaber_running_sound": {
+        "filename": "lightsaber_darth_vader_running.ogg",
+        "channel": 3
+      }
+    },
+    {
+      "lightsaber_close_sound": {
+        "filename": "lightsaber_darth_vader_retraction.ogg",
+        "channel": 3
+      }
+    }
+  ],
+
+  "GPIO": {
+    "top_led": 11,
+    "middle_led": 9,
+    "bottom_led": 10,
+    "lightsaber_led": 22,
+    "lightsaber_button": 23,
+    "song_button": 24,
+    "quotes_button": 25
+  },
+
+  "key_to_channel_mapping":
+  {
+    "f": 23,
+    "g": 24,
+    "h": 25
+  }
+}
