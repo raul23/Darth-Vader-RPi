@@ -12,11 +12,14 @@ logger = logging.getLogger(__name__)
 logger.addHandler(NullHandler())
 
 
+NB_CONFIG_TYPES = 2
+
+
 class TestUtils(TestBase):
     TEST_MODULE_QUALNAME = get_qualname(utils)
     LOGGER_NAME = __name__
     SHOW_FIRST_CHARS_IN_LOG = 0
-    CREATE_SANDBOX_TMP_DIR = True
+    CREATE_SANDBOX_TMP_DIR = False
     CREATE_DATA_TMP_DIR = False
 
     # @unittest.skip("test_get_cfg_dirpath()")
@@ -24,12 +27,11 @@ class TestUtils(TestBase):
         msg = "Dictionary of config filenames not found"
         self.assertTrue(isinstance(utils._cfg_filenames.default_cfg, dict), msg)
         self.assertTrue(isinstance(utils._cfg_filenames.user_cfg, dict), msg)
-        nb_configs = 2
-        msg = "There should be {} types of config files".format(nb_configs)
-        self.assertTrue(len(utils._cfg_filenames.default_cfg) == nb_configs, msg)
-        self.assertTrue(len(utils._cfg_filenames.user_cfg) == nb_configs, msg)
+        msg = "There should be {} types of config files".format(NB_CONFIG_TYPES)
+        self.assertTrue(len(utils._cfg_filenames.default_cfg) == NB_CONFIG_TYPES, msg)
+        self.assertTrue(len(utils._cfg_filenames.user_cfg) == NB_CONFIG_TYPES, msg)
+        startswith = "default"
         for k, v in utils._cfg_filenames.default_cfg.items():
-            startswith = "default"
             msg = "Config file should start with {}".format(startswith)
             self.assertTrue(k.startswith(startswith), msg)
 
