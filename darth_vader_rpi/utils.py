@@ -3,7 +3,6 @@ import json
 import os
 import shlex
 import subprocess
-
 from collections import namedtuple
 
 from darth_vader_rpi import configs

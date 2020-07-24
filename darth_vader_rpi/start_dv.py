@@ -4,25 +4,21 @@ import os
 import platform
 import threading
 import time
+from logging import NullHandler
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
-
-from logging import NullHandler
 
 from darth_vader_rpi import __name__ as package_name, __version__
 from darth_vader_rpi.utils import (get_cfg_filepath, load_json,
                                    msg_with_spaces, override_config_with_args,
                                    run_cmd)
 
-
 logger = logging.getLogger(__name__)
 logger.addHandler(NullHandler())
 
-
 _TEST_LOGGING_CFG = None
 _TEST_MAIN_CFG = None
-
 
 
 class SoundWrapper:

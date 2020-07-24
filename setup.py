@@ -8,7 +8,6 @@ The PyPi project name is Darth-Vader-RPi and the package name is
 import os
 from setuptools import find_packages, setup
 
-
 from darth_vader_rpi import __version__
 
 

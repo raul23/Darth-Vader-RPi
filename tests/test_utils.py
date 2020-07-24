@@ -1,16 +1,13 @@
 import logging
 import unittest
-
 from logging import NullHandler
 
 from darth_vader_rpi import utils, configs
 from pyutils.genutils import get_qualname
 from pyutils.testutils import TestBase
 
-
 logger = logging.getLogger(__name__)
 logger.addHandler(NullHandler())
-
 
 NB_CONFIG_TYPES = 2
 
