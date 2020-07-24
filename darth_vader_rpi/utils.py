@@ -6,7 +6,7 @@ import subprocess
 
 from collections import namedtuple
 
-import configs
+from darth_vader_rpi import configs
 
 
 _CFG_EXT = "json"
