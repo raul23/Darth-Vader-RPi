@@ -1,1 +1,2 @@
 pygame>=1.9.6
+py-common-utils @ https://github.com/raul23/py-common-utils/tarball/master
