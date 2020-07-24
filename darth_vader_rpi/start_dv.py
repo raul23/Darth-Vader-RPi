@@ -20,6 +20,11 @@ logger = logging.getLogger(__name__)
 logger.addHandler(NullHandler())
 
 
+_TEST_LOGGING_CFG = None
+_TEST_MAIN_CFG = None
+
+
+
 class SoundWrapper:
     def __init__(self, name, filepath, channel_obj):
         self.name = name
@@ -344,8 +349,11 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # Load main config file
-    main_cfg_filepath = get_cfg_filepath("main")
-    main_cfg_dict = load_json(main_cfg_filepath)
+    if _TEST_MAIN_CFG:
+        main_cfg_dict = _TEST_MAIN_CFG
+    else:
+        main_cfg_filepath = get_cfg_filepath("main")
+        main_cfg_dict = load_json(main_cfg_filepath)
 
     # Override logging configuration with command-line arguments
     retval = override_config_with_args(main_cfg_dict, parser)
@@ -359,15 +367,18 @@ if __name__ == '__main__':
         logger.disabled = True
     else:
         # Setup logger
-        logging_filepath = get_cfg_filepath("log")
-        log_dict = load_json(logging_filepath)
+        if _TEST_LOGGING_CFG:
+            logging_cfg_dict = _TEST_LOGGING_CFG
+        else:
+            logging_filepath = get_cfg_filepath("log")
+            logging_cfg_dict = load_json(logging_filepath)
         if main_cfg_dict['verbose']:
             keys = ['handlers', 'loggers']
             for k in keys:
-                for name, val in log_dict[k].items():
+                for name, val in logging_cfg_dict[k].items():
                     val['level'] = "DEBUG"
             logger.info("Verbose option enabled")
-        logging.config.dictConfig(log_dict)
+        logging.config.dictConfig(logging_cfg_dict)
         logger_name = "{}.{}".format(
             package_name,
             os.path.splitext(__file__)[0])
