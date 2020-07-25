@@ -10,8 +10,6 @@ from pyutils.testutils import TestBase
 logger = logging.getLogger(__name__)
 logger.addHandler(NullHandler())
 
-NB_CONFIG_TYPES = 2
-
 
 class TestUtils(TestBase):
     TEST_MODULE_QUALNAME = get_qualname(utils)
@@ -22,6 +20,7 @@ class TestUtils(TestBase):
 
     # @unittest.skip("test_add_cfg_filenames()")
     def test_add_cfg_filenames(self):
+        nb_config_types = 2
         self.log_test_method_name()
         self.log_main_message(extra_msg="Case where dictionaries are checked "
                                         "if they are <color>correctly filled"
@@ -29,11 +28,11 @@ class TestUtils(TestBase):
         msg = "Dictionary of config filenames not found"
         self.assertTrue(isinstance(utils._cfg_filenames.default_cfg, dict), msg)
         self.assertTrue(isinstance(utils._cfg_filenames.user_cfg, dict), msg)
-        msg = "There should be {} types of config files".format(NB_CONFIG_TYPES)
+        msg = "There should be {} types of config files".format(nb_config_types)
         self.assertTrue(
-            len(utils._cfg_filenames.default_cfg) == NB_CONFIG_TYPES, msg)
+            len(utils._cfg_filenames.default_cfg) == nb_config_types, msg)
         self.assertTrue(
-            len(utils._cfg_filenames.user_cfg) == NB_CONFIG_TYPES, msg)
+            len(utils._cfg_filenames.user_cfg) == nb_config_types, msg)
         startswith = "default"
         for k, v in utils._cfg_filenames.default_cfg.items():
             msg = "Config file should start with {}".format(startswith)
