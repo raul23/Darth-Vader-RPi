@@ -21,6 +21,7 @@ class TestUtils(TestBase):
 
     # @unittest.skip("test_get_cfg_dirpath()")
     def test_add_cfg_filenames(self):
+        self.log_test_method_name()
         msg = "Dictionary of config filenames not found"
         self.assertTrue(isinstance(utils._cfg_filenames.default_cfg, dict), msg)
         self.assertTrue(isinstance(utils._cfg_filenames.user_cfg, dict), msg)
@@ -34,6 +35,7 @@ class TestUtils(TestBase):
 
     # @unittest.skip("test_get_cfg_dirpath()")
     def test_get_cfg_dirpath(self):
+        self.log_test_method_name()
         cfg_dirpath = utils.get_cfg_dirpath()
         msg = "The returned directory path to the configuration files is invalid"
         # self.assertRegex(cfg_dirpath, "darth_vader_rpi\/configs$")
