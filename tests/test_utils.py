@@ -1,4 +1,5 @@
 import logging
+import os
 import unittest
 from logging import NullHandler
 
@@ -19,24 +20,59 @@ class TestUtils(TestBase):
     CREATE_SANDBOX_TMP_DIR = False
     CREATE_DATA_TMP_DIR = False
 
-    # @unittest.skip("test_get_cfg_dirpath()")
+    # @unittest.skip("test_add_cfg_filenames()")
     def test_add_cfg_filenames(self):
         self.log_test_method_name()
+        self.log_main_message(extra_msg="Case where dictionaries are checked "
+                                        "if they are <color>correctly filled"
+                                        "</color>")
         msg = "Dictionary of config filenames not found"
         self.assertTrue(isinstance(utils._cfg_filenames.default_cfg, dict), msg)
         self.assertTrue(isinstance(utils._cfg_filenames.user_cfg, dict), msg)
         msg = "There should be {} types of config files".format(NB_CONFIG_TYPES)
-        self.assertTrue(len(utils._cfg_filenames.default_cfg) == NB_CONFIG_TYPES, msg)
-        self.assertTrue(len(utils._cfg_filenames.user_cfg) == NB_CONFIG_TYPES, msg)
+        self.assertTrue(
+            len(utils._cfg_filenames.default_cfg) == NB_CONFIG_TYPES, msg)
+        self.assertTrue(
+            len(utils._cfg_filenames.user_cfg) == NB_CONFIG_TYPES, msg)
         startswith = "default"
         for k, v in utils._cfg_filenames.default_cfg.items():
             msg = "Config file should start with {}".format(startswith)
             self.assertTrue(k.startswith(startswith), msg)
+        logger.info("<color>RESULT:</color> The dictionaries of config "
+                    "filenames seem to be filled <color>as expected</color>")
 
     # @unittest.skip("test_get_cfg_dirpath()")
     def test_get_cfg_dirpath(self):
         self.log_test_method_name()
+        self.log_main_message(extra_msg="Case where the returned <color>"
+                                        "directory path</color> to the "
+                                        "<color>config files</color> is checked "
+                                        "to be <color>valid</color>")
         cfg_dirpath = utils.get_cfg_dirpath()
         msg = "The returned directory path to the configuration files is invalid"
         # self.assertRegex(cfg_dirpath, "darth_vader_rpi\/configs$")
         self.assertEqual(cfg_dirpath, configs.__path__[0], msg)
+        logger.info("<color>RESULT:</color> The directory path to the config "
+                    "files is returned <color>as expected</color>")
+
+    # @unittest.skip("test_get_cfg_filepath()")
+    def test_get_cfg_filepath(self):
+        self.log_test_method_name()
+        self.log_main_message(extra_msg="Case where <color>config file types"
+                                        "</color> return valid <color>file paths"
+                                        "</color>")
+        file_types = ['default_log', 'default_main', 'log', 'main']
+        for ft in file_types:
+            try:
+                fp = utils.get_cfg_filepath(ft)
+            except AssertionError as e:
+                logger.exception("<color>{}</color>".format(e))
+                msg = "Config file type not recognized: {}".format(ft)
+                self.fail(msg)
+            else:
+                msg = "Returned path is invalid: {}".format(fp)
+                self.assertTrue(os.path.isfile(fp), msg)
+                self.assertIn(ft, fp)
+        logger.info("<color>RESULT:</color> All config file types return "
+                    "valid file paths <color>as expected</color>")
+
