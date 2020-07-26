@@ -1,3 +1,42 @@
+#!/usr/script/env python
+"""Script to turn on LEDs and play sound effects for an RPi.
+
+The LEDs illuminate a Darth Vader figurine's lightsaber and the three slots in
+the chest control unit. 3 push buttons control the sound effects:
+
+1. Some of his famous quotes
+2. The Imperial march theme song
+3. The light saber opening and closing sounds
+
+His iconic breathing sound plays in the background indefinitely as soon as the
+RPi is run with the script.
+
+The script allows you also to edit the `configuration file (JSON)`_ to setup
+among other things the RPi's GPIO pins connected to LEDs and buttons.
+
+Usage
+-----
+    ``start_dv [-h] [--version] [-q] [-s] [-v] [-e {log,main}] [-a APP]``
+
+Run the script with configuration as it is:
+
+    $ start_dv
+
+Run the script using SimulRPi.GPIO which simulates RPi.GPIO
+
+    $ start_dv -s
+
+Notes
+-----
+More information is available at:
+
+- https://github.com/raul23/Darth-Vader-RPi
+- https://darth-vader-rpi.readthedocs.io/en/latest/index.html
+
+.. _configuration file (JSON): https://bit.ly/3hE37tQ
+
+"""
+# TODO: add PyPi URL in description above (Notes section)
 import argparse
 import logging.config
 import os
@@ -19,6 +58,7 @@ logger.addHandler(NullHandler())
 
 _TEST_LOGGING_CFG = None
 _TEST_MAIN_CFG = None
+GPIO = None
 
 
 class SoundWrapper:
@@ -167,7 +207,7 @@ def setup_argparser():
     # Setup the parser
     parser = argparse.ArgumentParser(
         # usage="%(prog)s [OPTIONS]",
-        prog=package_name,
+        prog=__file__,
         description='''\
     WRITEME''',
         formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -252,13 +292,13 @@ def start_dv(main_cfg):
     channels[3].set_volume(main_cfg['channel3_volume'])
 
     loaded_sounds = {}
-    sounds_dir = os.path.expanduser(main_cfg_dict['sounds_directory'])
+    sounds_dir = os.path.expanduser(main_cfg['sounds_directory'])
     logger.info("Loading sound effects...")
 
     def load_sounds():
         for sound_type in ['quotes', 'songs', 'sound_effects']:
             if sound_type == 'quotes':
-                for quote in main_cfg_dict[sound_type]:
+                for quote in main_cfg[sound_type]:
                     logger.info("Loading {}".format(quote['name']))
                     loaded_sounds.setdefault('quotes', [])
                     filepath = os.path.join(sounds_dir, quote['filename'])
@@ -266,7 +306,7 @@ def start_dv(main_cfg):
                     loaded_sounds['quotes'].append(
                         SoundWrapper(quote['name'], filepath, channel_obj))
             elif sound_type in ['songs', 'sound_effects']:
-                for s in main_cfg_dict[sound_type]:
+                for s in main_cfg[sound_type]:
                     sound = s.popitem()
                     sound_name = sound[0]
                     sound_info = sound[1]
@@ -340,7 +380,8 @@ def start_dv(main_cfg):
     return 0
 
 
-if __name__ == '__main__':
+def main():
+    global logger, GPIO
     # Setup the default logger (whose name is __main__ since this file is run
     # as a script) which will be used for printing to the console before all
     # loggers defined in the JSON file will be configured. The printing with
@@ -406,13 +447,15 @@ if __name__ == '__main__':
             """
         else:
             if main_cfg_dict['simulation']:
-                import SimulRPi.GPIO as GPIO
+                import SimulRPi.GPIO
+                GPIO = SimulRPi.GPIO
                 GPIO.setkeys(main_cfg_dict['key_to_channel_mapping'])
                 if main_cfg_dict['quiet']:
                     GPIO.disableprinting()
                 logger.info("Simulation mode enabled")
             else:
-                import RPi.GPIO as GPIO
+                import RPi.GPIO
+                GPIO = RPi.GPIO
             retcode = start_dv(main_cfg_dict)
     except (AssertionError, AttributeError, KeyError, OSError) as e:
         # TODO: explain this line
@@ -429,3 +472,13 @@ if __name__ == '__main__':
             logger.debug(msg)
         if main_cfg_dict['quiet']:
             print()
+        return retcode
+
+
+if __name__ == '__main__':
+    retcode = main()
+    msg = "\nProgram exited with <color>{}</color>".format(retcode)
+    if retcode == 1:
+        logger.error(msg)
+    else:
+        logger.debug(msg)
