@@ -18,8 +18,8 @@ sys.path.insert(0, os.path.abspath('../darth_vader_rpi'))
 # -- Project information -----------------------------------------------------
 
 project = 'Darth-Vader-RPi'
-copyright = '2020, Raul C'
-author = 'Raul C'
+copyright = '2020, Raul C.'
+author = 'Raul C.'
 
 # The full version, including alpha/beta/rc tags
 release = '0.1'
