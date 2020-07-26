@@ -16,27 +16,40 @@ among other things the RPi's GPIO pins connected to LEDs and buttons.
 
 Usage
 -----
+Once the `darth_vader_rpi` package is `installed`_, you should have access to
+the :mod:`start_dv` script:
+
     ``start_dv [-h] [--version] [-q] [-s] [-v] [-e {log,main}] [-a APP]``
 
-Run the script with configuration as it is:
+Run the script on the RPi::
 
     $ start_dv
 
-Run the script using SimulRPi.GPIO which simulates RPi.GPIO
+Run the script using SimulRPi.GPIO which simulates RPi.GPIO::
 
     $ start_dv -s
+
+Edit the main config file with TextEdit (macOS)::
+
+    $ start_dv -e main -a TextEdit
+
+Edit the logging config file with the default application (e.g. atom)::
+
+    $ start_dv -e log
 
 Notes
 -----
 More information is available at:
 
-- https://github.com/raul23/Darth-Vader-RPi
-- https://darth-vader-rpi.readthedocs.io/en/latest/index.html
+- Project GitHub: https://github.com/raul23/Darth-Vader-RPi
+- Project docs: https://darth-vader-rpi.readthedocs.io/en/latest/index.html
 
+.. _installed: https://github.com/raul23/Darth-Vader-RPi#readme
 .. _configuration file (JSON): https://bit.ly/3hE37tQ
 
 """
 # TODO: add PyPi URL in description above (Notes section)
+
 import argparse
 import logging.config
 import os
