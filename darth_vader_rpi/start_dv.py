@@ -457,7 +457,7 @@ def main():
                 import RPi.GPIO
                 GPIO = RPi.GPIO
             retcode = start_dv(main_cfg_dict)
-    except (AssertionError, AttributeError, KeyError, OSError) as e:
+    except (AssertionError, AttributeError, KeyError, ImportError, OSError) as e:
         # TODO: explain this line
         # traceback.print_exc()
         if args.verbose:
@@ -465,11 +465,6 @@ def main():
         else:
             logger.error(e.__repr__())
     finally:
-        msg = "Program exited with {}".format(retcode)
-        if retcode == 1:
-            logger.error(msg)
-        else:
-            logger.debug(msg)
         if main_cfg_dict['quiet']:
             print()
         return retcode
@@ -477,7 +472,7 @@ def main():
 
 if __name__ == '__main__':
     retcode = main()
-    msg = "\nProgram exited with <color>{}</color>".format(retcode)
+    msg = "Program exited with {}".format(retcode)
     if retcode == 1:
         logger.error(msg)
     else:
