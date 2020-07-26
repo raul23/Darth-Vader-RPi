@@ -1,3 +1,11 @@
+"""Collection of utilities specifically for the Darth-Vader-RPi project.
+
+.. _default logging configuration file: https://bit.ly/2D6exaD
+.. _default main configuration file: https://bit.ly/39x8o3e
+.. _user-defined logging configuration file: https://bit.ly/3f43Jac
+.. _user-defined main configuration file: https://bit.ly/30TapD0
+
+"""
 import codecs
 import json
 import os
@@ -29,28 +37,34 @@ _add_cfg_filenames()
 
 
 def get_cfg_dirpath():
-    """TODO
+    """Get the path to the directory containing the config files.
 
     Returns
     -------
+    dirpath : str
+        The path to the directory containing the config files.
+
+    See Also
+    --------
+    get_cfg_filepath : Get the path to a config file.
 
     """
     return configs.__path__[0]
 
 
 def get_cfg_filepath(file_type):
-    """Return the path to a config file used by :mod:`lyrics_scraping`.
+    """Get the path to a config file used by the :mod:`start_dv` script.
 
     The config file can either be the:
 
     - **default_log**: refers to the `default logging configuration file`_ used
       to setup the logging for all custom modules.
     - **default_main**: refers to the `default main configuration file`_ used to
-      setup a lyrics scraper.
+      setup the :mod:`start_dv` script.
     - **log**: refers to the `user-defined logging configuration file`_ which is
       used to setup the logging for all custom modules.
     - **main**: refers to the `user-defined main configuration file`_ used to
-      setup a lyrics scraper.
+      setup the :mod:`start_dv` script.
 
     Parameters
     ----------
