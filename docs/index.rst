@@ -14,6 +14,7 @@ Welcome to Darth-Vader-RPi's documentation!
    :maxdepth: 2
 
    README
+   api_reference
 
 
 Indices and tables
