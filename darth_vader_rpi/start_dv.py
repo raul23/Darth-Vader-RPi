@@ -25,7 +25,7 @@ Run the script on the RPi::
 
     $ start_dv
 
-Run the script using SimulRPi.GPIO which simulates RPi.GPIO::
+Run the script using `SimulRPi.GPIO`_ which simulates RPi.GPIO::
 
     $ start_dv -s
 
@@ -44,8 +44,9 @@ More information is available at:
 - Project GitHub: https://github.com/raul23/Darth-Vader-RPi
 - Project docs: https://darth-vader-rpi.readthedocs.io/en/latest/index.html
 
-.. _installed: https://github.com/raul23/Darth-Vader-RPi#readme
 .. _configuration file (JSON): https://bit.ly/3hE37tQ
+.. _SimulRPi.GPIO: https://github.com/raul23/SimulRPi
+.. _installed: https://github.com/raul23/Darth-Vader-RPi#readme
 
 """
 # TODO: add PyPi URL in description above (Notes section)
