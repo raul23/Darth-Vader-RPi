@@ -6,6 +6,10 @@
 Welcome to Darth-Vader-RPi's documentation!
 ===========================================
 
+.. raw:: html
+
+   <p align="center"><img src=_static/images/Darth_Vader_RPi_logo.png></p>
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
