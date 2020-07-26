@@ -74,4 +74,3 @@ class TestUtils(TestBase):
                 self.assertIn(ft, fp)
         logger.info("<color>RESULT:</color> All config file types return "
                     "valid file paths <color>as expected</color>")
-
