@@ -12,8 +12,8 @@ Welcome to Darth-Vader-RPi's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
+   README
 
 
 Indices and tables
