@@ -207,7 +207,7 @@ def setup_argparser():
     # Setup the parser
     parser = argparse.ArgumentParser(
         # usage="%(prog)s [OPTIONS]",
-        prog=__file__,
+        prog=os.path.basename(__file__),
         description='''\
     WRITEME''',
         formatter_class=argparse.RawDescriptionHelpFormatter)
