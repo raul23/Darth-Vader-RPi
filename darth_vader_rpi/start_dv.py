@@ -36,6 +36,19 @@ class SoundWrapper:
         self.channel_obj.stop()
 
 
+def get_cfg_dict(cfg_type):
+    global_cfg = {'main': _TEST_MAIN_CFG,
+                  'log': _TEST_LOGGING_CFG
+                  }
+    # Load main config file
+    if global_cfg[cfg_type]:
+        cfg_dict = global_cfg[cfg_type]
+    else:
+        cfg_filepath = get_cfg_filepath(cfg_type)
+        cfg_dict = load_json(cfg_filepath)
+    return cfg_dict
+
+
 def run_led_sequence(led_channels):
     # TODO: assert led_channels, i.e. keys (top, ...)
     t = threading.currentThread()
@@ -344,12 +357,8 @@ if __name__ == '__main__':
     parser = setup_argparser()
     args = parser.parse_args()
 
-    # Load main config file
-    if _TEST_MAIN_CFG:
-        main_cfg_dict = _TEST_MAIN_CFG
-    else:
-        main_cfg_filepath = get_cfg_filepath("main")
-        main_cfg_dict = load_json(main_cfg_filepath)
+    # Get main config dict
+    main_cfg_dict = get_cfg_dict('main')
 
     # Override logging configuration with command-line arguments
     retval = override_config_with_args(main_cfg_dict, parser)
@@ -363,11 +372,7 @@ if __name__ == '__main__':
         logger.disabled = True
     else:
         # Setup logger
-        if _TEST_LOGGING_CFG:
-            logging_cfg_dict = _TEST_LOGGING_CFG
-        else:
-            logging_filepath = get_cfg_filepath("log")
-            logging_cfg_dict = load_json(logging_filepath)
+        logging_cfg_dict = get_cfg_dict('log')
         if main_cfg_dict['verbose']:
             keys = ['handlers', 'loggers']
             for k in keys:
