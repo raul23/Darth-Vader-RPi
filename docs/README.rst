@@ -15,6 +15,6 @@ README
 
 .. raw:: html
 
-   <p align="center"><img src="https://github.com/raul23/images/blob/master/Darth-Vader-RPi/darth_vader_01.jpg" width="394" height="700"/></p>
+   <p align="center"><img src="https://raw.githubusercontent.com/raul23/images/master/Darth-Vader-RPi/darth_vader_01.jpg" width="394" height="700"/></p>
 
 **Darth-Vader-RPi** is a ...
