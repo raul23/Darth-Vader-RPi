@@ -33,6 +33,7 @@ setup(name='Darth-Vader-RPi',
       author_email='rchfe23@gmail.com',
       license='GPLv3',
       packages=find_packages(exclude=['tests']),
+      include_package_data=True,
       install_requires=[
           'pygame',
           'py-common-utils @ https://github.com/raul23/py-common-utils/tarball/master'
