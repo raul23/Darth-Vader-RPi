@@ -114,13 +114,8 @@ class SoundWrapper:
 
     The :meth:`__init__` method takes care of automatically loading the sound
     file. The sound file can then be played or stopped from the specified
-    channel with the :meth:`play` or :meth:`stop` method, respectively.
-
-    Notes
-    -----
-    It is a wrapper with a very minimal interface to
-    :class:`pygame.mixer.Channel` where only two methods :meth:`play` and
-    :meth:`stop` are provided for the sake of the project.
+    channel `channel_obj` with the :meth:`play` or :meth:`stop` method,
+    respectively.
 
     Parameters
     ----------
@@ -130,6 +125,13 @@ class SoundWrapper:
         Path to the sound file.
     channel_obj : pygame.mixer.Channel
         Channel object for controlling playback.
+
+
+    .. note::
+
+        It is a wrapper with a very minimal interface to
+        :class:`pygame.mixer.Channel` where only two methods :meth:`play` and
+        :meth:`stop` are provided for the sake of the project.
 
     """
 
@@ -141,7 +143,7 @@ class SoundWrapper:
         self.pygame_sound = pygame.mixer.Sound(self.filepath)
 
     def play(self, loops=0):
-        """Play a Sound on the specified Channel.
+        """Play a Sound on the specified Channel `channel_obj`.
 
         Parameters
         ----------
@@ -156,12 +158,12 @@ class SoundWrapper:
         self.channel_obj.play(self.pygame_sound, loops)
 
     def stop(self):
-        """Stop playback on the specified Channel.
+        """Stop playback on the specified Channel `channel_obj`.
         """
         self.channel_obj.stop()
 
 
-def get_cfg_dict(cfg_type):
+def _get_cfg_dict(cfg_type):
     global_cfg = {'main': _TEST_MAIN_CFG,
                   'log': _TEST_LOGGING_CFG
                   }
@@ -174,35 +176,88 @@ def get_cfg_dict(cfg_type):
     return cfg_dict
 
 
-def run_led_sequence(led_channels):
-    # TODO: assert led_channels, i.e. keys (top, ...)
+def turn_on_leds_sequence(leds_channels):
+    """Turn on/off three LEDs in a precise sequence.
+
+    These three LEDs are associated with Darth Vader's three slots located on
+    his chest control unit. These three LEDs are labeled as 'top', 'middle', and
+    'bottom' in the `leds_channels` dictionary.
+
+    The three LEDs are turn on according to the following sequence which repeats
+    itself:
+
+    1. top + bottom
+    2. top
+    3. bottom
+    4. middle + bottom
+    5. middle
+    6. top + middle
+    7. top + middle + bottom
+
+    Parameters
+    ----------
+    leds_channels : dict
+        Dictionary mapping the type of LED {'top', 'middle', 'bottom'} and its
+        channel number.
+
+
+    .. important::
+
+        This function should be run by a thread and eventually stopped from
+        the main thread by setting its ``do_run`` attribute to False to let
+        the thread break out from the infinite loop.
+
+    """
+    # TODO: assert leds_channels, i.e. keys (top, ...)
     t = threading.currentThread()
     seq_idx = 0
-    sequence = [[led_channels['top'], led_channels['bottom']],
-                [led_channels['top']],
-                [led_channels['bottom']],
-                [led_channels['middle'], led_channels['bottom']],
-                [led_channels['middle']],
-                [led_channels['top'], led_channels['middle']],
-                [led_channels['top'], led_channels['middle'], led_channels['bottom']]]
+    sequence = [
+        [leds_channels['top'], leds_channels['bottom']],
+        [leds_channels['top']],
+        [leds_channels['bottom']],
+        [leds_channels['middle'], leds_channels['bottom']],
+        [leds_channels['middle']],
+        [leds_channels['top'], leds_channels['middle']],
+        [leds_channels['top'], leds_channels['middle'], leds_channels['bottom']]
+    ]
     while getattr(t, "do_run", True):
         leds_step = sequence[seq_idx % len(sequence)]
         seq_idx += 1
-        turn_off_led(led_channels['top'])
-        turn_off_led(led_channels['middle'])
-        turn_off_led(led_channels['bottom'])
+        turn_off_led(leds_channels['top'])
+        turn_off_led(leds_channels['middle'])
+        turn_off_led(leds_channels['bottom'])
         for channel in leds_step:
             turn_on_led(channel)
         time.sleep(2)
-    logger.info("Stopping thread: run_leds_sequence()")
+    logger.info("Stopping thread: {}()".format(turn_on_leds_sequence.__name__))
 
 
 def turn_off_led(channel):
+    """
+
+    Parameters
+    ----------
+    channel
+
+    Returns
+    -------
+
+    """
     # logger.debug("LED {} off".format(led))
     GPIO.output(channel, GPIO.LOW)
 
 
 def turn_on_led(channel):
+    """
+
+    Parameters
+    ----------
+    channel
+
+    Returns
+    -------
+
+    """
     # logger.debug("LED {} on".format(led))
     GPIO.output(channel, GPIO.HIGH)
 
@@ -286,6 +341,12 @@ def edit_config(cfg_type, app=None):
 
 
 def setup_argparser():
+    """
+
+    Returns
+    -------
+
+    """
     # Help message that is used in various arguments
     common_help = '''Provide 'log' (without the quotes) for the logging config 
         file or 'main' (without the quotes) for the main config file.'''
@@ -342,6 +403,16 @@ def setup_argparser():
 
  
 def start_dv(main_cfg):
+    """
+
+    Parameters
+    ----------
+    main_cfg
+
+    Returns
+    -------
+
+    """
     logger.info("pygame mixer initialization")
     pygame.mixer.init()
     logger.info("RPi initialization")
@@ -409,8 +480,8 @@ def start_dv(main_cfg):
     load_sounds()
     quotes = loaded_sounds['quotes']
 
-    led_channels = {'top': top_led, 'middle': middle_led, 'bottom': bottom_led}
-    th = threading.Thread(target=run_led_sequence, args=(led_channels,))
+    leds_channels = {'top': top_led, 'middle': middle_led, 'bottom': bottom_led}
+    th = threading.Thread(target=turn_on_leds_sequence, args=(leds_channels,))
     th.start()
 
     logger.info("")
@@ -464,6 +535,12 @@ def start_dv(main_cfg):
 
 
 def main():
+    """
+
+    Returns
+    -------
+
+    """
     global logger, GPIO
     # Setup the default logger (whose name is __main__ since this file is run
     # as a script) which will be used for printing to the console before all
@@ -482,7 +559,7 @@ def main():
     args = parser.parse_args()
 
     # Get main config dict
-    main_cfg_dict = get_cfg_dict('main')
+    main_cfg_dict = _get_cfg_dict('main')
 
     # Override logging configuration with command-line arguments
     retval = override_config_with_args(main_cfg_dict, parser)
@@ -496,7 +573,7 @@ def main():
         logger.disabled = True
     else:
         # Setup logger
-        logging_cfg_dict = get_cfg_dict('log')
+        logging_cfg_dict = _get_cfg_dict('log')
         if main_cfg_dict['verbose']:
             keys = ['handlers', 'loggers']
             for k in keys:
