@@ -97,17 +97,6 @@ def get_cfg_filepath(file_type):
     return os.path.join(get_cfg_dirpath(), filename)
 
 
-# TODO: use load_json() from pyutils
-def load_json(filepath, encoding='utf8'):
-    try:
-        with codecs.open(filepath, 'r', encoding) as f:
-            data = json.load(f)
-    except OSError:
-        raise
-    else:
-        return data
-
-
 def msg_with_spaces(msg, nb_spaces=20):
     return "{}{}".format(msg, " " * nb_spaces)
 
