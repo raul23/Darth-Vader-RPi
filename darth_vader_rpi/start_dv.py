@@ -46,7 +46,7 @@ Notes
 -----
 More information is available at:
 
-- Project GitHub: https://github.com/raul23/Darth-Vader-RPi
+- Darth-Vader-RPi GitHub: https://github.com/raul23/Darth-Vader-RPi
 - SimulRPi GitHub: https://github.com/raul23/SimulRPi
 
 .. _configuration file (JSON): https://bit.ly/3hE37tQ
