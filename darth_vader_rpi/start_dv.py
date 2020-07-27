@@ -184,15 +184,15 @@ def turn_on_leds_sequence(leds_channels):
     'bottom' in the `leds_channels` dictionary.
 
     The three LEDs are turn on according to the following sequence which repeats
-    itself:
+    itself::
 
-    1. top + bottom
-    2. top
-    3. bottom
-    4. middle + bottom
-    5. middle
-    6. top + middle
-    7. top + middle + bottom
+        1. top + bottom
+        2. top
+        3. bottom
+        4. middle + bottom
+        5. middle
+        6. top + middle
+        7. top + middle + bottom
 
     Parameters
     ----------
