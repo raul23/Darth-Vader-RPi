@@ -6,11 +6,7 @@
 .. _user-defined main configuration file: https://bit.ly/30TapD0
 
 """
-import codecs
-import json
 import os
-import shlex
-import subprocess
 from collections import namedtuple
 
 from darth_vader_rpi import configs
@@ -120,51 +116,3 @@ def override_config_with_args(config, parser):
                 config[opt_name] = new_val
                 retval.config_opts_overidden.append((opt_name, old_val, new_val))
     return retval
-
-
-# TODO: use run_cmd() from pyutils
-def run_cmd(cmd, stderr=subprocess.STDOUT):
-    """Run a command with arguments.
-
-    The command is given as a string but the function will split it in order to
-    get a list having the name of the command and its arguments as items.
-
-    Parameters
-    ----------
-    cmd : str
-        Command to be executed, e.g. ::
-
-            open -a TextEdit text.txt
-    stderr
-
-    Returns
-    -------
-    retcode: int
-        Return code which is 0 if the command was successfully completed.
-        Otherwise, the return code is non-zero.
-
-    Raises
-    ------
-    FileNotFoundError
-        TODO command not recognized, e.g. `$ TextEdit {filepath}`
-
-    Examples
-    --------
-    TODO
-
-    """
-    try:
-        # `check_call()` takes as input a list. Thus, the string command must
-        # be split to get the command name and its arguments as items of a list.
-        # NOTE: To suppress stdout or stderr, supply a value of DEVNULL
-        #       Ref.: https://bit.ly/35NqiN0
-        """
-        retcode = subprocess.check_call(shlex.split(cmd), stderr=stderr)
-        """
-        result = subprocess.run(shlex.split(cmd), capture_output=True)
-    except subprocess.CalledProcessError as e:
-        return e
-    except FileNotFoundError:
-        raise
-    else:
-        return result
