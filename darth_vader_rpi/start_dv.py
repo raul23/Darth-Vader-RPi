@@ -16,7 +16,8 @@ among other things the RPi's GPIO pins connected to LEDs and buttons.
 
 By default the module `RPi.GPIO`_ is used, but if the `simulation` option (`-s`)
 is used with the `start_dv`_ script, then the module `SimulRPi.GPIO`_ will be
-used which simulates `RPi.GPIO`_ for those that don't have an RPi to test on.
+used instead which simulates `RPi.GPIO`_ for those that don't have an RPi to
+test on.
 
 Usage
 -----
@@ -46,7 +47,7 @@ Notes
 More information is available at:
 
 - Project GitHub: https://github.com/raul23/Darth-Vader-RPi
-- Project docs: https://darth-vader-rpi.readthedocs.io/en/latest/index.html
+- SimulRPi GitHub: https://github.com/raul23/SimulRPi
 
 .. _configuration file (JSON): https://bit.ly/3hE37tQ
 .. _installed: https://github.com/raul23/Darth-Vader-RPi#readme
