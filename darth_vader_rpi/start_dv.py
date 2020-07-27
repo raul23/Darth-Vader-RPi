@@ -383,16 +383,14 @@ def start_dv(main_cfg):
         logger.info(msg_with_spaces("Exiting..."))
 
     logger.info(msg_with_spaces("Cleanup..."))
-    turn_off_led(top_led)
-    turn_off_led(middle_led)
-    turn_off_led(bottom_led)
-    turn_off_led(lightsaber_led)
+    for gpio_name, gpio_pin in main_cfg['GPIO'].items():
+        if gpio_name.endswith("_led"):
+            turn_off_led(gpio_pin)
     GPIO.cleanup()
     th.do_run = False
     th.join()
-    channel1.stop()
-    channel2.stop()
-    channel3.stop()
+    for ch_num, ch_obj in channels.items():
+        ch_obj.stop()
 
     return 0
 
