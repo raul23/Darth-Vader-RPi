@@ -52,6 +52,7 @@ More information is available at:
 # TODO: add PyPi URL in description above (Notes section)
 
 import argparse
+import curses
 import logging.config
 import os
 import platform
@@ -471,6 +472,9 @@ def main():
             else:
                 import RPi.GPIO
                 GPIO = RPi.GPIO
+            # TODO: works on UNIX shell only, not Windows
+            # ref.: https://bit.ly/3f3A7dc
+            os.system("tput civis")
             retcode = start_dv(main_cfg_dict)
     except (AssertionError, AttributeError, KeyError, ImportError, OSError) as e:
         # TODO: explain this line
@@ -480,6 +484,8 @@ def main():
         else:
             logger.error(e.__repr__())
     finally:
+        # TODO: works on UNIX shell only, not Windows
+        os.system("tput cnorm")
         if main_cfg_dict['quiet']:
             print()
         return retcode
