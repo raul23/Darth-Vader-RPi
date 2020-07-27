@@ -1,8 +1,8 @@
 #!/usr/script/env python
-"""Script to turn on LEDs and play sound effects for an RPi.
+"""Script to turn on LEDs and play sound effects on a Raspberry Pi.
 
 The LEDs illuminate a Darth Vader figurine's lightsaber and the three slots in
-the chest control unit. 3 push buttons control the sound effects:
+the chest control unit. 3 push buttons control the following sounds:
 
 1. Some of his famous quotes
 2. The Imperial march theme song
@@ -13,6 +13,10 @@ RPi is run with the script.
 
 The script allows you also to edit the `configuration file (JSON)`_ to setup
 among other things the RPi's GPIO pins connected to LEDs and buttons.
+
+By default the module `RPi.GPIO`_ is used, but if the `simulation` option (`-s`)
+is used with the `start_dv`_ script, then the module `SimulRPi.GPIO`_ will be
+used which simulates `RPi.GPIO`_ for those that don't have an RPi to test on.
 
 Usage
 -----
@@ -45,14 +49,17 @@ More information is available at:
 - Project docs: https://darth-vader-rpi.readthedocs.io/en/latest/index.html
 
 .. _configuration file (JSON): https://bit.ly/3hE37tQ
-.. _SimulRPi.GPIO: https://github.com/raul23/SimulRPi
 .. _installed: https://github.com/raul23/Darth-Vader-RPi#readme
+.. _RPi.GPIO:
+    https://pypi.org/project/RPi.GPIO/
+.. _SimulRPi.GPIO: https://github.com/raul23/SimulRPi
+.. _start_dv:
+    https://darth-vader-rpi.readthedocs.io/en/latest/api_reference.html#usage
 
 """
 # TODO: add PyPi URL in description above (Notes section)
 
 import argparse
-import curses
 import logging.config
 import os
 import platform
@@ -71,13 +78,52 @@ from pyutils.genutils import load_json, run_cmd
 logger = logging.getLogger(__name__)
 logger.addHandler(NullHandler())
 
+"""Dictionary containing the logging configuration data.
+
+The default value is :obj:`None` and will be set when performing the tests from
+:mod:`darth_vader_rpi.tests`).
+"""
 _TEST_LOGGING_CFG = None
+
+"""Dictionary containing the main configuration data.
+
+The default value is :obj:`None` and will be set when performing the tests from
+:mod:`darth_vader_rpi.tests`).
+"""
 _TEST_MAIN_CFG = None
+
+"""`RPi.GPIO`_ provides a class to control the GPIO on a Raspberry Pi.
+
+If the `simulation` option is used with the :mod:`start_dv` script, the 
+:mod:`SimulRPi.GPIO` module will be used instead (the default value is 
+:obj:`None` and will be eventually set to one of the two modules).
+"""
 GPIO = None
 
 
 class SoundWrapper:
-    """Class that wraps around :class:`pygame.mixer.Channel`.
+    """Class that wraps around :class:`pygame.mixer.Channel` and
+    :class:`pygame.mixer.Sound`.
+
+    The :meth:`__init__` method takes care of automaticaly loading the sound
+    file. The sound file can then be played or stopped from the specified
+    channel with the :meth:`play` or :meth:`stop` method, respectively.
+
+    Parameters
+    ----------
+    name : str
+        Blablab ...
+    filepath : str
+        Blablab ...
+    channel_obj : pygame.mixer.Channel
+        Blablab ...
+
+    Attributes
+    ----------
+    logger : logging.Logger
+        Logger for logging to console (the default value is set to a
+        :class:`logging.Logger` that has a :class:`logging.NullHandler`).
+
     """
 
     def __init__(self, name, filepath, channel_obj):
@@ -88,9 +134,19 @@ class SoundWrapper:
         self.pygame_sound = pygame.mixer.Sound(self.filepath)
 
     def play(self, loops=0):
+        """
+
+        Parameters
+        ----------
+        loops : int
+            Blabla...
+
+        """
         self.channel_obj.play(self.pygame_sound, loops)
 
     def stop(self):
+        """
+        """
         self.channel_obj.stop()
 
 
