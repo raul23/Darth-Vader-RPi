@@ -1,5 +1,5 @@
 #!/usr/script/env python
-"""Script to turn on LEDs and play sound effects on a Raspberry Pi.
+"""Script to turn on LEDs and play sound effects on a Raspberry Pi (RPi).
 
 The LEDs illuminate a Darth Vader figurine's lightsaber and the three slots in
 the chest control unit. 3 push buttons control the following sounds:
@@ -115,6 +115,12 @@ class SoundWrapper:
     The :meth:`__init__` method takes care of automatically loading the sound
     file. The sound file can then be played or stopped from the specified
     channel with the :meth:`play` or :meth:`stop` method, respectively.
+
+    Notes
+    -----
+    It is a wrapper with a very minimal interface to
+    :class:`pygame.mixer.Channel` where only two methods :meth:`play` and
+    :meth:`stop` are provided for the sake of the project.
 
     Parameters
     ----------
