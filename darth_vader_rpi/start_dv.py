@@ -133,8 +133,6 @@ class SoundWrapper:
         self.channel_obj = channel_obj
         # Load sound file
         self.pygame_sound = pygame.mixer.Sound(self.filepath)
-        import ipdb
-        ipdb.set_trace()
 
     def play(self, loops=0):
         """Play a Sound on the specified Channel.
