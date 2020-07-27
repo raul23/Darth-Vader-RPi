@@ -63,10 +63,9 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 
 from darth_vader_rpi import __name__ as package_name, __version__
-from darth_vader_rpi.utils import (get_cfg_filepath,
-                                   msg_with_spaces, override_config_with_args,
-                                   run_cmd)
-from pyutils.genutils import load_json
+from darth_vader_rpi.utils import (get_cfg_filepath, msg_with_spaces,
+                                   override_config_with_args)
+from pyutils.genutils import load_json, run_cmd
 
 logger = logging.getLogger(__name__)
 logger.addHandler(NullHandler())
@@ -77,6 +76,9 @@ GPIO = None
 
 
 class SoundWrapper:
+    """Class that wraps around :class:`pygame.mixer.Channel`.
+    """
+
     def __init__(self, name, filepath, channel_obj):
         self.name = name
         self.filepath = filepath
