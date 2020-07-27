@@ -57,6 +57,7 @@ source_suffix = '.rst'
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
+    'pygame': ('https://www.pygame.org/docs', None),
     'python': ('https://docs.python.org/3', None),
     'pyutils': ('https://py-common-utils.readthedocs.io/en/latest', None)}
 
