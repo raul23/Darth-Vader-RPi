@@ -233,14 +233,12 @@ def turn_on_leds_sequence(leds_channels):
 
 
 def turn_off_led(channel):
-    """
+    """Turn off a LED from a given channel.
 
     Parameters
     ----------
-    channel
-
-    Returns
-    -------
+    channel : int
+        Channel number associated with a LED which will be turn off.
 
     """
     # logger.debug("LED {} off".format(led))
@@ -248,14 +246,12 @@ def turn_off_led(channel):
 
 
 def turn_on_led(channel):
-    """
+    """Turn on a LED from a given channel.
 
     Parameters
     ----------
-    channel
-
-    Returns
-    -------
+    channel : int
+        Channel number associated with a LED which will be turn on.
 
     """
     # logger.debug("LED {} on".format(led))
