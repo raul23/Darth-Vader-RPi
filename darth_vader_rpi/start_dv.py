@@ -51,6 +51,8 @@ More information is available at:
 
 .. _configuration file (JSON): https://bit.ly/3hE37tQ
 .. _installed: https://github.com/raul23/Darth-Vader-RPi#readme
+.. _pygame.mixer.Sound.play:
+    https://www.pygame.org/docs/ref/mixer.html#pygame.mixer.Sound.play
 .. _RPi.GPIO:
     https://pypi.org/project/RPi.GPIO/
 .. _SimulRPi.GPIO: https://github.com/raul23/SimulRPi
@@ -81,23 +83,27 @@ logger.addHandler(NullHandler())
 
 """Dictionary containing the logging configuration data.
 
-The default value is :obj:`None` and will be set when performing the tests from
-:mod:`darth_vader_rpi.tests`).
+The default value is None and will be set when performing the tests from
+`darth_vader_rpi.tests`).
 """
 _TEST_LOGGING_CFG = None
 
 """Dictionary containing the main configuration data.
 
-The default value is :obj:`None` and will be set when performing the tests from
-:mod:`darth_vader_rpi.tests`).
+The default value is None and will be set when performing the tests from
+`darth_vader_rpi.tests`).
 """
 _TEST_MAIN_CFG = None
 
-"""`RPi.GPIO`_ provides a class to control the GPIO on a Raspberry Pi.
+"""RPi.GPIO provides a class to control the GPIO on a Raspberry Pi.
 
-If the `simulation` option is used with the :mod:`start_dv` script, the 
-:mod:`SimulRPi.GPIO` module will be used instead (the default value is 
-:obj:`None` and will be eventually set to one of the two modules).
+If the `simulation` option is used with the `start_dv` script, the 
+`SimulRPi.GPIO` module will be used instead (the default value is 
+None and will be eventually set to one of the two modules).
+
+Ref.: 
+    - https://pypi.org/project/RPi.GPIO/
+    - https://github.com/raul23/SimulRPi
 """
 GPIO = None
 
@@ -106,24 +112,18 @@ class SoundWrapper:
     """Class that wraps around :class:`pygame.mixer.Channel` and
     :class:`pygame.mixer.Sound`.
 
-    The :meth:`__init__` method takes care of automaticaly loading the sound
+    The :meth:`__init__` method takes care of automatically loading the sound
     file. The sound file can then be played or stopped from the specified
     channel with the :meth:`play` or :meth:`stop` method, respectively.
 
     Parameters
     ----------
     name : str
-        Blablab ...
+        Name of the sound file.
     filepath : str
-        Blablab ...
+        Path to the sound file.
     channel_obj : pygame.mixer.Channel
-        Blablab ...
-
-    Attributes
-    ----------
-    logger : logging.Logger
-        Logger for logging to console (the default value is set to a
-        :class:`logging.Logger` that has a :class:`logging.NullHandler`).
+        Channel object for controlling playback.
 
     """
 
@@ -133,20 +133,26 @@ class SoundWrapper:
         self.channel_obj = channel_obj
         # Load sound file
         self.pygame_sound = pygame.mixer.Sound(self.filepath)
+        import ipdb
+        ipdb.set_trace()
 
     def play(self, loops=0):
-        """
+        """Play a Sound on the specified Channel.
 
         Parameters
         ----------
         loops : int
-            Blabla...
+            Controls how many times the sample will be repeated after being
+            played the first time. The default value (zero) means the Sound is
+            not repeated, and so is only played once. If `loops` is set to -1
+            the Sound will loop indefinitely (though you can still call
+            :meth:`stop` to stop it). Reference from `pygame.mixer.Sound.play`_
 
         """
         self.channel_obj.play(self.pygame_sound, loops)
 
     def stop(self):
-        """
+        """Stop playback on the specified Channel.
         """
         self.channel_obj.stop()
 
@@ -211,8 +217,8 @@ def edit_config(cfg_type, app=None):
     cfg_type : str, {'log', 'main'}
         The type of configuration file we want to edit. 'log' refers to the
         logging config file, and 'main' to the main config file used to setup a
-        the Darth-Vader-RPi project such as the sound effects or the GPIO
-        channels.
+        the Darth-Vader-RPi project such as specifying the sound effects or the
+        GPIO channels.
     app : str
         Name of the application to use for opening the config file, e.g. TextEdit
         (the default value is None which implies that the default application
