@@ -46,6 +46,6 @@ RPi is run with the script.
 .. raw:: html
 
    <div align="center">
-   <img src="https://4.bp.blogspot.com/-StAM8N9yHDU/WyqzyZCN-9I/AAAAAAAAAH4/6eQP5ehsodUu4PMzR4IEjbDH3NA4HrmrgCLcBGAs/s1600/splitscreen_3_videos_trim_300_first_frames_fast_4x_youtube_720p30_gif_13fps_640x400.gif"/>
+   <img src="https://lh3.googleusercontent.com/oY8-EKrAzt78WYUTzpfN04uTe8WvUdxFzbb_wfgXDcTNTFObt3-jAXLGMrg4PBHpLp992PpurrouJ7n5CiDfpovUtZCO893kLKL7Bl9BwtYjpo_BQMmM_dVC0PMC6iXejIA5Zk3OAv7gkLKL5zSaQjD6-pcVngm8bxGPu0vAdmbVsBC1jPnNH_kw1TD9ajgLa8sJ5eGqDTNF5LITXCrO60tAsCa-RMAwpcJCYwuEk97spO_W_auZtqzp3hELz7vZER5sPa72XF_Rkwg2jdzAaZOc1DMynbt6-gGIplKlOaMHjcvv9BOu4GzrRPb_xE6iVIk071dV9TjodSTkB_svIDBBRadCPDXleLX31eQTO1OicV57PXP02icWc9UFe9zMEhlLwp9KvLlCc8Z8H0PzuC2JP0bNMbvDB0kJ2PemgCu2Ja7Wy1oY4TvHyZMBKreukS-nan-uYl8D0PXuOs30lRzzB_DveOmK-B-9KAMC-pHzmVwSTZt0ybGZuaEq-MESHNKepUIdB0B1KtqwdJcuiiSvwCi6pi2nq7wHR8urxBVlPLB3njvVh_hydpI78ZrJwtd8YR9Wh2lgIX4z0WMhB28oImPm6uv4dXH5Luc1PQ2GiHwBkCuMEFs4oE77kPS5O1qa69plIIeqx3NF21HQEjGXC5YqJViLl5Ht7tDI0b5JIbPY03GZ0fXzUP5V=w147-h220-no?authuser=0"/>
    <p><b>Turning on/off the lightsaber</b></p>
    </div>
