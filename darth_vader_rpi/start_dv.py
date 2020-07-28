@@ -6,7 +6,7 @@ the chest control unit. 3 push buttons control the following sounds:
 
 1. Some of his famous quotes
 2. The Imperial march theme song
-3. The light saber opening and closing sounds
+3. The lightsaber opening and closing sounds and its illumination
 
 His iconic breathing sound plays in the background indefinitely as soon as the
 RPi is run with the script.
@@ -267,7 +267,7 @@ def activate_dv(main_cfg):
 
     1. Some of his famous quotes
     2. The Imperial march theme song
-    3. The light saber opening and closing sounds
+    3. The lightsaber opening and closing sounds and its illumination
 
     His iconic breathing sound plays in the background indefinitely as soon as
     the RPi is run with the script.
