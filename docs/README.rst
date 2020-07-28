@@ -40,7 +40,7 @@ RPi is run with the script.
    <p><b>Click on the above image for the full video</b></p>
    </div>
 
-..
+.. raw:: html
    <div align="center">
    <img src="https://bit.ly/330rzBr"/>
    <p><b>Turning on/off the lightsaber</b></p>
@@ -49,7 +49,7 @@ RPi is run with the script.
 |
 |
 
-.. raw:: html
+.. 
 
    <div align="center">
    <img src="https://bit.ly/30QEKlT"/>
