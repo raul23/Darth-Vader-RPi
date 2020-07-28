@@ -1,8 +1,8 @@
 #!/usr/script/env python
 """Script to turn on LEDs and play sound effects on a Raspberry Pi (RPi).
 
-The LEDs illuminate a Darth Vader figurine's lightsaber and the three slots in
-the chest control unit. 3 push buttons control the following sounds:
+The LEDs illuminate a Darth Vader action figure's lightsaber and the three
+slots in the chest control unit. 3 push buttons control the following sounds:
 
 1. Some of his famous quotes
 2. The Imperial march theme song
