@@ -52,7 +52,7 @@ More information is available at:
 - Darth-Vader-RPi GitHub: https://github.com/raul23/Darth-Vader-RPi
 - SimulRPi GitHub: https://github.com/raul23/SimulRPi
 
-.. _configuration file (JSON): https://bit.ly/3hE37tQ
+.. _configuration file (JSON): https://bit.ly/3f6qpa7
 .. _installed: https://github.com/raul23/Darth-Vader-RPi#readme
 .. _pygame.mixer.Sound.play:
     https://www.pygame.org/docs/ref/mixer.html#pygame.mixer.Sound.play
@@ -259,6 +259,156 @@ def turn_on_led(channel):
     GPIO.output(channel, GPIO.HIGH)
 
 
+def activate_dv(main_cfg):
+    """Activate Darth Vader by turning on LEDs and playing sounds.
+
+    The LEDs illuminate Darth Vader's lightsaber and the three slots in the
+    chest control unit. 3 buttons control the following sounds:
+
+    1. Some of his famous quotes
+    2. The Imperial march theme song
+    3. The light saber opening and closing sounds
+
+    His iconic breathing sound plays in the background indefinitely as soon as
+    the RPi is run with the script.
+
+    Parameters
+    ----------
+    main_cfg : dict
+        Dictionary containing the configuration data to setup the RPi, such as
+        the GPIO pins and the sound files. See `configuration file (JSON)`_ for
+        a detailed look into its content.
+
+    Returns
+    -------
+    retcode: int
+        If the script was run on the RPi without any :exc:`Exception`, the
+        return code is 0. Otherwise, it is 1.
+
+    """
+    logger.info("pygame mixer initialization")
+    pygame.mixer.init()
+    logger.info("RPi initialization")
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setwarnings(False)
+    # LEDs
+    top_led = main_cfg['GPIO']['top_led']
+    middle_led = main_cfg['GPIO']['middle_led']
+    bottom_led = main_cfg['GPIO']['bottom_led']
+    lightsaber_led = main_cfg['GPIO']['lightsaber_led']
+    GPIO.setup(top_led, GPIO.OUT)
+    GPIO.setup(middle_led, GPIO.OUT)
+    GPIO.setup(bottom_led, GPIO.OUT)
+    GPIO.setup(lightsaber_led, GPIO.OUT)
+    # Buttons
+    lightsaber_button = main_cfg['GPIO']['lightsaber_button']
+    song_button = main_cfg['GPIO']['song_button']
+    quotes_button = main_cfg['GPIO']['quotes_button']
+    GPIO.setup(lightsaber_button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.setup(song_button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.setup(quotes_button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+    ### Sound
+    # Create separate channel
+    # Ref.: stackoverflow.com/a/59742418
+    channel1 = pygame.mixer.Channel(0)  # Breathing sound
+    channel2 = pygame.mixer.Channel(1)  # Song
+    channel3 = pygame.mixer.Channel(2)  # Lightsaber sound
+    channels = {1: channel1, 2: channel2, 3: channel3}
+    # Set volume
+    channels[1].set_volume(main_cfg['channel1_volume'])
+    channels[2].set_volume(main_cfg['channel2_volume'])
+    channels[3].set_volume(main_cfg['channel3_volume'])
+
+    loaded_sounds = {}
+    sounds_dir = os.path.expanduser(main_cfg['sounds_directory'])
+    logger.info("Loading sound effects...")
+
+    def load_sounds():
+        for sound_type in ['quotes', 'songs', 'sound_effects']:
+            if sound_type == 'quotes':
+                for quote in main_cfg[sound_type]:
+                    logger.info("Loading {}".format(quote['name']))
+                    loaded_sounds.setdefault('quotes', [])
+                    filepath = os.path.join(sounds_dir, quote['filename'])
+                    channel_obj = channels[quote['channel']]
+                    loaded_sounds['quotes'].append(
+                        SoundWrapper(quote['name'], filepath, channel_obj))
+            elif sound_type in ['songs', 'sound_effects']:
+                for s in main_cfg[sound_type]:
+                    sound = s.popitem()
+                    sound_name = sound[0]
+                    sound_info = sound[1]
+                    logger.info("Loading {}".format(sound[0]))
+                    filepath = os.path.join(sounds_dir, sound_info['filename'])
+                    channel_obj = channels[sound_info['channel']]
+                    loaded_sounds.setdefault(sound_name,
+                                             SoundWrapper(sound_name,
+                                                          filepath,
+                                                          channel_obj))
+                    if sound_info.get('play'):
+                        loops = sound_info.get('loops', -1)
+                        loaded_sounds[sound_name].play(loops)
+
+    load_sounds()
+    quotes = loaded_sounds['quotes']
+
+    leds_channels = {'top': top_led, 'middle': middle_led, 'bottom': bottom_led}
+    th = threading.Thread(target=turn_on_leds_sequence, args=(leds_channels,))
+    th.start()
+
+    logger.info("")
+    logger.info(msg_with_spaces("Press any button"))
+    pressed_lightsaber = False
+    quote_idx = 0
+
+    retcode = 0
+    try:
+        while True:
+            if not GPIO.input(lightsaber_button):
+                logger.debug("\n\nButton {} pressed...".format(lightsaber_button))
+                if pressed_lightsaber:
+                    pressed_lightsaber = False
+                    loaded_sounds['lightsaber_close_sound'].play()
+                    time.sleep(0.1)  # 0.3
+                    turn_off_led(22)
+                else:
+                    pressed_lightsaber = True
+                    loaded_sounds['lightsaber_open_sound'].play()
+                    loaded_sounds['lightsaber_running_sound'].play(-1)
+                    time.sleep(0.1)  # 0.3
+                    turn_on_led(lightsaber_led)
+                time.sleep(0.2)  # 0.2
+            elif not GPIO.input(song_button):
+                logger.debug("\n\nButton {} pressed...".format(song_button))
+                loaded_sounds['imperial_march_song'].play()
+                time.sleep(0.2)
+            elif not GPIO.input(quotes_button):
+                logger.debug("\n\nButton {} pressed...".format(quotes_button))
+                quote = quotes[quote_idx % len(quotes)]
+                quote_idx += 1
+                quote.play()
+                time.sleep(0.2)
+    except Exception as e:
+        logger.exception(msg_with_spaces("Error: {}".format(e)))
+        logger.info(msg_with_spaces("Exiting..."))
+        retcode = 1
+    except KeyboardInterrupt:
+        logger.info(msg_with_spaces("Exiting..."))
+
+    logger.info(msg_with_spaces("Cleanup..."))
+    for gpio_name, gpio_pin in main_cfg['GPIO'].items():
+        if gpio_name.endswith("_led"):
+            turn_off_led(gpio_pin)
+    GPIO.cleanup()
+    th.do_run = False
+    th.join()
+    for ch_num, ch_obj in channels.items():
+        ch_obj.stop()
+
+    return retcode
+
+
 def edit_config(cfg_type, app=None):
     """Edit a configuration file.
 
@@ -412,144 +562,19 @@ def setup_argparser():
     """
     return parser
 
- 
-def start_dv(main_cfg):
-    """
-
-    Parameters
-    ----------
-    main_cfg
-
-    Returns
-    -------
-
-    """
-    logger.info("pygame mixer initialization")
-    pygame.mixer.init()
-    logger.info("RPi initialization")
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setwarnings(False)
-    # LEDs
-    top_led = main_cfg['GPIO']['top_led']
-    middle_led = main_cfg['GPIO']['middle_led']
-    bottom_led = main_cfg['GPIO']['bottom_led']
-    lightsaber_led = main_cfg['GPIO']['lightsaber_led']
-    GPIO.setup(top_led, GPIO.OUT)
-    GPIO.setup(middle_led, GPIO.OUT)
-    GPIO.setup(bottom_led, GPIO.OUT)
-    GPIO.setup(lightsaber_led, GPIO.OUT)
-    # Buttons
-    lightsaber_button = main_cfg['GPIO']['lightsaber_button']
-    song_button = main_cfg['GPIO']['song_button']
-    quotes_button = main_cfg['GPIO']['quotes_button']
-    GPIO.setup(lightsaber_button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.setup(song_button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.setup(quotes_button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-
-    ### Sound
-    # Create separate channel
-    # Ref.: stackoverflow.com/a/59742418
-    channel1 = pygame.mixer.Channel(0)  # Breathing sound
-    channel2 = pygame.mixer.Channel(1)  # Song
-    channel3 = pygame.mixer.Channel(2)  # Lightsaber sound
-    channels = {1: channel1, 2: channel2, 3: channel3}
-    # Set volume
-    channels[1].set_volume(main_cfg['channel1_volume'])
-    channels[2].set_volume(main_cfg['channel2_volume'])
-    channels[3].set_volume(main_cfg['channel3_volume'])
-
-    loaded_sounds = {}
-    sounds_dir = os.path.expanduser(main_cfg['sounds_directory'])
-    logger.info("Loading sound effects...")
-
-    def load_sounds():
-        for sound_type in ['quotes', 'songs', 'sound_effects']:
-            if sound_type == 'quotes':
-                for quote in main_cfg[sound_type]:
-                    logger.info("Loading {}".format(quote['name']))
-                    loaded_sounds.setdefault('quotes', [])
-                    filepath = os.path.join(sounds_dir, quote['filename'])
-                    channel_obj = channels[quote['channel']]
-                    loaded_sounds['quotes'].append(
-                        SoundWrapper(quote['name'], filepath, channel_obj))
-            elif sound_type in ['songs', 'sound_effects']:
-                for s in main_cfg[sound_type]:
-                    sound = s.popitem()
-                    sound_name = sound[0]
-                    sound_info = sound[1]
-                    logger.info("Loading {}".format(sound[0]))
-                    filepath = os.path.join(sounds_dir, sound_info['filename'])
-                    channel_obj = channels[sound_info['channel']]
-                    loaded_sounds.setdefault(sound_name,
-                                             SoundWrapper(sound_name,
-                                                          filepath,
-                                                          channel_obj))
-                    if sound_info.get('play'):
-                        loops = sound_info.get('loops', -1)
-                        loaded_sounds[sound_name].play(loops)
-
-    load_sounds()
-    quotes = loaded_sounds['quotes']
-
-    leds_channels = {'top': top_led, 'middle': middle_led, 'bottom': bottom_led}
-    th = threading.Thread(target=turn_on_leds_sequence, args=(leds_channels,))
-    th.start()
-
-    logger.info("")
-    logger.info(msg_with_spaces("Press any button"))
-    pressed_lightsaber = False
-    quote_idx = 0
-
-    try:
-        while True:
-            if not GPIO.input(lightsaber_button):
-                logger.debug("\n\nButton {} pressed...".format(lightsaber_button))
-                if pressed_lightsaber:
-                    pressed_lightsaber = False
-                    loaded_sounds['lightsaber_close_sound'].play()
-                    time.sleep(0.2)  # 0.3
-                    turn_off_led(22)
-                else:
-                    pressed_lightsaber = True
-                    loaded_sounds['lightsaber_open_sound'].play()
-                    loaded_sounds['lightsaber_running_sound'].play(-1)
-                    time.sleep(0.2)  # 0.3
-                    turn_on_led(lightsaber_led)
-                time.sleep(0.2)  # 0.2
-            elif not GPIO.input(song_button):
-                logger.debug("\n\nButton {} pressed...".format(song_button))
-                loaded_sounds['imperial_march_song'].play()
-                time.sleep(0.2)
-            elif not GPIO.input(quotes_button):
-                logger.debug("\n\nButton {} pressed...".format(quotes_button))
-                quote = quotes[quote_idx % len(quotes)]
-                quote_idx += 1
-                quote.play()
-                time.sleep(0.2)
-    except Exception as e:
-        logger.exception(msg_with_spaces("Error: {}".format(e)))
-        logger.info(msg_with_spaces("Exiting..."))
-    except KeyboardInterrupt:
-        logger.info(msg_with_spaces("Exiting..."))
-
-    logger.info(msg_with_spaces("Cleanup..."))
-    for gpio_name, gpio_pin in main_cfg['GPIO'].items():
-        if gpio_name.endswith("_led"):
-            turn_off_led(gpio_pin)
-    GPIO.cleanup()
-    th.do_run = False
-    th.join()
-    for ch_num, ch_obj in channels.items():
-        ch_obj.stop()
-
-    return 0
-
 
 def main():
-    """
+    """Main entry-point to the script.
 
-    Returns
-    -------
+    According to the user's choice of action, the script might:
+
+    - activate Darth Vader,
+    - edit a configuration file, or
+    - reset/undo a configuration file [SOON].
+
+    Notes
+    -----
+    Only one action at a time can be performed.
 
     """
     global logger, GPIO
@@ -585,6 +610,7 @@ def main():
     else:
         # Setup logger
         logging_cfg_dict = _get_cfg_dict('log')
+        # TODO: sanity check on loggers (names based in package...)
         if main_cfg_dict['verbose']:
             keys = ['handlers', 'loggers']
             for k in keys:
@@ -630,7 +656,7 @@ def main():
             # TODO: works on UNIX shell only, not Windows
             # ref.: https://bit.ly/3f3A7dc
             os.system("tput civis")
-            retcode = start_dv(main_cfg_dict)
+            retcode = activate_dv(main_cfg_dict)
     except (AssertionError, AttributeError, KeyError, ImportError, OSError) as e:
         # TODO: explain this line
         # traceback.print_exc()
