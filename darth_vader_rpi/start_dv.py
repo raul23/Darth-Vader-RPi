@@ -513,7 +513,7 @@ def setup_argparser():
         # usage="%(prog)s [OPTIONS]",
         # prog=os.path.basename(__file__),
         description='''\
-Activate Darth Vader by turning on LEDs on his spacesuit and lightsaber, and by
+Activate Darth Vader by turning on LEDs on his space suit and lightsaber, and by
 pressing buttons to produce sound effects.\n
 IMPORTANT: these are only some of the most important options. Open the main 
 config file to have access to the complete list of options, i.e. 

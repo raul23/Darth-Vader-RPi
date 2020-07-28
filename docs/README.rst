@@ -18,7 +18,7 @@ README
    <p align="center"><img src="https://raw.githubusercontent.com/raul23/images/master/Darth-Vader-RPi/darth_vader_01.jpg" width="394" height="700"/></p>
 
 **Darth-Vader-RPi** is a Raspberry Pi (RPi) project about activating a Darth
-Vader action figure by turning LEDs on his spacesuit and lightsaber, and by
+Vader action figure by turning LEDs on his space suit and lightsaber, and by
 playing sounds such as some of his famous quotes.
 
 The Darth Vader action figure is 11.5 inches tall (which is `this one from
