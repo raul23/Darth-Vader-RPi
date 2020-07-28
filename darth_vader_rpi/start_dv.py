@@ -2,7 +2,7 @@
 """Script to turn on LEDs and play sound effects on a Raspberry Pi (RPi).
 
 The LEDs illuminate a Darth Vader action figure's lightsaber and the three
-slots in the chest control unit. 3 push buttons control the following sounds:
+slots in the chest control box. 3 push buttons control the following sounds:
 
 1. Some of his famous quotes
 2. The Imperial march theme song
@@ -184,7 +184,7 @@ def turn_on_leds_sequence(leds_channels):
     """Turn on/off three LEDs in a precise sequence.
 
     These three LEDs are associated with Darth Vader's three slots located on
-    his chest control unit. These three LEDs are labeled as 'top', 'middle', and
+    his chest control box. These three LEDs are labeled as 'top', 'middle', and
     'bottom' in the `leds_channels` dictionary.
 
     The three LEDs are turn on according to the following sequence which repeats
@@ -266,7 +266,7 @@ def activate_dv(main_cfg):
     """Activate Darth Vader by turning on LEDs and playing sounds.
 
     The LEDs illuminate Darth Vader's lightsaber and the three slots in the
-    chest control unit. 3 buttons control the following sounds:
+    chest control box. 3 buttons control the following sounds:
 
     1. Some of his famous quotes
     2. The Imperial march theme song
