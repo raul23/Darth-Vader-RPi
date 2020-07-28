@@ -75,8 +75,7 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 
 from darth_vader_rpi import __name__ as package_name, __version__
-from darth_vader_rpi.utils import (get_cfg_filepath, msg_with_spaces,
-                                   override_config_with_args)
+from darth_vader_rpi.utils import (get_cfg_filepath, override_config_with_args)
 from pyutils.genutils import load_json, run_cmd
 
 logger = logging.getLogger(__name__)
@@ -162,6 +161,10 @@ class SoundWrapper:
         """Stop playback on the specified Channel `channel_obj`.
         """
         self.channel_obj.stop()
+
+
+def _add_spaces_to_msg(msg, nb_spaces=20):
+    return "{}{}".format(msg, " " * nb_spaces)
 
 
 def _get_cfg_dict(cfg_type):
@@ -358,7 +361,7 @@ def activate_dv(main_cfg):
     th.start()
 
     logger.info("")
-    logger.info(msg_with_spaces("Press any button"))
+    logger.info(_add_spaces_to_msg("Press any button"))
     pressed_lightsaber = False
     quote_idx = 0
 
@@ -390,13 +393,13 @@ def activate_dv(main_cfg):
                 quote.play()
                 time.sleep(0.2)
     except Exception as e:
-        logger.exception(msg_with_spaces("Error: {}".format(e)))
-        logger.info(msg_with_spaces("Exiting..."))
+        logger.exception(_add_spaces_to_msg("Error: {}".format(e)))
+        logger.info(_add_spaces_to_msg("Exiting..."))
         retcode = 1
     except KeyboardInterrupt:
-        logger.info(msg_with_spaces("Exiting..."))
+        logger.info(_add_spaces_to_msg("Exiting..."))
 
-    logger.info(msg_with_spaces("Cleanup..."))
+    logger.info(_add_spaces_to_msg("Cleanup..."))
     for gpio_name, gpio_pin in main_cfg['GPIO'].items():
         if gpio_name.endswith("_led"):
             turn_off_led(gpio_pin)
