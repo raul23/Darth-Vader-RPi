@@ -92,6 +92,27 @@ def get_cfg_filepath(file_type):
 
 
 def override_config_with_args(config, parser):
+    """Override a config dictionary with arguments from the command-line.
+
+    Parameters
+    ----------
+    config : dict
+
+    parser : argparse.ArgumentParser
+        Argument parser.
+
+    Returns
+    -------
+    retval : :obj:`collections.namedtuple`
+        Contains two lists:
+
+        1. `args_not_found`: stores command-line arguments not found in the
+        JSON file
+        2. `config_opts_overidden`: stores config options overriden by
+        command-line arguments as a three-tuple (option name, old value,
+        new value)
+
+    """
     args = parser.parse_args().__dict__
     parser_actions = parser.__dict__['_actions']
     retval = namedtuple("retval", "args_not_found config_opts_overidden")
