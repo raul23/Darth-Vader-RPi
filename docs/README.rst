@@ -23,8 +23,8 @@ playing sounds such as some of his famous quotes.
 
 The Darth Vader action figure is 11.5 inches tall (which is `this one from
 Hasbro <https://amzn.to/3hIw0ou>`_) and was modified to make it more lifelike
-by illuminating the lightsaber, his chest control box, and belt. 3 push 
-buttons control the following sounds:
+by illuminating the lightsaber, chest control box, and belt. 3 push buttons 
+control the following sounds:
 
 #. Some of his famous quotes
 #. The Imperial march theme song
