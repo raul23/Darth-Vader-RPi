@@ -108,6 +108,7 @@ def override_config_with_args(config, parser):
 
         1. `args_not_found`: stores command-line arguments not found in the
         JSON file
+
         2. `config_opts_overidden`: stores config options overriden by
         command-line arguments as a three-tuple (option name, old value,
         new value)
