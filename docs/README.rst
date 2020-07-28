@@ -36,7 +36,7 @@ RPi is run with the script.
 .. raw:: html
 
    <div align="center">
-   <a href="https://www.youtube.com/embed/R2dfXV5dYyc"><img src="https://img.youtube.com/vi/R2dfXV5dYyc/0.jpg" alt="IMAGE ALT TEXT"></a>
+   <a href="https://www.youtube.com/embed/R2dfXV5dYyc"><img src="https://img.youtube.com/vi/R2dfXV5dYyc/0.jpg" alt="Darth Vader action figure activated"></a>
    </div>
 
 Test ...
