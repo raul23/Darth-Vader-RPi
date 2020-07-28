@@ -45,7 +45,10 @@ RPi is run with the script.
    <img src="https://bit.ly/330rzBr"/>
    <p>Turning on/off the lightsaber</p>
    </div>
-   
+
+|
+|
+
 .. raw:: html
 
    <div align="center">
