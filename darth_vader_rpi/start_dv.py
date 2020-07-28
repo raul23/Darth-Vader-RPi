@@ -15,12 +15,15 @@ The script allows you also to edit the `configuration file (JSON)`_ to setup
 among other things the RPi's GPIO pins connected to LEDs and buttons.
 
 By default the module `RPi.GPIO`_ is used, but if the `simulation` option (`-s`)
-is used with the `start_dv`_ script, then the module `SimulRPi.GPIO`_ will be
-used instead which simulates `RPi.GPIO`_ for those that don't have an RPi to
-test on.
+is used with the :ref:`start_dv script <usage-start-dv-Label>`, then the module
+`SimulRPi.GPIO`_ will be used instead which simulates `RPi.GPIO`_ for those
+that don't have an RPi to test on.
+
+.. _usage-start-dv-Label:
 
 Usage
 -----
+
 Once the `darth_vader_rpi` package is `installed`_, you should have access to
 the :mod:`start_dv` script:
 
@@ -56,8 +59,6 @@ More information is available at:
 .. _RPi.GPIO:
     https://pypi.org/project/RPi.GPIO/
 .. _SimulRPi.GPIO: https://github.com/raul23/SimulRPi
-.. _start_dv:
-    https://darth-vader-rpi.readthedocs.io/en/latest/api_reference.html#usage
 
 """
 # TODO: add PyPi URL in description above (Notes section)
@@ -271,7 +272,7 @@ def edit_config(cfg_type, app=None):
     ----------
     cfg_type : str, {'log', 'main'}
         The type of configuration file we want to edit. 'log' refers to the
-        logging config file, and 'main' to the main config file used to setup a
+        logging config file, and 'main' to the main config file used to setup
         the Darth-Vader-RPi project such as specifying the sound effects or the
         GPIO channels.
     app : str
@@ -337,10 +338,24 @@ def edit_config(cfg_type, app=None):
 
 
 def setup_argparser():
-    """
+    """Setup the argument parser for the command-line script.
+
+    The important actions that can be performed with the script are:
+
+    - activate Darth Vader (turn on LEDs and play sound effects),
+    - edit a configuration file or
+    - reset/undo a configuration file [SOON].
 
     Returns
     -------
+    args : argparse.Namespace
+        Simple class used by default by `parse_args()` to create an object
+        holding attributes and return it [1]_.
+
+    References
+    ----------
+    .. [1] `argparse.Namespace
+       <https://docs.python.org/3.7/library/argparse.html#argparse.Namespace>`_.
 
     """
     # Help message that is used in various arguments
@@ -492,15 +507,15 @@ def start_dv(main_cfg):
                 if pressed_lightsaber:
                     pressed_lightsaber = False
                     loaded_sounds['lightsaber_close_sound'].play()
-                    time.sleep(0.3)
+                    time.sleep(0.2)  # 0.3
                     turn_off_led(22)
                 else:
                     pressed_lightsaber = True
                     loaded_sounds['lightsaber_open_sound'].play()
                     loaded_sounds['lightsaber_running_sound'].play(-1)
-                    time.sleep(0.3)
+                    time.sleep(0.2)  # 0.3
                     turn_on_led(lightsaber_led)
-                time.sleep(0.2)
+                time.sleep(0.2)  # 0.2
             elif not GPIO.input(song_button):
                 logger.debug("\n\nButton {} pressed...".format(song_button))
                 loaded_sounds['imperial_march_song'].play()
