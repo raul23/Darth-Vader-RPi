@@ -35,8 +35,8 @@ RPi is run with the script.
 
 .. raw:: html
 
-   <p align="center">
+   <div style="margin-top:10px;">
    <iframe width="560" height="315" src="https://www.youtube.com/embed/R2dfXV5dYyc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-   </p>
+   </div>
 
 Test ...
