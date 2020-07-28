@@ -40,4 +40,9 @@ RPi is run with the script.
    <p><b>Click on the image for the full video</b></p>
    </div>
 
-Test ...
+.. raw:: html
+
+   <div align="center">
+   <img src="https://bit.ly/330rzBr"/>
+   <p>Turning on/off the lightsaber</p>
+   </div>
