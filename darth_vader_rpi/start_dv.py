@@ -501,14 +501,8 @@ def setup_argparser():
 
     Returns
     -------
-    args : argparse.Namespace
-        Simple class used by default by `parse_args()` to create an object
-        holding attributes and return it [1]_.
-
-    References
-    ----------
-    .. [1] `argparse.Namespace
-       <https://docs.python.org/3.7/library/argparse.html#argparse.Namespace>`_.
+    args : argparse.ArgumentParser
+        Argument parser.
 
     """
     # Help message that is used in various arguments
