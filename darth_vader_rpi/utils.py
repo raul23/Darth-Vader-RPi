@@ -2,8 +2,6 @@
 
 .. _default logging configuration file: https://bit.ly/2D6exaD
 .. _default main configuration file: https://bit.ly/39x8o3e
-.. _user-defined logging configuration file: https://bit.ly/3f43Jac
-.. _user-defined main configuration file: https://bit.ly/30TapD0
 
 """
 import os
@@ -57,9 +55,9 @@ def get_cfg_filepath(file_type):
       to setup the logging for all custom modules.
     - **default_main**: refers to the `default main configuration file`_ used to
       setup the :mod:`start_dv` script.
-    - **log**: refers to the `user-defined logging configuration file`_ which is
+    - **log**: refers to the user-defined logging configuration file which is
       used to setup the logging for all custom modules.
-    - **main**: refers to the `user-defined main configuration file`_ used to
+    - **main**: refers to the user-defined main configuration file used to
       setup the :mod:`start_dv` script.
 
     Parameters
