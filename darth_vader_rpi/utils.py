@@ -91,10 +91,6 @@ def get_cfg_filepath(file_type):
     return os.path.join(get_cfg_dirpath(), filename)
 
 
-def msg_with_spaces(msg, nb_spaces=20):
-    return "{}{}".format(msg, " " * nb_spaces)
-
-
 def override_config_with_args(config, parser):
     args = parser.parse_args().__dict__
     parser_actions = parser.__dict__['_actions']
