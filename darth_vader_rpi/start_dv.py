@@ -59,6 +59,7 @@ More information is available at:
 .. _RPi.GPIO:
     https://pypi.org/project/RPi.GPIO/
 .. _SimulRPi.GPIO: https://github.com/raul23/SimulRPi
+.. _YouTube video: https://youtu.be/E2J_xl2MbGU?t=333
 
 """
 # TODO: add PyPi URL in description above (Notes section)
@@ -106,6 +107,49 @@ Ref.:
     - https://github.com/raul23/SimulRPi
 """
 GPIO = None
+
+"""TODO
+"""
+_VALID_SEQ_TYPES = ["calm", "active"]
+
+"""Darth Vader's physiological status.
+
+These lists represent the sequence the 3 slot LEDs (on his chest box) should
+turn on.  Each item in the list represents a step in the sequence. Thus, in the 
+case of `_ACTIVE_MODE`, all the 3 slot LEDs will be turned on, follow by the top
+and bottom LEDs, and so on.
+
+An empty subsequence refers to all LEDs turn off.
+
+Ref.:
+    - Where the sequences were obtained: https://youtu.be/E2J_xl2MbGU?t=333
+"""
+_ACTIVE_MODE = [['top', 'middle', 'bottom'],
+                ['top', 'bottom'],
+                ['top', 'middle', 'bottom'],
+                ['top'],
+                [],
+                ['top', 'middle', 'bottom'],
+                ['top'],
+                ['top', 'middle', 'bottom'],
+                ['middle', 'bottom'],
+                [],
+                ['top', 'bottom'],
+                ['top', 'middle', 'bottom'],
+                ['top', 'bottom'],
+                [],
+                ['top'],
+                []]
+_CALM_MODE = [['middle'],
+              ['top'],
+              ['middle'],
+              ['top'],
+              ['middle'],
+              ['top'],
+              ['top'],
+              [],
+              ['bottom'],
+              []]
 
 
 class SoundWrapper:
@@ -180,29 +224,65 @@ def _get_cfg_dict(cfg_type):
     return cfg_dict
 
 
-def turn_on_leds_sequence(leds_channels):
-    """Turn on/off three LEDs in a precise sequence.
+def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="active",
+                               time_light_up=0.4, leds_delay=0.4):
+    """Turn on/off three slot LEDs in a precise sequence.
 
     These three LEDs are associated with Darth Vader's three slots located on
     his chest control box. These three LEDs are labeled as 'top', 'middle', and
-    'bottom' in the `leds_channels` dictionary.
+    'bottom' in the `leds_channels_map` dictionary.
 
-    The three LEDs are turn on according to the following sequence which repeats
-    itself::
+    The three LEDs are turn on according to default or custom sequence which
+    repeats itself. The default `leds_sequence` are 'active' and 'calm' which
+    represent Darth Vader's physiological state.
 
-        1. top + bottom
-        2. top
-        3. bottom
-        4. middle + bottom
-        5. middle
-        6. top + middle
-        7. top + middle + bottom
+    The user can also provide its own `leds_sequence` by using a list of LED
+    labels {'top', 'midddle', 'bottom'} arranged in a sequence as to specify
+    the order the slot LEDs should turn on/off, e.g. ``[['top', 'bottom'], [],
+    ['middle'], []]`` will turn on/off the slot LEDs in this order::
+
+        1. top + bottom LEDs turn on
+        2. All turn off
+        3. middle LED turn on
+        4. All turn off
+
+    The LEDs will be turned on for `time_light_up` seconds.
+
+    There will be a delay of `leds_delay` seconds between subsequences of LEDs
+    being turn on, i.e. between each step in the previous example.
+
+    The default sequences of LEDs were obtained from this `YouTube video`_.
 
     Parameters
     ----------
-    leds_channels : dict
-        Dictionary mapping the type of LED {'top', 'middle', 'bottom'} and its
-        channel number.
+    leds_channels_map : dict
+        Dictionary mapping the type of slot LED {'top', 'middle', 'bottom'} and 
+        its channel number (:obj:`int`).
+
+    leds_sequence : str or list, optional
+        Sequence of slot LEDs on Darth Vader's chest box.
+
+        If `leds_sequence` is a string, then it takes on one of these values
+        which represent Darth Vader's physiological state: {'active', 'calm'}.
+
+        If `leds_sequence` is a list, then it must be a list of slot LED labels
+        {'top', 'midddle', 'bottom'} arranged in a sequence as to specify the
+        order the slot LEDs should turn on/off, e.g. ``[['top', 'bottom'], [],
+        ['middle'], []]`` will turn on/off the slot LEDs in this order::
+
+            1. top + bottom LEDs turn on
+            2. All turn off
+            3. middle LED turn on
+            4. All turn off
+
+    time_light_up : float, optional
+        Time in seconds the LEDs will be turned on. IMPORTANT: This also affects
+        the time all LEDs will remain turn off if a subsequence in
+        `leds_sequence` is an empty list. The default value is 0.4 seconds.
+
+    leds_delay : float, optional
+        Delay in seconds between subsequences of LEDs. The default value is 0.4
+        seconds.
 
 
     .. important::
@@ -212,28 +292,35 @@ def turn_on_leds_sequence(leds_channels):
         the thread break out from the infinite loop.
 
     """
-    # TODO: assert leds_channels, i.e. keys (top, ...)
+    lcm = leds_channels_map
+    if isinstance(leds_sequence, str):
+        assert leds_sequence in _VALID_SEQ_TYPES, \
+            "Wrong type of leds_sequence: '{}' (choose from {})".format(
+                leds_sequence, ", ".join(_VALID_SEQ_TYPES))
+    else:
+        assert isinstance(leds_sequence, list), \
+            "leds_sequence should be a string ({}) or a list: '{}'".format(
+                ", ".join(_VALID_SEQ_TYPES), leds_sequence)
     t = threading.currentThread()
-    seq_idx = 0
-    sequence = [
-        [leds_channels['top'], leds_channels['bottom']],
-        [leds_channels['top']],
-        [leds_channels['bottom']],
-        [leds_channels['middle'], leds_channels['bottom']],
-        [leds_channels['middle']],
-        [leds_channels['top'], leds_channels['middle']],
-        [leds_channels['top'], leds_channels['middle'], leds_channels['bottom']]
-    ]
+    if leds_sequence == "calm":
+        leds_sequence = _CALM_MODE
+    elif leds_sequence == "active":
+        leds_sequence = _ACTIVE_MODE
+    subseq_idx = 0
     while getattr(t, "do_run", True):
-        leds_step = sequence[seq_idx % len(sequence)]
-        seq_idx += 1
-        turn_off_led(leds_channels['top'])
-        turn_off_led(leds_channels['middle'])
-        turn_off_led(leds_channels['bottom'])
-        for channel in leds_step:
+        leds_subsequence = leds_sequence[subseq_idx % len(leds_sequence)]
+        subseq_idx += 1
+        for channel_label in leds_subsequence:
+            channel = leds_channels_map[channel_label]
             turn_on_led(channel)
-        time.sleep(2)
-    logger.info("Stopping thread: {}()".format(turn_on_leds_sequence.__name__))
+        time.sleep(time_light_up)
+        if leds_subsequence:
+            turn_off_led(lcm['top'])
+            turn_off_led(lcm['middle'])
+            turn_off_led(lcm['bottom'])
+            time.sleep(leds_delay)
+    logger.info("Stopping thread: {}()".format(
+        turn_on_slot_leds_sequence.__name__))
 
 
 def turn_off_led(channel):
@@ -242,7 +329,7 @@ def turn_off_led(channel):
     Parameters
     ----------
     channel : int
-        Channel number associated with a LED which will be turn off.
+        Channel number associated with a LED which will be turned off.
 
     """
     # logger.debug("LED {} off".format(led))
@@ -255,7 +342,7 @@ def turn_on_led(channel):
     Parameters
     ----------
     channel : int
-        Channel number associated with a LED which will be turn on.
+        Channel number associated with a LED which will be turned on.
 
     """
     # logger.debug("LED {} on".format(led))
@@ -357,7 +444,11 @@ def activate_dv(main_cfg):
     quotes = loaded_sounds['quotes']
 
     leds_channels = {'top': top_led, 'middle': middle_led, 'bottom': bottom_led}
-    th = threading.Thread(target=turn_on_leds_sequence, args=(leds_channels,))
+    th = threading.Thread(target=turn_on_slot_leds_sequence, 
+                          args=(leds_channels,
+                                main_cfg['slot_leds_sequence'],
+                                main_cfg['time_light_up'],
+                                main_cfg['slot_leds_delay']))
     th.start()
 
     logger.info("")
@@ -369,7 +460,8 @@ def activate_dv(main_cfg):
     try:
         while True:
             if not GPIO.input(lightsaber_button):
-                logger.debug("\n\nButton {} pressed...".format(lightsaber_button))
+                logger.debug("\n\nButton {} pressed...".format(
+                    lightsaber_button))
                 if pressed_lightsaber:
                     pressed_lightsaber = False
                     loaded_sounds['lightsaber_close_sound'].play()
@@ -429,9 +521,9 @@ def edit_config(cfg_type, app=None):
         the Darth-Vader-RPi project such as specifying the sound effects or the
         GPIO channels.
     app : str
-        Name of the application to use for opening the config file, e.g. TextEdit
-        (the default value is None which implies that the default application
-        will be used to open the config file).
+        Name of the application to use for opening the config file, e.g. 
+        TextEdit (the default value is None which implies that the default 
+        application will be used to open the config file).
 
     Returns
     -------
@@ -543,7 +635,7 @@ config file to have access to the complete list of options, i.e.
     edit_group.add_argument(
         "-a", "--app-name", default=None, dest="app",
         help='''Name of the application to use for editing the file. If no 
-            name is given, then the default application for opening this type of 
+            name is given, then the default application for opening this type of
             file will be used.''')
     # =================
     # Reset/Undo config
@@ -658,7 +750,8 @@ def main():
             # ref.: https://bit.ly/3f3A7dc
             os.system("tput civis")
             retcode = activate_dv(main_cfg_dict)
-    except (AssertionError, AttributeError, KeyError, ImportError, OSError) as e:
+    # except (AssertionError, AttributeError, KeyError, ImportError, OSError) as e:
+    except Exception as e:
         # TODO: explain this line
         # traceback.print_exc()
         if args.verbose:
