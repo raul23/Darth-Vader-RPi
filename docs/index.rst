@@ -17,6 +17,12 @@ Welcome to Darth-Vader-RPi's documentation!
    api_reference
 
 
+**Darth-Vader-RPi** is a Raspberry Pi (RPi) project about activating a Darth
+Vader action figure by turning on LEDs on his suit and lightsaber, and by
+playing sounds such as some of his famous quotes. See the
+`README <README.html>`_ for more info.
+
+
 Indices and tables
 ==================
 
