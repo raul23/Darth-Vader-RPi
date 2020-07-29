@@ -59,7 +59,8 @@ source_suffix = '.rst'
 intersphinx_mapping = {
     'pygame': ('https://www.pygame.org/docs', None),
     'python': ('https://docs.python.org/3', None),
-    'pyutils': ('https://py-common-utils.readthedocs.io/en/latest', None)}
+    'pyutils': ('https://py-common-utils.readthedocs.io/en/latest', None)
+}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
