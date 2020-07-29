@@ -739,7 +739,7 @@ def main():
             if main_cfg_dict['simulation']:
                 import SimulRPi.GPIO
                 GPIO = SimulRPi.GPIO
-                GPIO.setkeys(main_cfg_dict['key_to_channel_mapping'])
+                GPIO.setkeymap(main_cfg_dict['key_to_channel_mapping'])
                 if main_cfg_dict['quiet']:
                     GPIO.disableprinting()
                 logger.info("Simulation mode enabled")
