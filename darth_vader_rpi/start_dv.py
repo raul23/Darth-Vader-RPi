@@ -232,7 +232,7 @@ def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="active",
     his chest control box. These three LEDs are labeled as 'top', 'middle', and
     'bottom' in the `leds_channels_map` dictionary.
 
-    The three LEDs are turn on according to default or custom sequence which
+    The three LEDs are turn on according to a default or custom sequence which
     repeats itself. The default `leds_sequence` are 'active' and 'calm' which
     represent Darth Vader's physiological state.
 
@@ -251,7 +251,7 @@ def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="active",
     There will be a delay of `leds_delay` seconds between subsequences of LEDs
     being turn on, i.e. between each step in the previous example.
 
-    The default sequences of LEDs were obtained from this `YouTube video`_.
+    The default sequences of slot LEDs were obtained from this `YouTube video`_.
 
     Parameters
     ----------
