@@ -7,6 +7,13 @@
   "channel2_volume": 1.0,
   "channel3_volume": 1.0,
 
+  "slot_leds_sequence": [
+    ["middle"],
+    ["bottom"]
+  ],
+  "time_light_up": 5,
+  "slot_leds_delay": 1,
+
   "quotes": [
     {
       "name": "i_am_your_father",
