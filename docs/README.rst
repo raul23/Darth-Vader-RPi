@@ -13,7 +13,7 @@ README
    :target: https://travis-ci.org/raul23/Darth-Vader-RPi
    :alt: Build Status
 
-.. raw:: html
+..
 
    <p align="center"><img src="https://raw.githubusercontent.com/raul23/images/master/Darth-Vader-RPi/darth_vader_01.jpg" width="394" height="700"/></p>
 
