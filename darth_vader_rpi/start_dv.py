@@ -158,18 +158,18 @@ class SoundWrapper:
 
     The :meth:`__init__` method takes care of automatically loading the sound
     file. The sound file can then be played or stopped from the specified
-    channel `channel_obj` with the :meth:`play` or :meth:`stop` method,
+    channel `channel_id` with the :meth:`play` or :meth:`stop` method,
     respectively.
 
     Parameters
     ----------
-    name : str
+    sound_name : str
         Name of the sound file.
-    filepath : str
+    sound_filepath : str
         Path to the sound file.
-    channel_obj : pygame.mixer.Channel
-        Channel object for controlling playback.
-
+    channel_id : int
+        Channel id associated with an instance of
+        :class:`pygame.mixer.Channel` for controlling playback.
 
     .. note::
 
@@ -179,15 +179,16 @@ class SoundWrapper:
 
     """
 
-    def __init__(self, name, filepath, channel_obj):
-        self.name = name
-        self.filepath = filepath
-        self.channel_obj = channel_obj
+    def __init__(self, sound_name, sound_filepath, channel_id):
+        self.sound_name = sound_name
+        self.sound_filepath = sound_filepath
+        self.channel_id = channel_id
+        self._channel = pygame.mixer.Channel(channel_id)
         # Load sound file
-        self.pygame_sound = pygame.mixer.Sound(self.filepath)
+        self._pygame_sound = pygame.mixer.Sound(self.sound_filepath)
 
     def play(self, loops=0):
-        """Play a Sound on the specified Channel `channel_obj`.
+        """Play a Sound on the specified Channel `channel_id`.
 
         Parameters
         ----------
@@ -199,12 +200,12 @@ class SoundWrapper:
             :meth:`stop` to stop it). Reference from `pygame.mixer.Sound.play`_
 
         """
-        self.channel_obj.play(self.pygame_sound, loops)
+        self._channel.play(self._pygame_sound, loops)
 
     def stop(self):
-        """Stop playback on the specified Channel `channel_obj`.
+        """Stop playback on the specified channel `channel_id`.
         """
-        self.channel_obj.stop()
+        self._channel.stop()
 
 
 def _add_spaces_to_msg(msg, nb_spaces=20):
@@ -225,7 +226,7 @@ def _get_cfg_dict(cfg_type):
 
 
 def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="active",
-                               time_light_up=0.4, leds_delay=0.4):
+                               time_leds_on=0.4, delay_between_leds_on=0.4):
     """Turn on/off three slot LEDs in a precise sequence.
 
     These three LEDs are associated with Darth Vader's three slots located on
@@ -246,10 +247,11 @@ def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="active",
         3. middle LED turn on
         4. All turn off
 
-    The LEDs will be turned on for `time_light_up` seconds.
+    The LEDs will be turned on for `time_leds_on` seconds.
 
-    There will be a delay of `leds_delay` seconds between subsequences of LEDs
-    being turn on, i.e. between each step in the previous example.
+    There will be a delay of `delay_between_leds_on` seconds between
+    subsequences of LEDs being turn on, i.e. between each step in the previous
+    example.
 
     The default sequences of slot LEDs were obtained from this `YouTube video`_.
 
@@ -257,7 +259,7 @@ def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="active",
     ----------
     leds_channels_map : dict
         Dictionary mapping the type of slot LED {'top', 'middle', 'bottom'} and 
-        its channel number (:obj:`int`).
+        its channel id (:obj:`int`).
 
     leds_sequence : str or list, optional
         Sequence of slot LEDs on Darth Vader's chest box.
@@ -275,12 +277,12 @@ def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="active",
             3. middle LED turn on
             4. All turn off
 
-    time_light_up : float, optional
+    time_leds_on : float, optional
         Time in seconds the LEDs will be turned on. IMPORTANT: This also affects
         the time all LEDs will remain turn off if a subsequence in
         `leds_sequence` is an empty list. The default value is 0.4 seconds.
 
-    leds_delay : float, optional
+    delay_between_leds_on : float, optional
         Delay in seconds between subsequences of LEDs. The default value is 0.4
         seconds.
 
@@ -313,12 +315,12 @@ def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="active",
         for channel_label in leds_subsequence:
             channel = leds_channels_map[channel_label]
             turn_on_led(channel)
-        time.sleep(time_light_up)
+        time.sleep(time_leds_on)
         if leds_subsequence:
             turn_off_led(lcm['top'])
             turn_off_led(lcm['middle'])
             turn_off_led(lcm['bottom'])
-            time.sleep(leds_delay)
+            time.sleep(delay_between_leds_on)
     logger.info("Stopping thread: {}()".format(
         turn_on_slot_leds_sequence.__name__))
 
@@ -401,14 +403,10 @@ def activate_dv(main_cfg):
     ### Sound
     # Create separate channel
     # Ref.: stackoverflow.com/a/59742418
-    channel1 = pygame.mixer.Channel(0)  # Breathing sound
-    channel2 = pygame.mixer.Channel(1)  # Song
-    channel3 = pygame.mixer.Channel(2)  # Lightsaber sound
-    channels = {1: channel1, 2: channel2, 3: channel3}
-    # Set volume
-    channels[1].set_volume(main_cfg['channel1_volume'])
-    channels[2].set_volume(main_cfg['channel2_volume'])
-    channels[3].set_volume(main_cfg['channel3_volume'])
+    channels = main_cfg['channels']
+    for ch_dict in channels:
+        channel = pygame.mixer.Channel(ch_dict['channel_id'])
+        channel.set_volume(ch_dict['volume'])
 
     loaded_sounds = {}
     sounds_dir = os.path.expanduser(main_cfg['sounds_directory'])
@@ -421,9 +419,10 @@ def activate_dv(main_cfg):
                     logger.info("Loading {}".format(quote['name']))
                     loaded_sounds.setdefault('quotes', [])
                     filepath = os.path.join(sounds_dir, quote['filename'])
-                    channel_obj = channels[quote['channel']]
                     loaded_sounds['quotes'].append(
-                        SoundWrapper(quote['name'], filepath, channel_obj))
+                        SoundWrapper(sound_name=quote['name'],
+                                     sound_filepath=filepath,
+                                     channel_id=quote['channel_id']))
             elif sound_type in ['songs', 'sound_effects']:
                 for s in main_cfg[sound_type]:
                     sound = s.popitem()
@@ -431,11 +430,10 @@ def activate_dv(main_cfg):
                     sound_info = sound[1]
                     logger.info("Loading {}".format(sound[0]))
                     filepath = os.path.join(sounds_dir, sound_info['filename'])
-                    channel_obj = channels[sound_info['channel']]
-                    loaded_sounds.setdefault(sound_name,
-                                             SoundWrapper(sound_name,
-                                                          filepath,
-                                                          channel_obj))
+                    sw = SoundWrapper(sound_name=sound_name,
+                                      sound_filepath=filepath,
+                                      channel_id=sound_info['channel_id'])
+                    loaded_sounds.setdefault(sound_name, sw)
                     if sound_info.get('play'):
                         loops = sound_info.get('loops', -1)
                         loaded_sounds[sound_name].play(loops)
@@ -446,9 +444,9 @@ def activate_dv(main_cfg):
     leds_channels = {'top': top_led, 'middle': middle_led, 'bottom': bottom_led}
     th = threading.Thread(target=turn_on_slot_leds_sequence, 
                           args=(leds_channels,
-                                main_cfg['slot_leds_sequence'],
-                                main_cfg['time_light_up'],
-                                main_cfg['slot_leds_delay']))
+                                main_cfg['slot_leds']['sequence'],
+                                main_cfg['slot_leds']['time_leds_on'],
+                                main_cfg['slot_leds']['delay_between_leds_on']))
     th.start()
 
     logger.info("")
@@ -498,8 +496,8 @@ def activate_dv(main_cfg):
     GPIO.cleanup()
     th.do_run = False
     th.join()
-    for ch_num, ch_obj in channels.items():
-        ch_obj.stop()
+    for ch in main_cfg['channels']:
+        pygame.mixer.Channel(ch['channel_id']).stop()
 
     return retcode
 
