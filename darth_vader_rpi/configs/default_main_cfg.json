@@ -20,8 +20,8 @@
   ],
 
   "slot_leds":{
-    "time_leds_on": 1,
     "delay_between_leds_on": 0.5,
+    "time_leds_on": 1,
     "sequence":[
       ["top", "middle", "bottom"],
       ["top", "bottom"],

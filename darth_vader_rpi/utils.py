@@ -1,4 +1,4 @@
-"""Collection of utilities specifically for the Darth-Vader-RPi project.
+"""Collection of utilities specifically for the *Darth-Vader-RPi* project.
 
 .. _default logging configuration file: https://bit.ly/2D6exaD
 .. _default main configuration file: https://bit.ly/39x8o3e

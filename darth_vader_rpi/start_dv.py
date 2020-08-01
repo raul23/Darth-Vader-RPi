@@ -11,13 +11,13 @@ slots in the chest control box. 3 push buttons control the following sounds:
 His iconic breathing sound plays in the background indefinitely as soon as the
 RPi is run with the script.
 
-The script allows you also to edit the `configuration file (JSON)`_ to setup
-among other things the RPi's GPIO pins connected to LEDs and buttons.
+The script allows you also to edit the `main config file`_ to setup among other
+things the RPi's GPIO pins connected to LEDs and push buttons.
 
-By default the module `RPi.GPIO`_ is used, but if the `simulation` option (`-s`)
-is used with the :ref:`start_dv script <usage-start-dv-Label>`, then the module
-`SimulRPi.GPIO`_ will be used instead which simulates `RPi.GPIO`_ for those
-that don't have an RPi to test on.
+By default the module `RPi.GPIO`_ is used, but if the :ref:`simulation option
+(-s) <usage-start-dv-Label>` is used with the :mod:`start_dv` script, then the
+module `SimulRPi.GPIO`_ will be used instead which simulates `RPi.GPIO`_ for
+those that don't have an RPi to test on.
 
 .. _usage-start-dv-Label:
 
@@ -37,11 +37,11 @@ Run the script using `SimulRPi.GPIO`_ which simulates RPi.GPIO::
 
     $ start_dv -s
 
-Edit the main config file with TextEdit (macOS)::
+Edit the main config file with *TextEdit* (macOS)::
 
     $ start_dv -e main -a TextEdit
 
-Edit the logging config file with the default application (e.g. atom)::
+Edit the logging config file with a default application (e.g. atom)::
 
     $ start_dv -e log
 
@@ -52,8 +52,9 @@ More information is available at:
 - Darth-Vader-RPi GitHub: https://github.com/raul23/Darth-Vader-RPi
 - SimulRPi GitHub: https://github.com/raul23/SimulRPi
 
-.. _configuration file (JSON): https://bit.ly/3f6qpa7
 .. _installed: https://github.com/raul23/Darth-Vader-RPi#readme
+.. _logging config file: https://bit.ly/2D6exaD
+.. _main config file: https://bit.ly/39x8o3e
 .. _pygame.mixer.Sound.play:
     https://www.pygame.org/docs/ref/mixer.html#pygame.mixer.Sound.play
 .. _RPi.GPIO:
@@ -87,8 +88,8 @@ GPIO = None
 
 If the `simulation` option (`-s`) is used with the :mod:`start_dv` script, the 
 `SimulRPi.GPIO`_ module will be used instead. :attr:`GPIO`\'s default value is 
-:obj:`None` and will be eventually set to one of the two modules depending on
-the user's settings).
+:obj:`None` and will be eventually set to one of the two modules (`RPi.GPIO`_ 
+or `SimulRPi.GPIO`_) depending on the user's settings.
 
 """
 
@@ -169,7 +170,9 @@ class SoundWrapper:
         Path to the sound file.
     channel_id : int
         Channel id associated with an instance of
-        :class:`pygame.mixer.Channel` for controlling playback.
+        :class:`pygame.mixer.Channel` for controlling playback. It must take an
+        :obj:`int` value starting from 0.
+
 
     .. note::
 
@@ -194,10 +197,11 @@ class SoundWrapper:
         ----------
         loops : int
             Controls how many times the sample will be repeated after being
-            played the first time. The default value (zero) means the Sound is
+            played the first time. The default value (zero) means the aound is
             not repeated, and so is only played once. If `loops` is set to -1
             the Sound will loop indefinitely (though you can still call
-            :meth:`stop` to stop it). Reference from `pygame.mixer.Sound.play`_
+            :meth:`stop` to stop it). Reference from
+            :meth:`pygame.mixer.Sound.play`.
 
         """
         self._channel.play(self._pygame_sound, loops)
@@ -208,6 +212,7 @@ class SoundWrapper:
         self._channel.stop()
 
 
+# TODO: clear buffer
 def _add_spaces_to_msg(msg, nb_spaces=20):
     return "{}{}".format(msg, " " * nb_spaces)
 
@@ -226,7 +231,7 @@ def _get_cfg_dict(cfg_type):
 
 
 def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="active",
-                               time_leds_on=0.4, delay_between_leds_on=0.4):
+                               delay_between_leds_on=0.4, time_leds_on=0.4,):
     """Turn on/off three slot LEDs in a precise sequence.
 
     These three LEDs are associated with Darth Vader's three slots located on
@@ -243,9 +248,9 @@ def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="active",
     ['middle'], []]`` will turn on/off the slot LEDs in this order::
 
         1. top + bottom LEDs turn on
-        2. All turn off
+        2. All LEDs turn off
         3. middle LED turn on
-        4. All turn off
+        4. All LEDs turn off
 
     The LEDs will be turned on for `time_leds_on` seconds.
 
@@ -273,24 +278,28 @@ def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="active",
         ['middle'], []]`` will turn on/off the slot LEDs in this order::
 
             1. top + bottom LEDs turn on
-            2. All turn off
+            2. All LEDs turn off
             3. middle LED turn on
-            4. All turn off
-
-    time_leds_on : float, optional
-        Time in seconds the LEDs will be turned on. IMPORTANT: This also affects
-        the time all LEDs will remain turn off if a subsequence in
-        `leds_sequence` is an empty list. The default value is 0.4 seconds.
+            4. All LEDs turn off
 
     delay_between_leds_on : float, optional
         Delay in seconds between subsequences of LEDs. The default value is 0.4
         seconds.
 
+    time_leds_on : float, optional
+        Time in seconds the LEDs will be turned on. The default value is 0.4
+        seconds.
+
+        .. important::
+
+            This also affects the time all LEDs will remain turn off if a
+            subsequence in `leds_sequence` is an empty list.
+
 
     .. important::
 
         This function should be run by a thread and eventually stopped from
-        the main thread by setting its ``do_run`` attribute to False to let
+        the main thread by setting its ``do_run`` attribute to *False* to let
         the thread break out from the infinite loop.
 
     """
@@ -355,7 +364,7 @@ def activate_dv(main_cfg):
     """Activate Darth Vader by turning on LEDs and playing sounds.
 
     The LEDs illuminate Darth Vader's lightsaber and the three slots in the
-    chest control box. 3 buttons control the following sounds:
+    chest control box. 3 push buttons control the following sounds:
 
     1. Some of his famous quotes
     2. The Imperial march theme song
@@ -368,13 +377,13 @@ def activate_dv(main_cfg):
     ----------
     main_cfg : dict
         Dictionary containing the configuration data to setup the RPi, such as
-        the GPIO pins and the sound files. See `configuration file (JSON)`_ for
-        a detailed look into its content.
+        the GPIO pins and the sound files. See `main config file`_ for a
+        detailed look into its content.
 
     Returns
     -------
     retcode: int
-        If the script was run on the RPi without any :exc:`Exception`, the
+        If the script is run on the RPi without any :exc:`Exception`, the
         return code is 0. Otherwise, it is 1.
 
     """
@@ -445,8 +454,8 @@ def activate_dv(main_cfg):
     th = threading.Thread(target=turn_on_slot_leds_sequence, 
                           args=(leds_channels,
                                 main_cfg['slot_leds']['sequence'],
-                                main_cfg['slot_leds']['time_leds_on'],
-                                main_cfg['slot_leds']['delay_between_leds_on']))
+                                main_cfg['slot_leds']['delay_between_leds_on'],
+                                main_cfg['slot_leds']['time_leds_on'],))
     th.start()
 
     logger.info("")
@@ -506,7 +515,7 @@ def edit_config(cfg_type, app=None):
     """Edit a configuration file.
 
     The user chooses what type of config file (`cfg_type`) to edit: 'log' for
-    the logging config file and 'main' for the main config file.
+    the `logging config file`_ and 'main' for the `main config file`_.
 
     The configuration file can be opened by a user-specified application (`app`)
     or a default program associated with this type of file (when `app` is None).
@@ -515,12 +524,12 @@ def edit_config(cfg_type, app=None):
     ----------
     cfg_type : str, {'log', 'main'}
         The type of configuration file we want to edit. 'log' refers to the
-        logging config file, and 'main' to the main config file used to setup
-        the Darth-Vader-RPi project such as specifying the sound effects or the
-        GPIO channels.
+        `logging config file`_, and 'main' to the `main config file`_ used to
+        setup the Darth-Vader-RPi project such as specifying the sound effects
+        or the GPIO channels.
     app : str
         Name of the application to use for opening the config file, e.g. 
-        TextEdit (the default value is None which implies that the default 
+        `TextEdit` (the default value is None which implies that the default
         application will be used to open the config file).
 
     Returns
@@ -529,7 +538,7 @@ def edit_config(cfg_type, app=None):
         If there is a `subprocess
         <https://docs.python.org/3/library/subprocess.html#subprocess.CalledProcessError>`_
         -related error, the return code is non-zero. Otherwise, it is 0 if the
-        file could be successfully opened with an external program.
+        file can be successfully opened with an external program.
 
     """
     # Get path to user-defined config file
@@ -587,7 +596,7 @@ def setup_argparser():
 
     - activate Darth Vader (turn on LEDs and play sound effects),
     - edit a configuration file or
-    - reset/undo a configuration file [SOON].
+    - reset/undo a configuration file *[SOON]*.
 
     Returns
     -------
@@ -661,7 +670,7 @@ def main():
 
     - activate Darth Vader,
     - edit a configuration file, or
-    - reset/undo a configuration file [SOON].
+    - reset/undo a configuration file *[SOON]*.
 
     Notes
     -----
