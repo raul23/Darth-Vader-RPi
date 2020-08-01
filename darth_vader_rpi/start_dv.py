@@ -49,8 +49,8 @@ Notes
 -----
 More information is available at:
 
-- Darth-Vader-RPi GitHub: https://github.com/raul23/Darth-Vader-RPi
-- SimulRPi GitHub: https://github.com/raul23/SimulRPi
+- *Darth-Vader-RPi* GitHub: https://github.com/raul23/Darth-Vader-RPi
+- *SimulRPi* GitHub: https://github.com/raul23/SimulRPi
 
 .. _installed: https://github.com/raul23/Darth-Vader-RPi#readme
 .. _logging config file: https://bit.ly/2D6exaD
@@ -760,7 +760,7 @@ def main():
                 GPIO = SimulRPi.GPIO
                 GPIO.setkeymap(main_cfg_dict['key_to_channel_mapping'])
                 if main_cfg_dict['quiet']:
-                    GPIO.disableprinting()
+                    GPIO.setprinting(False)
                 logger.info("Simulation mode enabled")
             else:
                 import RPi.GPIO
