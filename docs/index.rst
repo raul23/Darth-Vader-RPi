@@ -12,6 +12,7 @@ Darth-Vader-RPi's documentation
 
 .. toctree::
    :maxdepth: 2
+   :caption: Contents
 
    README
    api_reference

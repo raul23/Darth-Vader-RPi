@@ -298,9 +298,21 @@ def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="active",
 
     .. important::
 
-        This function should be run by a thread and eventually stopped from
-        the main thread by setting its ``do_run`` attribute to *False* to let
-        the thread break out from the infinite loop.
+        :meth:`turn_on_slot_leds_sequence` should be run by a thread and
+        eventually stopped from the main thread by setting its ``do_run``
+        attribute to *False* to let the thread exit its target function.
+
+        .. code-block:: python
+
+            th = threading.Thread(target=turn_on_slot_leds_sequence,
+                                  args=(leds_channels))
+            th.start()
+
+            # Your other code ...
+
+            # Time to stop thread
+            th.do_run = False
+            th.join()
 
     """
     lcm = leds_channels_map
@@ -455,7 +467,7 @@ def activate_dv(main_cfg):
                           args=(leds_channels,
                                 main_cfg['slot_leds']['sequence'],
                                 main_cfg['slot_leds']['delay_between_leds_on'],
-                                main_cfg['slot_leds']['time_leds_on'],))
+                                main_cfg['slot_leds']['time_leds_on']))
     th.start()
 
     logger.info("")
