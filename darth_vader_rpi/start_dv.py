@@ -300,7 +300,7 @@ def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="active",
 
         :meth:`turn_on_slot_leds_sequence` should be run by a thread and
         eventually stopped from the main thread by setting its ``do_run``
-        attribute to *False* to let the thread exit its target function.
+        attribute to `False` to let the thread exit its target function.
 
         .. code-block:: python
 
