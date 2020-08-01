@@ -139,7 +139,7 @@ _CALM_MODE = [["middle"],
 """Darth Vader's physiological status.
 
 These lists represent the sequence the 3 slot LEDs (on his chest box) should be
-turned on.  Each item in the list represents a step in the sequence. Thus, in 
+turned on.  Each item in the list represents a step in the sequence. Thus, in
 the case of :attr:`_ACTIVE_MODE`, all the 3 slot LEDs will be turned on first, 
 followed by the top and bottom LEDs, and so on.
 
