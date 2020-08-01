@@ -82,48 +82,34 @@ from pyutils.genutils import load_json, run_cmd
 logger = logging.getLogger(__name__)
 logger.addHandler(NullHandler())
 
+GPIO = None
+"""`RPi.GPIO`_ provides a class to control the GPIO pins on a Raspberry Pi.
+
+If the `simulation` option (`-s`) is used with the :mod:`start_dv` script, the 
+`SimulRPi.GPIO`_ module will be used instead. :attr:`GPIO`\'s default value is 
+:obj:`None` and will be eventually set to one of the two modules depending on
+the user's settings).
+
+"""
+
+_TEST_LOGGING_CFG = None
 """Dictionary containing the logging configuration data.
 
-The default value is None and will be set when performing the tests from
-`darth_vader_rpi.tests`).
+The default value is :obj:`None` and will be set when performing the tests from
+:obj:`darth_vader_rpi.tests`).
 """
-_TEST_LOGGING_CFG = None
 
+_TEST_MAIN_CFG = None
 """Dictionary containing the main configuration data.
 
-The default value is None and will be set when performing the tests from
-`darth_vader_rpi.tests`).
+The default value is obj:`None` and will be set when performing the tests from
+:obj:`darth_vader_rpi.tests`).
 """
-_TEST_MAIN_CFG = None
 
-"""RPi.GPIO provides a class to control the GPIO on a Raspberry Pi.
-
-If the `simulation` option is used with the `start_dv` script, the 
-`SimulRPi.GPIO` module will be used instead (the default value is 
-None and will be eventually set to one of the two modules).
-
-Ref.: 
-    - https://pypi.org/project/RPi.GPIO/
-    - https://github.com/raul23/SimulRPi
-"""
-GPIO = None
-
+_VALID_SEQ_TYPES = ["calm", "active"]
 """TODO
 """
-_VALID_SEQ_TYPES = ["calm", "active"]
 
-"""Darth Vader's physiological status.
-
-These lists represent the sequence the 3 slot LEDs (on his chest box) should
-turn on.  Each item in the list represents a step in the sequence. Thus, in the 
-case of `_ACTIVE_MODE`, all the 3 slot LEDs will be turned on, follow by the top
-and bottom LEDs, and so on.
-
-An empty subsequence refers to all LEDs turn off.
-
-Ref.:
-    - Where the sequences were obtained: https://youtu.be/E2J_xl2MbGU?t=333
-"""
 _ACTIVE_MODE = [["top", "middle", "bottom"],
                 ["top", "bottom"],
                 ["top", "middle", "bottom"],
@@ -150,6 +136,20 @@ _CALM_MODE = [["middle"],
               [],
               ["bottom"],
               []]
+"""Darth Vader's physiological status.
+
+These lists represent the sequence the 3 slot LEDs (on his chest box) should be
+turned on.  Each item in the list represents a step in the sequence. Thus, in 
+the case of :attr:`_ACTIVE_MODE`, all the 3 slot LEDs will be turned on first, 
+followed by the top and bottom LEDs, and so on.
+
+An empty subsequence refers to all LEDs being turned off.
+
+References
+----------
+- Where the sequences were obtained: https://youtu.be/E2J_xl2MbGU?t=333
+
+"""
 
 
 class SoundWrapper:
