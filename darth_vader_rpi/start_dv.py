@@ -232,33 +232,35 @@ def _get_cfg_dict(cfg_type):
 
 def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="active",
                                delay_between_leds_on=0.4, time_leds_on=0.4,):
-    """Turn on/off three slot LEDs in a precise sequence.
+    """Turn on/off the three slot LEDs in a precise sequence.
 
     These three LEDs are associated with Darth Vader's three slots located on
     his chest control box. These three LEDs are labeled as 'top', 'middle', and
     'bottom' in the `leds_channels_map` dictionary.
 
-    The three LEDs are turn on according to a default or custom sequence which
-    repeats itself. The default `leds_sequence` are 'active' and 'calm' which
-    represent Darth Vader's physiological state.
+    The three LEDs are turned on according to a default or custom sequence
+    which repeats itself. The default values for `leds_sequence` are 'active'
+    and 'calm' which represent Darth Vader's physiological state as a sequence
+    of LEDs blinking in a particular order.
 
     The user can also provide its own `leds_sequence` by using a list of LED
     labels {'top', 'midddle', 'bottom'} arranged in a sequence as to specify
     the order the slot LEDs should turn on/off, e.g. ``[['top', 'bottom'], [],
     ['middle'], []]`` will turn on/off the slot LEDs in this order::
 
-        1. top + bottom LEDs turn on
-        2. All LEDs turn off
-        3. middle LED turn on
-        4. All LEDs turn off
+        1. top + bottom LEDs turned on
+        2. All LEDs turned off
+        3. middle LED turned on
+        4. All LEDs turned off
 
     The LEDs will be turned on for `time_leds_on` seconds.
 
     There will be a delay of `delay_between_leds_on` seconds between
-    subsequences of LEDs being turn on, i.e. between each step in the previous
-    example.
+    subsequences of LEDs being turned on, i.e. between each step in the
+    previous example.
 
-    The default sequences of slot LEDs were obtained from this `YouTube video`_.
+    The default sequences of slot LEDs were obtained from this
+    `YouTube video`_.
 
     Parameters
     ----------
@@ -300,7 +302,9 @@ def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="active",
 
         :meth:`turn_on_slot_leds_sequence` should be run by a thread and
         eventually stopped from the main thread by setting its ``do_run``
-        attribute to `False` to let the thread exit its target function.
+        attribute to `False` to let the thread exit from its target function.
+
+        **For example**:
 
         .. code-block:: python
 
@@ -758,7 +762,7 @@ def main():
             if main_cfg_dict['simulation']:
                 import SimulRPi.GPIO
                 GPIO = SimulRPi.GPIO
-                GPIO.setkeymap(main_cfg_dict['key_to_channel_mapping'])
+                GPIO.setkeymap(main_cfg_dict['key_to_channel_map'])
                 if main_cfg_dict['quiet']:
                     GPIO.setprinting(False)
                 logger.info("Simulation mode enabled")
