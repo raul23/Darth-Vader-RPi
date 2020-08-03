@@ -69,6 +69,7 @@ import argparse
 import logging.config
 import os
 import platform
+import shutil
 import threading
 import time
 from logging import NullHandler
@@ -84,12 +85,14 @@ logger = logging.getLogger(__name__)
 logger.addHandler(NullHandler())
 
 GPIO = None
-"""`RPi.GPIO`_ provides a class to control the GPIO pins on a Raspberry Pi.
+""":attr:`GPIO`\'s default value is :obj:`None` and will be eventually set to 
+one of the two modules (`RPi.GPIO`_ or `SimulRPi.GPIO`_) depending on the 
+user's settings.
+
+`RPi.GPIO`_ provides a class to control the GPIO pins on a Raspberry Pi.
 
 If the `simulation` option (`-s`) is used with the :mod:`start_dv` script, the 
-`SimulRPi.GPIO`_ module will be used instead. :attr:`GPIO`\'s default value is 
-:obj:`None` and will be eventually set to one of the two modules (`RPi.GPIO`_ 
-or `SimulRPi.GPIO`_) depending on the user's settings.
+`SimulRPi.GPIO`_ module will be used instead.
 
 """
 
@@ -191,15 +194,15 @@ class SoundWrapper:
         self._pygame_sound = pygame.mixer.Sound(self.sound_filepath)
 
     def play(self, loops=0):
-        """Play a Sound on the specified Channel `channel_id`.
+        """Play a sound on the specified Channel `channel_id`.
 
         Parameters
         ----------
         loops : int
             Controls how many times the sample will be repeated after being
-            played the first time. The default value (zero) means the aound is
+            played the first time. The default value (zero) means the sound is
             not repeated, and so is only played once. If `loops` is set to -1
-            the Sound will loop indefinitely (though you can still call
+            the sound will loop indefinitely (though you can still call
             :meth:`stop` to stop it). Reference from
             :meth:`pygame.mixer.Sound.play`.
 
@@ -213,20 +216,30 @@ class SoundWrapper:
 
 
 # TODO: clear buffer
+# TODO: add description
 def _add_spaces_to_msg(msg, nb_spaces=20):
     return "{}{}".format(msg, " " * nb_spaces)
 
 
+# TODO: add description
 def _get_cfg_dict(cfg_type):
     global_cfg = {'main': _TEST_MAIN_CFG,
                   'log': _TEST_LOGGING_CFG
                   }
-    # Load main config file
     if global_cfg[cfg_type]:
+        # Performing tests-suite
         cfg_dict = global_cfg[cfg_type]
     else:
         cfg_filepath = get_cfg_filepath(cfg_type)
-        cfg_dict = load_json(cfg_filepath)
+        try:
+            cfg_dict = load_json(cfg_filepath)
+        except FileNotFoundError:
+            # Config file not found
+            # Copy it from the default one
+            default_cfg_type = "default_{}".format(cfg_type)
+            src = get_cfg_filepath(default_cfg_type)
+            shutil.copy(src, cfg_filepath)
+            cfg_dict = load_json(cfg_filepath)
     return cfg_dict
 
 
@@ -294,7 +307,7 @@ def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="active",
 
         .. important::
 
-            This also affects the time all LEDs will remain turn off if a
+            This also affects the time all LEDs will remain turned off if a
             subsequence in `leds_sequence` is an empty list.
 
 
@@ -534,7 +547,8 @@ def edit_config(cfg_type, app=None):
     the `logging config file`_ and 'main' for the `main config file`_.
 
     The configuration file can be opened by a user-specified application (`app`)
-    or a default program associated with this type of file (when `app` is None).
+    or a default program associated with this type of file (when `app` is
+    :obj:`None`).
 
     Parameters
     ----------
@@ -545,8 +559,8 @@ def edit_config(cfg_type, app=None):
         or the GPIO channels.
     app : str
         Name of the application to use for opening the config file, e.g. 
-        `TextEdit` (the default value is None which implies that the default
-        application will be used to open the config file).
+        `TextEdit` (the default value is :obj:`None` which implies that the
+        default application will be used to open the config file).
 
     Returns
     -------
@@ -760,15 +774,12 @@ def main():
             """
         else:
             if main_cfg_dict['simulation']:
-                import SimulRPi.GPIO
-                GPIO = SimulRPi.GPIO
+                import SimulRPi.GPIO as GPIO
                 GPIO.setkeymap(main_cfg_dict['key_to_channel_map'])
-                if main_cfg_dict['quiet']:
-                    GPIO.setprinting(False)
+                GPIO.setprinting(not main_cfg_dict['quiet'])
                 logger.info("Simulation mode enabled")
             else:
-                import RPi.GPIO
-                GPIO = RPi.GPIO
+                import RPi.GPIO as GPIO
             # TODO: works on UNIX shell only, not Windows
             # ref.: https://bit.ly/3f3A7dc
             os.system("tput civis")
