@@ -136,3 +136,7 @@ dmypy.json
 
 # Test files/folders
 sandbox/
+
+# Config files
+main_cfg.json
+logging_cfg.json
