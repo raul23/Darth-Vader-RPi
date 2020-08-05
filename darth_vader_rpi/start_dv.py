@@ -782,7 +782,7 @@ def main():
                 import RPi.GPIO as GPIO
             # TODO: works on UNIX shell only, not Windows
             # ref.: https://bit.ly/3f3A7dc
-            os.system("tput civis")
+            # os.system("tput civis")
             retcode = activate_dv(main_cfg_dict)
     # except (AssertionError, AttributeError, KeyError, ImportError, OSError) as e:
     except Exception as e:
