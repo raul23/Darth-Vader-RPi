@@ -656,7 +656,7 @@ config file to have access to the complete list of options, i.e.
     parser.add_argument("-q", "--quiet", action="store_true",
                         help="Enable quiet mode, i.e. nothing will be printed.")
     parser.add_argument("-s", "--simulation", action="store_true",
-                        help="Enable simulation mode, i.e. SimulRPi.GPIO wil "
+                        help="Enable simulation mode, i.e. SimulRPi.GPIO will "
                              "be used for simulating RPi.GPIO.")
     parser.add_argument("-v", "--verbose", action="store_true",
                         help="Print various debugging information, e.g. print "
