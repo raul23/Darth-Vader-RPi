@@ -24,7 +24,9 @@ those that don't have an RPi to test on.
 Usage
 -----
 
-Once the `darth_vader_rpi` package is `installed`_, you should have access to
+.. highlight:: console
+
+Once the **darth_vader_rpi** package is `installed`_, you should have access to
 the :mod:`start_dv` script:
 
     ``start_dv [-h] [--version] [-q] [-s] [-v] [-e {log,main}] [-a APP]``
@@ -44,6 +46,8 @@ Edit the main config file with *TextEdit* (macOS)::
 Edit the logging config file with a default application (e.g. atom)::
 
     $ start_dv -e log
+
+.. highlight:: python
 
 Notes
 -----
