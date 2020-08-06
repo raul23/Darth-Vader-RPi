@@ -33,7 +33,7 @@ Run the script on the RPi::
 
     $ start_dv
 
-Run the script using `SimulRPi.GPIO`_ which simulates RPi.GPIO::
+Run the script using `SimulRPi.GPIO`_ which simulates `RPi.GPIO`_::
 
     $ start_dv -s
 
@@ -630,7 +630,7 @@ def setup_argparser():
 
     Returns
     -------
-    args : argparse.ArgumentParser
+    parser : argparse.ArgumentParser
         Argument parser.
 
     """
@@ -656,8 +656,8 @@ config file to have access to the complete list of options, i.e.
     parser.add_argument("-q", "--quiet", action="store_true",
                         help="Enable quiet mode, i.e. nothing will be printed.")
     parser.add_argument("-s", "--simulation", action="store_true",
-                        help="Enable simulation mode, i.e. SimulRPi.GPIO wil be "
-                             "used for simulating RPi.GPIO.")
+                        help="Enable simulation mode, i.e. SimulRPi.GPIO wil "
+                             "be used for simulating RPi.GPIO.")
     parser.add_argument("-v", "--verbose", action="store_true",
                         help="Print various debugging information, e.g. print "
                              "traceback when there is an exception.")
@@ -759,6 +759,7 @@ def main():
                "{}".format(retval.args_not_found)
         logger.debug(msg1)
         logger.debug(msg2)
+
     # =======
     # Actions
     # =======
@@ -794,7 +795,7 @@ def main():
             logger.error(e.__repr__())
     finally:
         # TODO: works on UNIX shell only, not Windows
-        os.system("tput cnorm")
+        # os.system("tput cnorm")
         if main_cfg_dict['quiet']:
             print()
         return retcode
