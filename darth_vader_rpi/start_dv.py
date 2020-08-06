@@ -406,6 +406,9 @@ def activate_dv(main_cfg):
     His iconic breathing sound plays in the background indefinitely as soon as
     the RPi is run with the script.
 
+    While the function waits for a pressed button, you can exit from this
+    function by pressing :obj:`ctr` + :obj:`c`.
+
     Parameters
     ----------
     main_cfg : dict
@@ -416,88 +419,92 @@ def activate_dv(main_cfg):
     Returns
     -------
     retcode: int
-        If the script is run on the RPi without any :exc:`Exception`, the
-        return code is 0. Otherwise, it is 1.
+        If the function is run without any :exc:`Exception`, the return code is
+        0. Otherwise, it is 1.
+
+        Also, even if there is an :exc:`Exception`, we will try to clean up
+        before exiting from the function.
 
     """
-    logger.info("pygame mixer initialization")
-    pygame.mixer.init()
-    logger.info("RPi initialization")
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setwarnings(False)
-    # LEDs
-    top_led = main_cfg['GPIO']['top_led']
-    middle_led = main_cfg['GPIO']['middle_led']
-    bottom_led = main_cfg['GPIO']['bottom_led']
-    lightsaber_led = main_cfg['GPIO']['lightsaber_led']
-    GPIO.setup(top_led, GPIO.OUT)
-    GPIO.setup(middle_led, GPIO.OUT)
-    GPIO.setup(bottom_led, GPIO.OUT)
-    GPIO.setup(lightsaber_led, GPIO.OUT)
-    # Buttons
-    lightsaber_button = main_cfg['GPIO']['lightsaber_button']
-    song_button = main_cfg['GPIO']['song_button']
-    quotes_button = main_cfg['GPIO']['quotes_button']
-    GPIO.setup(lightsaber_button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.setup(song_button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.setup(quotes_button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-
-    ### Sound
-    # Create separate channel
-    # Ref.: stackoverflow.com/a/59742418
-    channels = main_cfg['channels']
-    for ch_dict in channels:
-        channel = pygame.mixer.Channel(ch_dict['channel_id'])
-        channel.set_volume(ch_dict['volume'])
-
-    loaded_sounds = {}
-    sounds_dir = os.path.expanduser(main_cfg['sounds_directory'])
-    logger.info("Loading sound effects...")
-
-    def load_sounds():
-        for sound_type in ['quotes', 'songs', 'sound_effects']:
-            if sound_type == 'quotes':
-                for quote in main_cfg[sound_type]:
-                    logger.info("Loading {}".format(quote['name']))
-                    loaded_sounds.setdefault('quotes', [])
-                    filepath = os.path.join(sounds_dir, quote['filename'])
-                    loaded_sounds['quotes'].append(
-                        SoundWrapper(sound_name=quote['name'],
-                                     sound_filepath=filepath,
-                                     channel_id=quote['channel_id']))
-            elif sound_type in ['songs', 'sound_effects']:
-                for s in main_cfg[sound_type]:
-                    sound = s.popitem()
-                    sound_name = sound[0]
-                    sound_info = sound[1]
-                    logger.info("Loading {}".format(sound[0]))
-                    filepath = os.path.join(sounds_dir, sound_info['filename'])
-                    sw = SoundWrapper(sound_name=sound_name,
-                                      sound_filepath=filepath,
-                                      channel_id=sound_info['channel_id'])
-                    loaded_sounds.setdefault(sound_name, sw)
-                    if sound_info.get('play'):
-                        loops = sound_info.get('loops', -1)
-                        loaded_sounds[sound_name].play(loops)
-
-    load_sounds()
-    quotes = loaded_sounds['quotes']
-
-    leds_channels = {'top': top_led, 'middle': middle_led, 'bottom': bottom_led}
-    th = threading.Thread(target=turn_on_slot_leds_sequence, 
-                          args=(leds_channels,
-                                main_cfg['slot_leds']['sequence'],
-                                main_cfg['slot_leds']['delay_between_leds_on'],
-                                main_cfg['slot_leds']['time_leds_on']))
-    th.start()
-
-    logger.info("")
-    logger.info(_add_spaces_to_msg("Press any button"))
-    pressed_lightsaber = False
-    quote_idx = 0
-
     retcode = 0
+    th = None
     try:
+        logger.info("pygame mixer initialization")
+        pygame.mixer.init()
+        logger.info("RPi initialization")
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False)
+        # LEDs
+        top_led = main_cfg['GPIO']['top_led']
+        middle_led = main_cfg['GPIO']['middle_led']
+        bottom_led = main_cfg['GPIO']['bottom_led']
+        lightsaber_led = main_cfg['GPIO']['lightsaber_led']
+        GPIO.setup(top_led, GPIO.OUT)
+        GPIO.setup(middle_led, GPIO.OUT)
+        GPIO.setup(bottom_led, GPIO.OUT)
+        GPIO.setup(lightsaber_led, GPIO.OUT)
+        # Buttons
+        lightsaber_button = main_cfg['GPIO']['lightsaber_button']
+        song_button = main_cfg['GPIO']['song_button']
+        quotes_button = main_cfg['GPIO']['quotes_button']
+        GPIO.setup(lightsaber_button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(song_button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(quotes_button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+        ### Sound
+        # Create separate channel
+        # Ref.: stackoverflow.com/a/59742418
+        channels = main_cfg['channels']
+        for ch_dict in channels:
+            channel = pygame.mixer.Channel(ch_dict['channel_id'])
+            channel.set_volume(ch_dict['volume'])
+
+        loaded_sounds = {}
+        sounds_dir = os.path.expanduser(main_cfg['sounds_directory'])
+        logger.info("Loading sound effects...")
+
+        def load_sounds():
+            for sound_type in ['quotes', 'songs', 'sound_effects']:
+                if sound_type == 'quotes':
+                    for quote in main_cfg[sound_type]:
+                        logger.info("Loading {}".format(quote['name']))
+                        loaded_sounds.setdefault('quotes', [])
+                        filepath = os.path.join(sounds_dir, quote['filename'])
+                        loaded_sounds['quotes'].append(
+                            SoundWrapper(sound_name=quote['name'],
+                                         sound_filepath=filepath,
+                                         channel_id=quote['channel_id']))
+                elif sound_type in ['songs', 'sound_effects']:
+                    for s in main_cfg[sound_type]:
+                        sound = s.popitem()
+                        sound_name = sound[0]
+                        sound_info = sound[1]
+                        logger.info("Loading {}".format(sound[0]))
+                        filepath = os.path.join(sounds_dir, sound_info['filename'])
+                        sw = SoundWrapper(sound_name=sound_name,
+                                          sound_filepath=filepath,
+                                          channel_id=sound_info['channel_id'])
+                        loaded_sounds.setdefault(sound_name, sw)
+                        if sound_info.get('play'):
+                            loops = sound_info.get('loops', -1)
+                            loaded_sounds[sound_name].play(loops)
+
+        load_sounds()
+        quotes = loaded_sounds['quotes']
+
+        leds_channels = {'top': top_led, 'middle': middle_led, 'bottom': bottom_led}
+        th = threading.Thread(target=turn_on_slot_leds_sequence,
+                              args=(leds_channels,
+                                    main_cfg['slot_leds']['sequence'],
+                                    main_cfg['slot_leds']['delay_between_leds_on'],
+                                    main_cfg['slot_leds']['time_leds_on']))
+        th.start()
+
+        logger.info("")
+        logger.info(_add_spaces_to_msg("Press any button"))
+        pressed_lightsaber = False
+        quote_idx = 0
+
         while True:
             if not GPIO.input(lightsaber_button):
                 logger.debug("\n\nButton {} pressed...".format(
@@ -525,7 +532,10 @@ def activate_dv(main_cfg):
                 quote.play()
                 time.sleep(0.2)
     except Exception as e:
-        logger.exception(_add_spaces_to_msg("Error: {}".format(e)))
+        if main_cfg['verbose']:
+            logger.exception(_add_spaces_to_msg("Error: {}".format(e)))
+        else:
+            logger.error(_add_spaces_to_msg(e.__repr__()))
         logger.info(_add_spaces_to_msg("Exiting..."))
         retcode = 1
     except KeyboardInterrupt:
@@ -536,8 +546,9 @@ def activate_dv(main_cfg):
         if gpio_name.endswith("_led"):
             turn_off_led(gpio_pin)
     GPIO.cleanup()
-    th.do_run = False
-    th.join()
+    if th:
+        th.do_run = False
+        th.join()
     for ch in main_cfg['channels']:
         pygame.mixer.Channel(ch['channel_id']).stop()
 
