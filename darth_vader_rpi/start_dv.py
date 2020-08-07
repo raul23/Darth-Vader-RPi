@@ -15,11 +15,11 @@ The script allows you also to edit the `main config file`_ to setup among other
 things the RPi's GPIO pins connected to LEDs and push buttons.
 
 By default the module `RPi.GPIO`_ is used, but if the :ref:`simulation option
-(-s) <usage-start-dv-Label>` is used with the :mod:`start_dv` script, then the
+(-s) <usage-start-dv-label>` is used with the :mod:`start_dv` script, then the
 module `SimulRPi.GPIO`_ will be used instead which simulates `RPi.GPIO`_ for
 those that don't have an RPi to test on.
 
-.. _usage-start-dv-Label:
+.. _usage-start-dv-label:
 
 Usage
 -----
@@ -345,13 +345,13 @@ def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="active",
         assert isinstance(leds_sequence, list), \
             "leds_sequence should be a string ({}) or a list: '{}'".format(
                 ", ".join(_VALID_SEQ_TYPES), leds_sequence)
-    t = threading.currentThread()
+    th = threading.currentThread()
     if leds_sequence == "calm":
         leds_sequence = _CALM_MODE
     elif leds_sequence == "active":
         leds_sequence = _ACTIVE_MODE
     subseq_idx = 0
-    while getattr(t, "do_run", True):
+    while getattr(th, "do_run", True):
         leds_subsequence = leds_sequence[subseq_idx % len(leds_sequence)]
         subseq_idx += 1
         for channel_label in leds_subsequence:
@@ -363,8 +363,7 @@ def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="active",
             turn_off_led(lcm['middle'])
             turn_off_led(lcm['bottom'])
             time.sleep(delay_between_leds_on)
-    logger.info("Stopping thread: {}()".format(
-        turn_on_slot_leds_sequence.__name__))
+    logger.debug("Stopping thread: {}".format(th.name))
 
 
 def turn_off_led(channel):
@@ -427,7 +426,7 @@ def activate_dv(main_cfg):
 
     """
     retcode = 0
-    th = None
+    th_slot_leds = None
     try:
         logger.info("pygame mixer initialization")
         pygame.mixer.init()
@@ -493,12 +492,14 @@ def activate_dv(main_cfg):
         quotes = loaded_sounds['quotes']
 
         leds_channels = {'top': top_led, 'middle': middle_led, 'bottom': bottom_led}
-        th = threading.Thread(target=turn_on_slot_leds_sequence,
-                              args=(leds_channels,
-                                    main_cfg['slot_leds']['sequence'],
-                                    main_cfg['slot_leds']['delay_between_leds_on'],
-                                    main_cfg['slot_leds']['time_leds_on']))
-        th.start()
+        th_slot_leds = threading.Thread(name="thread_slot_leds",
+                                        target=turn_on_slot_leds_sequence,
+                                        args=(leds_channels,
+                                              main_cfg['slot_leds']['sequence'],
+                                              main_cfg['slot_leds']['delay_between_leds_on'],
+                                              main_cfg['slot_leds']['time_leds_on']))
+
+        th_slot_leds.start()
 
         logger.info("")
         logger.info(_add_spaces_to_msg("Press any button"))
@@ -507,8 +508,8 @@ def activate_dv(main_cfg):
 
         while True:
             if not GPIO.input(lightsaber_button):
-                logger.debug("\n\nButton {} pressed...".format(
-                    lightsaber_button))
+                # logger.debug("\n\nButton {} pressed...".format(
+                    # lightsaber_button))
                 if pressed_lightsaber:
                     pressed_lightsaber = False
                     loaded_sounds['lightsaber_close_sound'].play()
@@ -522,11 +523,11 @@ def activate_dv(main_cfg):
                     turn_on_led(lightsaber_led)
                 time.sleep(0.2)  # 0.2
             elif not GPIO.input(song_button):
-                logger.debug("\n\nButton {} pressed...".format(song_button))
+                # logger.debug("\n\nButton {} pressed...".format(song_button))
                 loaded_sounds['imperial_march_song'].play()
                 time.sleep(0.2)
             elif not GPIO.input(quotes_button):
-                logger.debug("\n\nButton {} pressed...".format(quotes_button))
+                # logger.debug("\n\nButton {} pressed...".format(quotes_button))
                 quote = quotes[quote_idx % len(quotes)]
                 quote_idx += 1
                 quote.play()
@@ -546,9 +547,11 @@ def activate_dv(main_cfg):
         if gpio_name.endswith("_led"):
             turn_off_led(gpio_pin)
     GPIO.cleanup()
-    if th:
-        th.do_run = False
-        th.join()
+    if th_slot_leds:
+        logger.info("Stopping thread ...")
+        th_slot_leds.do_run = False
+        th_slot_leds.join()
+        logger.debug("Thread stopped: {}".format(th_slot_leds.name))
     for ch in main_cfg['channels']:
         pygame.mixer.Channel(ch['channel_id']).stop()
 
@@ -778,7 +781,7 @@ def main():
     # =======
     # Actions
     # =======
-    retcode = 1
+    retcode = 0
     try:
         if args.edit:
             retcode = edit_config(args.edit, args.app)
@@ -808,6 +811,7 @@ def main():
             logger.exception(e)
         else:
             logger.error(e.__repr__())
+        retcode = 1
     finally:
         # TODO: works on UNIX shell only, not Windows
         # os.system("tput cnorm")
