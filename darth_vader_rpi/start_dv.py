@@ -217,6 +217,7 @@ class SoundWrapper:
         """Stop playback on the specified channel `channel_id`.
         """
         self._channel.stop()
+        self._channel.stop()
 
 
 # TODO: clear buffer
@@ -431,7 +432,8 @@ def activate_dv(main_cfg):
         logger.info("pygame mixer initialization")
         pygame.mixer.init()
         logger.info("RPi initialization")
-        GPIO.setmode(GPIO.BCM)
+        # TODO: get mode from config
+        GPIO.setmode(GPIO.MODES[main_cfg['mode'].upper()])
         GPIO.setwarnings(False)
         # LEDs
         top_led = main_cfg['GPIO']['top_led']
@@ -533,27 +535,28 @@ def activate_dv(main_cfg):
                 quote.play()
                 time.sleep(0.2)
     except Exception as e:
+        retcode = 1
         if main_cfg['verbose']:
             logger.exception(_add_spaces_to_msg("Error: {}".format(e)))
         else:
             logger.error(_add_spaces_to_msg(e.__repr__()))
         logger.info(_add_spaces_to_msg("Exiting..."))
-        retcode = 1
     except KeyboardInterrupt:
         logger.info(_add_spaces_to_msg("Exiting..."))
 
-    logger.info(_add_spaces_to_msg("Cleanup..."))
+    GPIO.setprinting(False)
     for gpio_name, gpio_pin in main_cfg['GPIO'].items():
         if gpio_name.endswith("_led"):
             turn_off_led(gpio_pin)
-    GPIO.cleanup()
     if th_slot_leds:
-        logger.info("Stopping thread ...")
+        logger.info(_add_spaces_to_msg("Stopping thread ..."))
         th_slot_leds.do_run = False
         th_slot_leds.join()
-        logger.debug("Thread stopped: {}".format(th_slot_leds.name))
+        logger.debug(_add_spaces_to_msg("Thread stopped: {}".format(th_slot_leds.name)))
     for ch in main_cfg['channels']:
         pygame.mixer.Channel(ch['channel_id']).stop()
+    logger.info(_add_spaces_to_msg("Cleanup..."))
+    GPIO.cleanup()
 
     return retcode
 
@@ -826,4 +829,4 @@ if __name__ == '__main__':
     if retcode == 1:
         logger.error(msg)
     else:
-        logger.debug(msg)
+        logger.info(msg)
