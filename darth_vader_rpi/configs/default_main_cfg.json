@@ -3,6 +3,7 @@
   "simulation": false,
   "verbose": false,
   "sounds_directory": "~/Data/star_wars_sound_effects/ogg",
+  "mode": "BCM",
 
   "channels": [
     {
