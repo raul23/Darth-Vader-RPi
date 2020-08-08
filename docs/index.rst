@@ -8,7 +8,9 @@ Darth-Vader-RPi's documentation
 
 .. raw:: html
 
-   <p align="center"><img src=_static/images/Darth_Vader_RPi_logo.png></p>
+   <p align="center"><img src=_static/images/Darth_Vader_RPi_logo.png>
+   <br> 🚧 &nbsp;&nbsp;&nbsp;<b>Work-In-Progress</b>
+   </p>
 
 .. toctree::
    :maxdepth: 2
