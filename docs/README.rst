@@ -3,8 +3,9 @@ README
 ======
 .. raw:: html
 
-   <p align="center"><img src="https://raw.githubusercontent.com/raul23/Darth-Vader-RPi/master/docs/_static/images/Darth_Vader_RPi_logo.png"></p>
-   <p align="center"> 🚧 &nbsp;&nbsp;&nbsp;<b>Work-In-Progress</b></p>
+   <p align="center"><img src="https://raw.githubusercontent.com/raul23/Darth-Vader-RPi/master/docs/_static/images/Darth_Vader_RPi_logo.png">
+   <br>🚧 &nbsp;&nbsp;&nbsp;<b>Work-In-Progress</b>
+   </p>
 
 .. image:: https://readthedocs.org/projects/darth-vader-rpi/badge/?version=latest
    :target: https://darth-vader-rpi.readthedocs.io/en/latest/?badge=latest
