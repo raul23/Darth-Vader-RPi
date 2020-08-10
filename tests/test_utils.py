@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 logger.addHandler(NullHandler())
 
 
+# TODO: pygame in requirements?
 class TestUtils(TestBase):
     TEST_MODULE_QUALNAME = get_qualname(utils)
     LOGGER_NAME = __name__
