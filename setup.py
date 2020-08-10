@@ -18,13 +18,17 @@ dirpath = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(dirpath, "README.rst")) as f:
     README = f.read()
 
+# The text of the requirements.txt file
+with open(os.path.join(dirpath, "requirements.txt")) as f:
+    REQUIREMENTS = f.read().split()
+
 setup(name='Darth-Vader-RPi',
       version=__version__,
       description='WRITEME',
       long_description=README,
       long_description_content_type='text/x-rst',
       classifiers=[
-        'Development Status :: 1 - Planning',
+        'Development Status :: 3 - Alpha',
         'Environment :: Console',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
@@ -41,10 +45,7 @@ setup(name='Darth-Vader-RPi',
       license='GPLv3',
       packages=find_packages(exclude=['tests']),
       include_package_data=True,
-      install_requires=[
-          'pygame',
-          'py-common-utils @ https://github.com/raul23/py-common-utils/tarball/master'
-      ],
+      install_requires=REQUIREMENTS,
       entry_points={
         'console_scripts': ['start_dv=darth_vader_rpi.start_dv:main']
       },
