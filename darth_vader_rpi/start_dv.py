@@ -1,4 +1,4 @@
-#!/usr/script/env python
+#!/usr/bin/env python
 """Script to turn on LEDs and play sound effects on a Raspberry Pi (RPi).
 
 The LEDs illuminate a Darth Vader action figure's lightsaber and the three
