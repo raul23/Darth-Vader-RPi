@@ -2,10 +2,27 @@
   "quiet": false,
   "simulation": false,
   "verbose": false,
-  "sounds_directory": "~/Data/star_wars_sound_effects/ogg",
   "mode": "BCM",
+  "sounds_directory": "~/Data/star_wars_sound_effects/ogg",
 
-  "channels": [
+  "GPIO_channels": {
+    "top_led": 11,
+    "middle_led": 9,
+    "bottom_led": 10,
+    "lightsaber_led": 22,
+    "lightsaber_button": 23,
+    "song_button": 24,
+    "quotes_button": 25
+  },
+
+  "keyboard_key_to_channel_map":
+  {
+    "f": 23,
+    "g": 24,
+    "h": 25
+  },
+
+  "audio_channels": [
     {
       "channel_id": 0,
       "volume": 0.2
@@ -21,7 +38,7 @@
   ],
 
   "slot_leds":{
-    "delay_between_leds_on": 0.5,
+    "delay_between_subsequences": 0.5,
     "time_leds_on": 1,
     "sequence":[
       ["top", "middle", "bottom"],
@@ -117,22 +134,5 @@
         "channel_id": 2
       }
     }
-  ],
-
-  "GPIO": {
-    "top_led": 11,
-    "middle_led": 9,
-    "bottom_led": 10,
-    "lightsaber_led": 22,
-    "lightsaber_button": 23,
-    "song_button": 24,
-    "quotes_button": 25
-  },
-
-  "key_to_channel_map":
-  {
-    "f": 23,
-    "g": 24,
-    "h": 25
-  }
+  ]
 }
