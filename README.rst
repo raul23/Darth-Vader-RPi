@@ -42,7 +42,6 @@ playing sounds such as some of his famous quotes.
 .. contents::
    :depth: 3
    :local:
-   :caption: Contents
 
 Introduction
 ============
