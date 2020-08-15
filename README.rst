@@ -1,3 +1,4 @@
+.. _RPi.GPIO: https://pypi.org/project/RPi.GPIO/
 .. _SimulRPi: https://github.com/raul23/SimulRPi
 
 ======
@@ -75,7 +76,7 @@ Dependencies
 * **Packages**
 
   * ``pygame``>=1.9.6: for playing sounds
-  * ``SimulRPi`` >=0.0.1a0: for partly faking ``RPI.GPIO`` and simulating I/O
+  * ``SimulRPi`` >=0.0.1a0: for partly faking `RPI.GPIO`_ and simulating I/O
     devices connected to an RPi such as LEDs and push buttons in the case that
     you don't have access to an RPi
 
