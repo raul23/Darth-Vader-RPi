@@ -78,7 +78,8 @@ Dependencies
   * ``pygame``>=1.9.6: for playing sounds
   * ``SimulRPi`` >=0.0.1a0: for partly faking `RPI.GPIO`_ and simulating I/O
     devices connected to an RPi such as LEDs and push buttons in case that you
-    don't have access to an RPi
+    don't have access to an RPi. See `SimulRPi`_ for more info about this
+    library.
 
 Installation instructions
 =========================
