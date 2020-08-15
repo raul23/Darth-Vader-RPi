@@ -31,7 +31,8 @@ the :mod:`start_dv` script:
 
     ``start_dv [-h] [--version] [-q] [-s] [-v] [-e {log,main}] [-a APP]``
 
-Run the script on the RPi::
+Run the script on the RPi with `default values`_ for GPIO channels and other
+settings::
 
     $ start_dv
 
@@ -53,9 +54,10 @@ Notes
 -----
 More information is available at:
 
-- *Darth-Vader-RPi* GitHub: https://github.com/raul23/Darth-Vader-RPi
-- *SimulRPi* GitHub: https://github.com/raul23/SimulRPi
+- `Darth-Vader-RPi GitHub <https://github.com/raul23/Darth-Vader-RPi>`_
+- `SimulRPi GitHub <https://github.com/raul23/SimulRPi>`_
 
+.. _default values: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json
 .. _installed: https://github.com/raul23/Darth-Vader-RPi#readme
 .. _logging config file: https://bit.ly/2D6exaD
 .. _main config file: https://bit.ly/39x8o3e
@@ -249,7 +251,8 @@ def _get_cfg_dict(cfg_type):
 
 
 def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="active",
-                               delay_between_leds_on=0.4, time_leds_on=0.4,):
+                               delay_between_subsequences=0.4,
+                               time_leds_on=0.4,):
     """Turn on/off the three slot LEDs in a precise sequence.
 
     These three LEDs are associated with Darth Vader's three slots located on
@@ -273,7 +276,7 @@ def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="active",
 
     The LEDs will be turned on for `time_leds_on` seconds.
 
-    There will be a delay of `delay_between_leds_on` seconds between
+    There will be a delay of `delay_between_subsequences` seconds between
     subsequences of LEDs being turned on, i.e. between each step in the
     previous example.
 
@@ -302,7 +305,7 @@ def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="active",
             3. middle LED turn on
             4. All LEDs turn off
 
-    delay_between_leds_on : float, optional
+    delay_between_subsequences : float, optional
         Delay in seconds between subsequences of LEDs. The default value is 0.4
         seconds.
 
@@ -363,7 +366,7 @@ def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="active",
             turn_off_led(lcm['top'])
             turn_off_led(lcm['middle'])
             turn_off_led(lcm['bottom'])
-            time.sleep(delay_between_leds_on)
+            time.sleep(delay_between_subsequences)
     logger.debug("Stopping thread: {}".format(th.name))
 
 
@@ -436,18 +439,18 @@ def activate_dv(main_cfg):
         GPIO.setmode(GPIO.MODES[main_cfg['mode'].upper()])
         GPIO.setwarnings(False)
         # LEDs
-        top_led = main_cfg['GPIO']['top_led']
-        middle_led = main_cfg['GPIO']['middle_led']
-        bottom_led = main_cfg['GPIO']['bottom_led']
-        lightsaber_led = main_cfg['GPIO']['lightsaber_led']
+        top_led = main_cfg['GPIO_channels']['top_led']
+        middle_led = main_cfg['GPIO_channels']['middle_led']
+        bottom_led = main_cfg['GPIO_channels']['bottom_led']
+        lightsaber_led = main_cfg['GPIO_channels']['lightsaber_led']
         GPIO.setup(top_led, GPIO.OUT)
         GPIO.setup(middle_led, GPIO.OUT)
         GPIO.setup(bottom_led, GPIO.OUT)
         GPIO.setup(lightsaber_led, GPIO.OUT)
         # Buttons
-        lightsaber_button = main_cfg['GPIO']['lightsaber_button']
-        song_button = main_cfg['GPIO']['song_button']
-        quotes_button = main_cfg['GPIO']['quotes_button']
+        lightsaber_button = main_cfg['GPIO_channels']['lightsaber_button']
+        song_button = main_cfg['GPIO_channels']['song_button']
+        quotes_button = main_cfg['GPIO_channels']['quotes_button']
         GPIO.setup(lightsaber_button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.setup(song_button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.setup(quotes_button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -455,7 +458,7 @@ def activate_dv(main_cfg):
         ### Sound
         # Create separate channel
         # Ref.: stackoverflow.com/a/59742418
-        channels = main_cfg['channels']
+        channels = main_cfg['audio_channels']
         for ch_dict in channels:
             channel = pygame.mixer.Channel(ch_dict['channel_id'])
             channel.set_volume(ch_dict['volume'])
@@ -494,12 +497,13 @@ def activate_dv(main_cfg):
         quotes = loaded_sounds['quotes']
 
         leds_channels = {'top': top_led, 'middle': middle_led, 'bottom': bottom_led}
-        th_slot_leds = threading.Thread(name="thread_slot_leds",
-                                        target=turn_on_slot_leds_sequence,
-                                        args=(leds_channels,
-                                              main_cfg['slot_leds']['sequence'],
-                                              main_cfg['slot_leds']['delay_between_leds_on'],
-                                              main_cfg['slot_leds']['time_leds_on']))
+        th_slot_leds = threading.Thread(
+            name="thread_slot_leds",
+            target=turn_on_slot_leds_sequence,
+            args=(leds_channels,
+                  main_cfg['slot_leds']['sequence'],
+                  main_cfg['slot_leds']['delay_between_subsequences'],
+                  main_cfg['slot_leds']['time_leds_on']))
 
         th_slot_leds.start()
 
@@ -545,7 +549,7 @@ def activate_dv(main_cfg):
         logger.info(_add_spaces_to_msg("Exiting..."))
 
     GPIO.setprinting(False)
-    for gpio_name, gpio_pin in main_cfg['GPIO'].items():
+    for gpio_name, gpio_pin in main_cfg['GPIO_channels'].items():
         if gpio_name.endswith("_led"):
             turn_off_led(gpio_pin)
     if th_slot_leds:
@@ -553,7 +557,7 @@ def activate_dv(main_cfg):
         th_slot_leds.do_run = False
         th_slot_leds.join()
         logger.debug(_add_spaces_to_msg("Thread stopped: {}".format(th_slot_leds.name)))
-    for ch in main_cfg['channels']:
+    for ch in main_cfg['audio_channels']:
         pygame.mixer.Channel(ch['channel_id']).stop()
     logger.info(_add_spaces_to_msg("Cleanup..."))
     GPIO.cleanup()
@@ -797,7 +801,7 @@ def main():
         else:
             if main_cfg_dict['simulation']:
                 import SimulRPi.GPIO as GPIO
-                GPIO.setkeymap(main_cfg_dict['key_to_channel_map'])
+                GPIO.setkeymap(main_cfg_dict['keyboard_key_to_channel_map'])
                 GPIO.setprinting(not main_cfg_dict['quiet'])
                 logger.info("Simulation mode enabled")
             else:
