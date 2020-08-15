@@ -39,7 +39,7 @@ playing sounds such as some of his famous quotes.
 
    **Disclaimer:** I also wrote the ``SimulRPi`` library
 
-.. contents:: Table of contents
+.. contents:: **Table of contents**
    :depth: 3
    :local:
 
