@@ -68,6 +68,15 @@ RPi is run with the script.
    different sounds produced by pressing the push buttons</b></p>
    </div>
 
+Connection diagram
+==================
+.. raw:: html
+
+   <div align="center">
+   <img src="https://raw.githubusercontent.com/raul23/images/master/Darth-Vader-RPi/schematics.png"/>
+   <p><b>Schematics</b></p>
+   </div>
+
 Dependencies
 ============
 * **Platforms:** macOS, Linux
