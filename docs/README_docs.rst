@@ -1,3 +1,6 @@
+.. _RPi.GPIO: https://pypi.org/project/RPi.GPIO/
+.. _SimulRPi: https://github.com/raul23/SimulRPi
+
 ======
 README
 ======
@@ -33,11 +36,11 @@ playing sounds such as some of his famous quotes.
 
    If you don't have an RPi, don't worry. You can still test the program on
    your own computer because the package ``darth_vader_rpi`` uses the library
-   ``SimulRPi`` to simulate I/O devices connected to an RPi such as LEDs and
+   `SimulRPi`_ to simulate I/O devices connected to an RPi such as LEDs and
    push buttons by blinking small circles on the terminal and playing sounds
    when a keyboard key is pressed. Almost like testing with a real RPi!
 
-   **Disclaimer:** I also wrote the ``SimulRPi`` library
+   **Disclaimer:** I also wrote the `SimulRPi`_ library
 
 .. contents::
    :depth: 3
@@ -70,10 +73,13 @@ Dependencies
 ============
 * **Platforms:** macOS, Linux
 * **Python**: 3.5, 3.6, 3.7, 3.8
-* ``pygame``>=1.9.6: for playing sounds
-* ``SimulRPi`` >=0.0.1a0: for partly faking ``RPI.GPIO`` and simulating I/O
-  devices connected to an RPi such as LEDs and push buttons in the case that you
-  don't have access to an RPi
+* **Packages**
+
+  * ``pygame``>=1.9.6: for playing sounds
+  * ``SimulRPi`` >=0.0.1a0: for partly faking `RPI.GPIO`_ and simulating I/O
+    devices connected to an RPi such as LEDs and push buttons in case that you
+    don't have access to an RPi. See `SimulRPi`_ for more info about this
+    library.
 
 Installation instructions
 =========================
