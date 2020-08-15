@@ -18,9 +18,6 @@ README
    :target: https://travis-ci.org/raul23/Darth-Vader-RPi
    :alt: Build Status
 
-..
-   <p align="center"><img src="https://raw.githubusercontent.com/raul23/images/master/Darth-Vader-RPi/darth_vader_01.jpg" width="394" height="700"/></p>
-
 **Darth-Vader-RPi** is a Python-based Raspberry Pi (RPi) project about activating a Darth
 Vader action figure by turning on LEDs on his suit and lightsaber, and by
 playing sounds such as some of his famous quotes.
@@ -28,7 +25,9 @@ playing sounds such as some of his famous quotes.
 .. raw:: html
 
    <div align="center">
+   <a href="https://www.youtube.com/embed/P631S1k1h_0">
    <img src="https://raw.githubusercontent.com/raul23/images/master/Darth-Vader-RPi/darth_vader_lightsaber_2x_speed_smaller_version.gif"/>
+   </a>
    <p><b>Turning on/off the lightsaber</b></p>
    </div>
 
