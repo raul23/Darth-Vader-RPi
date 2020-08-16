@@ -152,7 +152,7 @@ Simulating on your computer
 If you don't have access to a Raspberry Pi and want to try out the script
 ``start_dv``, you can use the `-s` flag which will simulate an RPi on your
 computer. It will make use of the library ``SimulRPi`` to simulate LEDs and
-push buttons by blinking red circles on the terminal and monitoring pressed
+push buttons by blinking red circles in the terminal and monitoring pressed
 keyboard keys::
 
    $ start_dv -s
@@ -160,13 +160,13 @@ keyboard keys::
 **NOTE:** the last command makes use of default values. See ``TODO`` on how
 to change these settings.
 
-Here is a video of what it looks like on a terminal when running the script
+Here is a video of what it looks like in a terminal when running the script
 ``start_dv`` on a computer instead of an RPi:
 
 .. raw:: html
 
    <div align="center">
-   <a href="https://www.youtube.com/watch?v=Wfv5uaQtRM4"><img src="https://img.youtube.com/vi/Wfv5uaQtRM4/0.jpg" alt="Raspberry Pi simulaion on a terminal"></a>
+   <a href="https://www.youtube.com/watch?v=Wfv5uaQtRM4"><img src="https://img.youtube.com/vi/Wfv5uaQtRM4/0.jpg" alt="Raspberry Pi simulaion in a terminal"></a>
    <p><b>Click on the above image for the full video</b></p>
    </div>
 
