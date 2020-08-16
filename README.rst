@@ -78,7 +78,7 @@ Connection diagram
 .. raw:: html
 
    <div align="center">
-   <img src="https://raw.githubusercontent.com/raul23/images/master/Darth-Vader-RPi/schematics.png" width="500" height="600"/>
+   <img src="https://raw.githubusercontent.com/raul23/images/master/Darth-Vader-RPi/schematics.png" width="600" height="500"/>
    </div>
 
 * The lightsaber is illuminated by 3 LEDs connected in parallel
