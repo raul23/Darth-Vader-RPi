@@ -1,3 +1,5 @@
+.. _config file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L1
+.. _default values: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L1
 .. _RPi.GPIO: https://pypi.org/project/RPi.GPIO/
 .. _SimulRPi: https://github.com/raul23/SimulRPi
 
@@ -18,9 +20,6 @@ README
    :target: https://travis-ci.org/raul23/Darth-Vader-RPi
    :alt: Build Status
 
-..  
-   <p align="center"><img src="https://raw.githubusercontent.com/raul23/images/master/Darth-Vader-RPi/darth_vader_01.jpg" width="394" height="700"/></p>
-
 **Darth-Vader-RPi** is a Python-based Raspberry Pi (RPi) project about activating a Darth
 Vader action figure by turning on LEDs on his suit and lightsaber, and by 
 playing sounds such as some of his famous quotes.
@@ -28,7 +27,9 @@ playing sounds such as some of his famous quotes.
 .. raw:: html
 
    <div align="center">
+   <a href="https://www.youtube.com/embed/P631S1k1h_0">
    <img src="https://raw.githubusercontent.com/raul23/images/master/Darth-Vader-RPi/darth_vader_lightsaber_2x_speed_smaller_version.gif"/>
+   </a>
    <p><b>Turning on/off the lightsaber</b></p>
    </div>
 
@@ -69,6 +70,15 @@ RPi is run with the script.
    different sounds produced by pressing the push buttons</b></p>
    </div>
 
+Connection diagram
+==================
+.. raw:: html
+
+   <div align="center">
+   <img src="https://raw.githubusercontent.com/raul23/images/master/Darth-Vader-RPi/schematics.png"/>
+   <p><b>Schematics</b></p>
+   </div>
+
 Dependencies
 ============
 * **Platforms:** macOS, Linux
@@ -95,4 +105,30 @@ Installation instructions
 
 Usage
 =====
+Script ``darth_vader_rpi``
+--------------------------
+Once you install ``darth_vader_rpi``, you should have access to the script
+``start_dv`` which turns on LEDs and plays sound effects on a Raspberry Pi.
+
+Run the script on your RPi with `default values`_ for the GPIO channels and other
+settings::
+
+   $ start_dv
+
+If you want to test the script on your computer (use the `-s` option)::
+
+   $ start_dv -s
+
+.. note::
+
+   Both previous commands will use the default values from the `config file`_
+   (e.g GPIO and audio channels).
+
+   To change these settings, use the `-e` flag to edit the configuration file
+   with your favorite editor and don't forget to save your changes::
+
+      $ start_dv -e
+
+List of options
+---------------
 Test
