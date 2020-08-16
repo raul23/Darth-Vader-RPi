@@ -116,15 +116,6 @@ Dependencies
 
 Installation instructions
 =========================
-1. Install the ``darth_vader_rpi`` package with *pip*::
-
-   $ pip install Darth-Vader-RPi
-
-   It will install the dependencies if they are not already found in your system.
-
-2. Test your installation by importing ``darth_vader_rpi`` and printing its version::
-
-   $ python -c "import darth_vader_rpi; print(darth_vader_rpi.__version__)"
 
 Usage
 =====
