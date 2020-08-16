@@ -431,6 +431,7 @@ def activate_dv(main_cfg):
     """
     retcode = 0
     th_slot_leds = None
+    loaded_sounds = {}
     try:
         logger.info("pygame mixer initialization")
         pygame.mixer.init()
@@ -463,38 +464,31 @@ def activate_dv(main_cfg):
             channel = pygame.mixer.Channel(ch_dict['channel_id'])
             channel.set_volume(ch_dict['volume'])
 
-        loaded_sounds = {}
         sounds_dir = os.path.expanduser(main_cfg['sounds_directory'])
         logger.info("Loading sound effects...")
 
-        def load_sounds():
+        def load_sounds_from_cfg():
             for sound_type in ['quotes', 'songs', 'sound_effects']:
-                if sound_type == 'quotes':
-                    for quote in main_cfg[sound_type]:
-                        logger.info("Loading {}".format(quote['name']))
-                        loaded_sounds.setdefault('quotes', [])
-                        filepath = os.path.join(sounds_dir, quote['filename'])
-                        loaded_sounds['quotes'].append(
-                            SoundWrapper(sound_name=quote['name'],
-                                         sound_filepath=filepath,
-                                         channel_id=quote['channel_id']))
-                elif sound_type in ['songs', 'sound_effects']:
-                    for s in main_cfg[sound_type]:
-                        sound = s.popitem()
-                        sound_name = sound[0]
-                        sound_info = sound[1]
-                        logger.info("Loading {}".format(sound[0]))
-                        filepath = os.path.join(sounds_dir, sound_info['filename'])
-                        sw = SoundWrapper(sound_name=sound_name,
-                                          sound_filepath=filepath,
-                                          channel_id=sound_info['channel_id'])
+                for s in main_cfg[sound_type]:
+                    sound = s.popitem()
+                    sound_name = sound[0]
+                    sound_info = sound[1]
+                    logger.info("Loading {}".format(sound[0]))
+                    filepath = os.path.join(sounds_dir, sound_info['filename'])
+                    sw = SoundWrapper(sound_name=sound_name,
+                                      sound_filepath=filepath,
+                                      channel_id=sound_info['channel_id'])
+                    if sound_type == "quotes":
+                        loaded_sounds.setdefault("quotes", {})
+                        loaded_sounds['quotes'].setdefault(sound_name, sw)
+                    else:
                         loaded_sounds.setdefault(sound_name, sw)
-                        if sound_info.get('play'):
-                            loops = sound_info.get('loops', -1)
-                            loaded_sounds[sound_name].play(loops)
+                    if sound_info.get('play'):
+                        loops = sound_info.get('loops', -1)
+                        loaded_sounds[sound_name].play(loops)
 
-        load_sounds()
-        quotes = loaded_sounds['quotes']
+        load_sounds_from_cfg()
+        quotes = list(loaded_sounds['quotes'].values())
 
         leds_channels = {'top': top_led, 'middle': middle_led, 'bottom': bottom_led}
         th_slot_leds = threading.Thread(
@@ -508,7 +502,7 @@ def activate_dv(main_cfg):
         th_slot_leds.start()
 
         logger.info("")
-        logger.info(_add_spaces_to_msg("Press any button"))
+        logger.info(_add_spaces_to_msg("Press buttons"))
         pressed_lightsaber = False
         quote_idx = 0
 
@@ -518,16 +512,16 @@ def activate_dv(main_cfg):
                     # lightsaber_button))
                 if pressed_lightsaber:
                     pressed_lightsaber = False
-                    loaded_sounds['lightsaber_close_sound'].play()
-                    time.sleep(0.1)  # 0.3
+                    loaded_sounds['lightsaber_retraction_sound'].play()
+                    time.sleep(0.1)
                     turn_off_led(22)
                 else:
                     pressed_lightsaber = True
-                    loaded_sounds['lightsaber_open_sound'].play()
-                    loaded_sounds['lightsaber_running_sound'].play(-1)
-                    time.sleep(0.1)  # 0.3
+                    loaded_sounds['lightsaber_drawing_sound'].play()
+                    loaded_sounds['lightsaber_hum_sound'].play(-1)
+                    time.sleep(0.1)
                     turn_on_led(lightsaber_led)
-                time.sleep(0.2)  # 0.2
+                time.sleep(0.2)
             elif not GPIO.input(song_button):
                 # logger.debug("\n\nButton {} pressed...".format(song_button))
                 loaded_sounds['imperial_march_song'].play()
@@ -540,6 +534,8 @@ def activate_dv(main_cfg):
                 time.sleep(0.2)
     except Exception as e:
         retcode = 1
+        import ipdb
+        ipdb.set_trace()
         if main_cfg['verbose']:
             logger.exception(_add_spaces_to_msg("Error: {}".format(e)))
         else:
@@ -547,6 +543,11 @@ def activate_dv(main_cfg):
         logger.info(_add_spaces_to_msg("Exiting..."))
     except KeyboardInterrupt:
         logger.info(_add_spaces_to_msg("Exiting..."))
+        if main_cfg['closing_sound']['play'] and loaded_sounds:
+            closing_sound = loaded_sounds['quotes'].get('nooooo')
+            if closing_sound and closing_sound.play:
+                closing_sound.play()
+                time.sleep(1)
 
     GPIO.setprinting(False)
     for gpio_name, gpio_pin in main_cfg['GPIO_channels'].items():
