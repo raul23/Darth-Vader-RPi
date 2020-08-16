@@ -39,11 +39,15 @@ more info about the project.
 .. TODO: this important notice is also found in README.rst
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents
 
    README_docs
+   change_default_settings
+   changelog
+   todos
    api_reference
+   license
 
 
 Indices and tables
