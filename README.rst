@@ -95,8 +95,9 @@ Connection diagram
 * The *Song button* plays the `Imperial March song by Jacob Townsend`_
 * The *Quotes button* plays a famous Darth Vader's quotes when pressed. For
   testing purposes, the ``darth_vader_rpi`` package comes with two movie lines:
-    * `"I am your father"`_
-    * `"Nooooo"`_
+
+  * `"I am your father"`_
+  * `"Nooooo"`_
 
   However, you could add more if you want to. Check ``TODO`` for more info on
   how to do it.
