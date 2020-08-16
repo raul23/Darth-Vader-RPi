@@ -36,7 +36,7 @@ playing sounds such as some of his famous quotes.
    <p><b>Turning on/off the lightsaber</b></p>
    </div>
 
-.. important::
+`:warning:`
 
    If you don't have an RPi, don't worry. You can still test the program on
    your own computer because the package ``darth_vader_rpi`` uses the library
@@ -95,7 +95,6 @@ Connection diagram
 * The *Song button* plays the `Imperial March song by Jacob Townsend`_
 * The *Quotes button* plays a famous Darth Vader's quotes when pressed. For
   testing purposes, the ``darth_vader_rpi`` package comes with two movie lines:
-
     * `"I am your father"`_
     * `"Nooooo"`_
 
