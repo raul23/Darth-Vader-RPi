@@ -142,7 +142,7 @@ If you want to test the script on your computer (use the `-s` option)::
 
    $ start_dv -s
 
-.. note::
+`:information_source:`
 
    Both previous commands will use the default values from the `config file`_
    (e.g GPIO and audio channels).
