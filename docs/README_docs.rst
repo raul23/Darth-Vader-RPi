@@ -46,7 +46,7 @@ playing sounds such as some of his famous quotes.
 
    **Disclaimer:** I also wrote the `SimulRPi`_ library
 
-.. contents::
+.. contents:: **Table of contents**
    :depth: 3
    :local:
 
@@ -175,46 +175,9 @@ Here is a video of what it looks like on a terminal when running the script
 .. raw:: html
 
    <div align="center">
-   <a href="https://www.youtube.com/watch?v=Wfv5uaQtRM4"><img src="https://img.youtube.com/vi/Wfv5uaQtRM4/0.jpg" alt="Raspberry Pi simulaion on a terminal"></a>
+   <a href="https://youtu.be/DeCTCACna5A"><img src="https://img.youtube.com/vi/DeCTCACna5A/0.jpg" alt="Raspberry Pi simulaion in a terminal"></a>
    <p><b>Click on the above image for the full video</b></p>
    </div>
-
-
-
-Change default settings
------------------------
-
-Add Darth Vader quotes
-^^^^^^^^^^^^^^^^^^^^^^
-
-Change channel volume
-^^^^^^^^^^^^^^^^^^^^^
-
-Change key to channel mapping
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Change paths to audio files
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Change GPIO channels
-^^^^^^^^^^^^^^^^^^^^
-
-Change slot LEDs sequence
-^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Mute breathing and closing sounds
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Change Log
-==========
-0.1.0a0
--------
-* Test
-
-TODOs
-=====
-* Test
-* Bouncy button
 
 Resources
 =========
