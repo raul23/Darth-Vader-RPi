@@ -166,7 +166,7 @@ Here is a video of what it looks like on a terminal when running the script
 .. raw:: html
 
    <div align="center">
-   <a href="https://youtu.be/DeCTCACna5A"><img src="https://img.youtube.com/vi/DeCTCACna5A/0.jpg" alt="Raspberry Pi simulaion in a terminal"></a>
+   <a href="https://youtu.be/SqyU1ZwYxyk"><img src="https://img.youtube.com/vi/SqyU1ZwYxyk/0.jpg" alt="Raspberry Pi simulaion in a terminal"></a>
    <p><b>Click on the above image for the full video</b></p>
    </div>
 
