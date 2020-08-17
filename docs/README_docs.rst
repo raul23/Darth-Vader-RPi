@@ -1,5 +1,10 @@
 .. _config file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L1
 .. _default values: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L1
+.. _pygame: https://www.pygame.org/
+.. _Darth-Vader-RPi documentation: http://darth-vader-rpi.rtfd.io/
+.. _Darth-Vader-RPi GitHub: https://github.com/raul23/Darth-Vader-RPi
+.. TODO: test the following URL
+.. _Darth-Vader-RPi PyPI: https://pypi.org/project/Darth-Vader-RPi/
 .. _"I am your father": https://www.youtube.com/watch?v=xuJEYdOFEP4
 .. _Imperial March song by Jacob Townsend: https://soundcloud.com/jacobtownsend1/imperial-march
 .. _"Nooooo": https://www.youtube.com/watch?v=ZscVhFvD6iE
@@ -170,16 +175,24 @@ Here is a video of what it looks like on a terminal when running the script
    <p><b>Click on the above image for the full video</b></p>
    </div>
 
+
+
 Resources
 =========
-* Darth-Vader-RPi GitHub: source code
-* Darth-Vader-RPi PyPI
+.. TODO: don't use next item for readthedocs
+
+* `Darth-Vader-RPi documentation`_
+* `Darth-Vader-RPi GitHub`_: source code
+* `Darth-Vader-RPi PyPI`_
+* `Changelog <changelog.html>`_
+* `TODOs <todos.html>`_
 
 References
 ==========
-* pygame: package used for
-* RPI.GPIO:
-* SimulRPi:
+* `pygame`_: package used for playing sounds
+* `RPI.GPIO`_: a module to control RPi GPIO channels
+* `SimulRPi`_: package that partly fakes ``RPi.GPIO`` and simulates some I/O
+  devices on a Raspberry Pi
 
 Credits
 =======
