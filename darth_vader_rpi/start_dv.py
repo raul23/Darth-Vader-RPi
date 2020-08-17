@@ -116,11 +116,7 @@ The default value is obj:`None` and will be set when performing the tests from
 :obj:`darth_vader_rpi.tests`).
 """
 
-_VALID_SEQ_TYPES = ["calm", "active"]
-"""TODO
-"""
-
-_ACTIVE_MODE = [["top", "middle", "bottom"],
+_ACTION_MODE = [["top", "middle", "bottom"],
                 ["top", "bottom"],
                 ["top", "middle", "bottom"],
                 ["top"],
@@ -150,7 +146,7 @@ _CALM_MODE = [["middle"],
 
 These lists represent the sequence the 3 slot LEDs (on his chest box) should be
 turned on.  Each item in the list represents a step in the sequence. Thus, in
-the case of :attr:`_ACTIVE_MODE`, all the 3 slot LEDs will be turned on first, 
+the case of :attr:`_ACTION_MODE`, all the 3 slot LEDs will be turned on first, 
 followed by the top and bottom LEDs, and so on.
 
 An empty subsequence refers to all LEDs being turned off.
@@ -159,6 +155,10 @@ References
 ----------
 - Where the sequences were obtained: https://youtu.be/E2J_xl2MbGU?t=333
 
+"""
+
+_SEQ_TYPES_MAP = {'action': _ACTION_MODE, 'calm': _CALM_MODE}
+"""TODO
 """
 
 
@@ -224,7 +224,7 @@ class SoundWrapper:
 
 # TODO: clear buffer
 # TODO: add description
-def _add_spaces_to_msg(msg, nb_spaces=20):
+def _add_spaces_to_msg(msg, nb_spaces=80):
     return "{}{}".format(msg, " " * nb_spaces)
 
 
@@ -250,7 +250,7 @@ def _get_cfg_dict(cfg_type):
     return cfg_dict
 
 
-def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="active",
+def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="action",
                                delay_between_subsequences=0.4,
                                time_leds_on=0.4,):
     """Turn on/off the three slot LEDs in a precise sequence.
@@ -260,7 +260,7 @@ def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="active",
     'bottom' in the `leds_channels_map` dictionary.
 
     The three LEDs are turned on according to a default or custom sequence
-    which repeats itself. The default values for `leds_sequence` are 'active'
+    which repeats itself. The default values for `leds_sequence` are 'action'
     and 'calm' which represent Darth Vader's physiological state as a sequence
     of LEDs blinking in a particular order.
 
@@ -293,7 +293,7 @@ def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="active",
         Sequence of slot LEDs on Darth Vader's chest box.
 
         If `leds_sequence` is a string, then it takes on one of these values
-        which represent Darth Vader's physiological state: {'active', 'calm'}.
+        which represent Darth Vader's physiological state: {'action', 'calm'}.
 
         If `leds_sequence` is a list, then it must be a list of slot LED labels
         {'top', 'midddle', 'bottom'} arranged in a sequence as to specify the
@@ -342,18 +342,15 @@ def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="active",
     """
     lcm = leds_channels_map
     if isinstance(leds_sequence, str):
-        assert leds_sequence in _VALID_SEQ_TYPES, \
+        assert leds_sequence in _SEQ_TYPES_MAP.keys(), \
             "Wrong type of leds_sequence: '{}' (choose from {})".format(
-                leds_sequence, ", ".join(_VALID_SEQ_TYPES))
+                leds_sequence, ", ".join(_SEQ_TYPES_MAP.keys()))
+        leds_sequence = _SEQ_TYPES_MAP[leds_sequence]
     else:
         assert isinstance(leds_sequence, list), \
             "leds_sequence should be a string ({}) or a list: '{}'".format(
-                ", ".join(_VALID_SEQ_TYPES), leds_sequence)
+                ", ".join(_SEQ_TYPES_MAP.keys()), leds_sequence)
     th = threading.currentThread()
-    if leds_sequence == "calm":
-        leds_sequence = _CALM_MODE
-    elif leds_sequence == "active":
-        leds_sequence = _ACTIVE_MODE
     subseq_idx = 0
     while getattr(th, "do_run", True):
         leds_subsequence = leds_sequence[subseq_idx % len(leds_sequence)]
@@ -534,8 +531,6 @@ def activate_dv(main_cfg):
                 time.sleep(0.2)
     except Exception as e:
         retcode = 1
-        import ipdb
-        ipdb.set_trace()
         if main_cfg['verbose']:
             logger.exception(_add_spaces_to_msg("Error: {}".format(e)))
         else:
@@ -802,6 +797,13 @@ def main():
         else:
             if main_cfg_dict['simulation']:
                 import SimulRPi.GPIO as GPIO
+                channel_names = {
+                    main_cfg_dict['GPIO_channels']['top_led']: "top",
+                    main_cfg_dict['GPIO_channels']['middle_led']: "middle",
+                    main_cfg_dict['GPIO_channels']['bottom_led']: "bottom",
+                    main_cfg_dict['GPIO_channels']['lightsaber_led']: "lightsaber"
+                }
+                GPIO.setchannelnames(channel_names)
                 GPIO.setkeymap(main_cfg_dict['keyboard_key_to_channel_map'])
                 GPIO.setprinting(not main_cfg_dict['quiet'])
                 logger.info("Simulation mode enabled")
