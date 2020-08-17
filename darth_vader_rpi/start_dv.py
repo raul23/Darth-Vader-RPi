@@ -85,6 +85,7 @@ import pygame
 
 from darth_vader_rpi import __name__ as package_name, __version__
 from darth_vader_rpi.utils import (get_cfg_filepath, override_config_with_args)
+# TODO: don't use pytutils
 from pyutils.genutils import load_json, run_cmd
 
 logger = logging.getLogger(__name__)
@@ -101,6 +102,10 @@ If the `simulation` option (`-s`) is used with the :mod:`start_dv` script, the
 `SimulRPi.GPIO`_ module will be used instead.
 
 """
+
+_LOG_CFG = "log_cfg"
+_MAIN_CFG = "cfg"
+"""TODO"""
 
 _TEST_LOGGING_CFG = None
 """Dictionary containing the logging configuration data.
@@ -656,8 +661,8 @@ def setup_argparser():
 
     """
     # Help message that is used in various arguments
-    common_help = '''Provide 'log' (without the quotes) for the logging config 
-        file or 'main' (without the quotes) for the main config file.'''
+    common_help = '''Provide '{}' for the logging config file or '{}' for the 
+    main config file.'''.format(_LOG_CFG, _MAIN_CFG)
     # Setup the parser
     parser = argparse.ArgumentParser(
         # usage="%(prog)s [OPTIONS]",
@@ -667,8 +672,9 @@ Activate Darth Vader by turning on LEDs on his suit and lightsaber, and by
 pressing buttons to produce sound effects.\n
 IMPORTANT: these are only some of the most important options. Open the main 
 config file to have access to the complete list of options, i.e. 
-%(prog)s -e main''',
-        formatter_class=argparse.RawDescriptionHelpFormatter)
+%(prog)s -e {}'''.format(_MAIN_CFG),
+        # formatter_class=argparse.RawDescriptionHelpFormatter)
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     # ===============
     # General options
     # ===============
@@ -688,10 +694,10 @@ config file to have access to the complete list of options, i.e.
     # ===========
     edit_group = parser.add_argument_group('Edit a configuration file')
     edit_group.add_argument(
-        "-e", "--edit", choices=["log", "main"],
+        "-e", "--edit", choices=[_LOG_CFG, _MAIN_CFG],
         help="Edit a configuration file. {}".format(common_help))
     edit_group.add_argument(
-        "-a", "--app-name", default=None, dest="app",
+        "-a", "--app-name", dest="app",
         help='''Name of the application to use for editing the file. If no 
             name is given, then the default application for opening this type of
             file will be used.''')
@@ -702,11 +708,11 @@ config file to have access to the complete list of options, i.e.
     reset_group = parser.add_argument_group(
         'Reset or undo a configuration file')
     reset_group.add_argument(
-        "-r", "--reset", choices=["log", "main"],
+        "-r", "--reset", choices=[_LOG_CFG, _MAIN_CFG],
         help='''Reset a configuration file with factory default values. 
             {}'''.format(common_help))
     reset_group.add_argument(
-        "-u", "--undo", choices=["log", "main"],
+        "-u", "--undo", choices=[_LOG_CFG, _MAIN_CFG],
         help='''Undo the LAST RESET. Thus, the config file will be restored 
             to what it was before the LAST reset. {}'''.format(common_help))
     
@@ -785,8 +791,19 @@ def main():
     # Actions
     # =======
     retcode = 0
+    # TODO: enlarge try? even if logger not setup completely
     try:
         if args.edit:
+            if args.edit == _MAIN_CFG:
+                args.edit = "main"
+            elif args.edit == _LOG_CFG:
+                args.edit = "log"
+            else:
+                raise ValueError(
+                    "edit argument not valid: '{}' (choose from {})".format(
+                        args.edit,
+                        ", ".join("'{}'".format(i) for i in [_LOG_CFG,
+                                                             _MAIN_CFG])))
             retcode = edit_config(args.edit, args.app)
             """
             elif args.reset:
@@ -820,7 +837,10 @@ def main():
         if args.verbose:
             logger.exception(e)
         else:
-            logger.error(e.__repr__())
+            # logger.error(e.__repr__())
+            # TODO: add next line in a utility function
+            err_msg = "{}: {}".format(str(e.__class__).split("'")[1], e)
+            logger.error(err_msg)
         retcode = 1
     finally:
         # TODO: works on UNIX shell only, not Windows
