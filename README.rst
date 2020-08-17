@@ -170,43 +170,6 @@ Here is a video of what it looks like in a terminal when running the script
    <p><b>Click on the above image for the full video</b></p>
    </div>
 
-
-
-Change default settings
------------------------
-
-Add Darth Vader quotes
-^^^^^^^^^^^^^^^^^^^^^^
-
-Change channel volume
-^^^^^^^^^^^^^^^^^^^^^
-
-Change key to channel mapping
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Change paths to audio files
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Change GPIO channels
-^^^^^^^^^^^^^^^^^^^^
-
-Change slot LEDs sequence
-^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Mute breathing and closing sounds
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Change Log
-==========
-0.1.0a0
--------
-* Test
-
-TODOs
-=====
-* Test
-* Bouncy button
-
 Resources
 =========
 * Darth-Vader-RPi GitHub: source code
