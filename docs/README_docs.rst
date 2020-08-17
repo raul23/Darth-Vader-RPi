@@ -139,15 +139,17 @@ If you want to test the script on your computer (use the `-s` option)::
 
    $ start_dv -s
 
+.. TODO: change name of config file. Maybe use settings
+
 .. note::
 
    Both previous commands will use the default values from the `config file`_
    (e.g GPIO and audio channels).
 
-   To change these settings, use the `-e` flag to edit the configuration file
-   with your favorite editor and don't forget to save your changes::
+   To change these settings, use the option '`-e main`' to edit the
+   configuration file and don't forget to save your changes::
 
-      $ start_dv -e
+      $ start_dv -e main
 
 List of options
 ^^^^^^^^^^^^^^^
@@ -166,7 +168,7 @@ terminal and monitoring pressed keyboard keys::
 **NOTE:** the last command makes use of default values. See ``TODO`` on how
 to change these settings.
 
-Here is a video of what it looks like on a terminal when running the script
+Here is a video of what it looks like in a terminal when running the script
 ``start_dv`` on a computer instead of an RPi:
 
 .. raw:: html
