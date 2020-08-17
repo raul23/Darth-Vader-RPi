@@ -32,7 +32,8 @@ README
 Vader action figure by turning on LEDs on his suit and lightsaber, and by 
 playing sounds such as some of his famous quotes.
 
-.. raw:: html
+..
+   raw:: html
 
    <div align="center">
    <a href="https://www.youtube.com/embed/P631S1k1h_0">
@@ -155,10 +156,10 @@ Test
 Simulating on your computer
 ---------------------------
 If you don't have access to a Raspberry Pi and want to try out the script
-``start_dv``, you can use the `-s` flag which will simulate an RPi on your
-computer. It will make use of the library ``SimulRPi`` to simulate LEDs and
-push buttons by blinking red circles on the terminal and monitoring pressed
-keyboard keys::
+``start_dv``, you can use the `-s` flag which will simulate I/O devices
+connected to an RPi on your computer. It will make use of the library
+``SimulRPi`` to simulate LEDs and push buttons by blinking red circles on the
+terminal and monitoring pressed keyboard keys::
 
    $ start_dv -s
 
@@ -171,11 +172,10 @@ Here is a video of what it looks like on a terminal when running the script
 .. raw:: html
 
    <div align="center">
-   <a href="https://youtu.be/SqyU1ZwYxyk"><img src="https://img.youtube.com/vi/SqyU1ZwYxyk/0.jpg" alt="Raspberry Pi simulaion in a terminal"></a>
+   <a href="https://youtu.be/SqyU1ZwYxyk"><img src="https://img.youtube.com/vi/SqyU1ZwYxyk/0.jpg"
+   alt="LEDs and buttons simulaion in a terminal [Darth-Vader-RPi project]"></a>
    <p><b>Click on the above image for the full video</b></p>
    </div>
-
-
 
 Resources
 =========

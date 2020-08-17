@@ -26,7 +26,8 @@ more info about the project.
    <p><b>Turning on/off the lightsaber</b></p>
    </div>
 
-.. important::
+..
+   important::
 
    If you don't have an RPi, don't worry. You can still test the program on
    your own computer because the package ``darth_vader_rpi`` uses the library
