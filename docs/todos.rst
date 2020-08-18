@@ -1,5 +1,0 @@
-=====
-TODOs
-=====
-* Test
-* Bouncy button
