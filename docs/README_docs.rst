@@ -1,6 +1,8 @@
 .. _config file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L1
 .. _default values: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L1
 .. _pygame: https://www.pygame.org/
+.. TODO: next reference might not work in GitHub
+.. _test the program on your own computer: #simulating-on-your-computer
 .. _Darth-Vader-RPi documentation: http://darth-vader-rpi.rtfd.io/
 .. _Darth-Vader-RPi GitHub: https://github.com/raul23/Darth-Vader-RPi
 .. TODO: test the following URL
@@ -8,8 +10,10 @@
 .. _"I am your father": https://www.youtube.com/watch?v=xuJEYdOFEP4
 .. _Imperial March song by Jacob Townsend: https://soundcloud.com/jacobtownsend1/imperial-march
 .. _"Nooooo": https://www.youtube.com/watch?v=ZscVhFvD6iE
+.. _Platform limitations: https://simulrpi.readthedocs.io/en/latest/api_reference.html#important-platform-limitations-label
 .. _RPi.GPIO: https://pypi.org/project/RPi.GPIO/
 .. _SimulRPi: https://github.com/raul23/SimulRPi
+.. _SimulRPi's documentation: https://simulrpi.readthedocs.io/en/latest/api_reference.html#content-default-keymap-label
 
 ======
 README
@@ -44,8 +48,8 @@ playing sounds such as some of his famous quotes.
 
 .. important::
 
-   If you don't have an RPi, don't worry. You can still test the program on
-   your own computer because the package ``darth_vader_rpi`` uses the library
+   If you don't have an RPi, don't worry. You can still `test the program on
+   your own computer`_ because the package ``darth_vader_rpi`` uses the library
    `SimulRPi`_ to simulate I/O devices connected to an RPi such as LEDs and
    push buttons by blinking small circles on the terminal and playing sounds
    when a keyboard key is pressed. Almost like testing with a real RPi!
@@ -61,7 +65,7 @@ Introduction
 
 The Darth Vader action figure is 11.5 inches tall (which is `this one from
 Hasbro <https://amzn.to/3hIw0ou>`_) and was modified to make it more lifelike
-by illuminating the lightsaber, chest control box, and belt. 3 push buttons 
+by illuminating the lightsaber, chest control box, and belt. 3 push buttons
 control the following sounds:
 
 #. Some of his famous quotes
@@ -69,7 +73,7 @@ control the following sounds:
 #. The lightsaber opening and closing sounds and its illumination
 
 His iconic breathing sound plays in the background indefinitely as soon as the
-RPi is run with the script.
+RPi is run with the script ``start_dv``.
 
 .. raw:: html
 
@@ -81,6 +85,8 @@ RPi is run with the script.
 
 Connection diagram
 ==================
+Here's how the various LEDs and push buttons are connected to the Raspberry Pi:
+
 .. raw:: html
 
    <div align="center">
@@ -105,8 +111,7 @@ Connection diagram
     * `"I am your father"`_
     * `"Nooooo"`_
 
-  However, you could add more if you want to. Check ``TODO`` for more info on
-  how to do it.
+  However, you could add more quotes if you want to. Check ``TODO``.
 
 Dependencies
 ============
@@ -135,33 +140,52 @@ settings::
 
    $ start_dv
 
-If you want to test the script on your computer (use the `-s` option)::
+If you want to test the script on your computer (use the flag **-s**)::
 
    $ start_dv -s
-
-.. TODO: change name of config file. Maybe use settings
 
 .. note::
 
    Both previous commands will use the default values from the `config file`_
    (e.g GPIO and audio channels).
 
-   To change these settings, use the option '`-e main`' to edit the
-   configuration file and don't forget to save your changes::
+   To change these settings, use the command-line option **-e cfg** which will
+   open the configuration file with the default text editor::
 
-      $ start_dv -e main
+      $ start_dv -e cfg
+
+   Don't forget to save the changes!
 
 List of options
 ^^^^^^^^^^^^^^^
-Test
+To display the script's list of options and their descriptions:
+``$ start_dv -h``
+
+  --version             show program's version number and exit
+  -q, --quiet           Enable quiet mode, i.e. nothing will be printed.
+                        (default: False)
+  -s, --simulation      Enable simulation mode, i.e. ``SimulRPi.GPIO`` will be
+                        used for simulating ``RPi.GPIO``. (default: False)
+  -v, --verbose         Print various debugging information, e.g. print
+                        traceback when there is an exception. (default: False)
+
+Edit a configuration file:
+  -e cfg_name, --edit cfg_name   Edit a configuration file. Provide **log_cfg**
+                                 for the logging config file or **cfg** for the
+                                 main config file. (default: None)
+
+  -a APP, --app-name APP   Name of the application to use for editing the file.
+                           If no name is given, then the default application for
+                           opening this type of file will be used. (default:
+                           None)
+
 
 Simulating on your computer
 ---------------------------
-If you don't have access to a Raspberry Pi and want to try out the script
-``start_dv``, you can use the `-s` flag which will simulate I/O devices
-connected to an RPi on your computer. It will make use of the library
-``SimulRPi`` to simulate LEDs and push buttons by blinking red circles on the
-terminal and monitoring pressed keyboard keys::
+If you don't have access to a Raspberry Pi (RPi) and want to try out the script
+``start_dv``, you can run the script with the flag **-s**. It will make use of
+the library `SimulRPi`_ to simulate LEDs and push buttons connected to an RPi
+by blinking red circles on the terminal and monitoring pressed keyboard keys::
 
    $ start_dv -s
 
@@ -179,9 +203,53 @@ Here is a video of what it looks like in a terminal when running the script
    <p><b>Click on the above image for the full video</b></p>
    </div>
 
+Here's how the keyboard keys are related **by default** to push buttons
+connected to an RPi:
+
+* ``cmd_left``   -----> lightsaber button
+* ``alt_left``   -----> song button
+* ``alt_right``  -----> quotes button
+
+.. note::
+
+   If you want to change the default keymap, edit the setting
+   ``keyboard_key_to_channel_map`` in the configuration file which can be opened
+   with: ``$ start_dv -e cfg``.
+
+   .. code-block:: python
+
+      "keyboard_key_to_channel_map":
+      {
+        "cmd": 23,
+        "alt": 24,
+        "alt_r": 25
+      },
+
+   You will need to change the name of the keyboard key.
+
+   The names of keyboard keys that you can use are those specified in the
+   `SimulRPi's documentation`_, e.g. `media_play_pause`, `shift`, and
+   `shift_r`.
+
+   The value for each keyboard key is the GPIO channel number (integer)
+   associated with the push button, e.g. 23 is related to the
+   *ligthsaber_button*. See the setting ``GPIO_channels`` in the configuration
+   file to know how the GPIO channels are identified by default.
+
+.. note::
+
+   On mac, I recommend using the following keyboard keys because they don't
+   require running the script ``start_dv`` with ``sudo``: *alt*, *alt_r*,
+   *cmd*, *cmd_r*, *ctrl*, *ctrl_r*, *media_play_pause*,
+   *media_volume_down*, *media_volume_mute*, *media_volume_up*, *shift*,
+   and *shift_r*.
+
+   **Ref.:** `Platform limitations`_
+
 Resources
 =========
-.. TODO: don't use next item for readthedocs
+.. TODO: don't use documentation link for readthedocs
+.. TODO: don't show changelog and todos links for readthedocs
 
 * `Darth-Vader-RPi documentation`_
 * `Darth-Vader-RPi GitHub`_: source code
@@ -198,16 +266,19 @@ References
 
 Credits
 =======
-* Darth Vader quotes:
+.. TODO: specify not used anymore for music
 
-  * `"I am your father"`_
-  * `"Nooooo"`_
-* `Imperial March song by Jacob Townsend <https://soundcloud.com/jacobtownsend1/imperial-march>`_
-  is licensed under a `Creative Commons (CC BY-NC-SA 3.0) License <http://creativecommons.org/licenses/by-nc-sa/3.0/>`_
+- **Darth Vader quotes:**
 
-  * Old code used `Star Wars- The Imperial March (Darth Vader's Theme) <https://www.youtube.com/watch?v=-bzWSJG93P8>`_
-* Sound effects:
+  - `"I am your father"`_
+  - `"Nooooo"`_
+- **Music:**
 
-  * `Darth Vader breathing sound <https://www.youtube.com/watch?v=d28NrjMPERs>`_
-  * `Darth Vader's lightsaber sound effect <https://www.youtube.com/watch?v=bord-573NWY>`_
-  * `Darth Vader's lightsaber retraction sound effect <https://www.youtube.com/watch?v=m6buyGJF46k>`_
+  - `Imperial March song by Jacob Townsend <https://soundcloud.com/jacobtownsend1/imperial-march>`_
+    is licensed under a `Creative Commons (CC BY-NC-SA 3.0) License <http://creativecommons.org/licenses/by-nc-sa/3.0/>`_
+  - `Star Wars- The Imperial March (Darth Vader's Theme) <https://www.youtube.com/watch?v=-bzWSJG93P8>`_
+- **Sound effects:**
+
+  - `Darth Vader breathing sound <https://www.youtube.com/watch?v=d28NrjMPERs>`_
+  - `Darth Vader's lightsaber sound effect <https://www.youtube.com/watch?v=bord-573NWY>`_
+  - `Darth Vader's lightsaber retraction sound effect <https://www.youtube.com/watch?v=m6buyGJF46k>`_

@@ -45,9 +45,8 @@ more info about the project.
 
    README_docs
    change_default_settings
-   changelog
-   todos
    api_reference
+   changelog
    license
 
 
