@@ -821,7 +821,7 @@ def main():
                     main_cfg_dict['GPIO_channels']['lightsaber_led']: "lightsaber"
                 }
                 GPIO.setchannelnames(channel_names)
-                GPIO.setkeymap(main_cfg_dict['keyboard_key_to_channel_map'])
+                GPIO.setkeymap(main_cfg_dict['key_to_channel_map'])
                 GPIO.setprinting(not main_cfg_dict['quiet'])
                 logger.info("Simulation mode enabled")
             else:
@@ -830,7 +830,6 @@ def main():
             # ref.: https://bit.ly/3f3A7dc
             # os.system("tput civis")
             retcode = activate_dv(main_cfg_dict)
-    # except (AssertionError, AttributeError, KeyError, ImportError, OSError) as e:
     except Exception as e:
         # TODO: explain this line
         # traceback.print_exc()
