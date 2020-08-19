@@ -186,7 +186,10 @@ class SoundWrapper:
         Channel id associated with an instance of
         :class:`pygame.mixer.Channel` for controlling playback. It must take an
         :obj:`int` value starting from 0.
-
+    play_opening : bool
+        TODO
+    play_closing : bool
+        TODO
 
     .. note::
 
@@ -196,10 +199,13 @@ class SoundWrapper:
 
     """
 
-    def __init__(self, sound_name, sound_filepath, channel_id):
+    def __init__(self, sound_name, sound_filepath, channel_id,
+                 play_opening=False, play_closing=False):
         self.sound_name = sound_name
         self.sound_filepath = sound_filepath
         self.channel_id = channel_id
+        self.play_opening = play_opening
+        self.play_closing = play_closing
         self._channel = pygame.mixer.Channel(channel_id)
         # Load sound file
         self._pygame_sound = pygame.mixer.Sound(self.sound_filepath)
@@ -229,7 +235,7 @@ class SoundWrapper:
 
 # TODO: clear buffer
 # TODO: add description
-def _add_spaces_to_msg(msg, nb_spaces=80):
+def _add_spaces_to_msg(msg, nb_spaces=60):
     return "{}{}".format(msg, " " * nb_spaces)
 
 
@@ -469,27 +475,27 @@ def activate_dv(main_cfg):
         sounds_dir = os.path.expanduser(main_cfg['sounds_directory'])
         logger.info("Loading sound effects...")
 
-        def load_sounds_from_cfg():
-            for sound_type in ['quotes', 'songs', 'sound_effects']:
-                for s in main_cfg[sound_type]:
-                    sound = s.popitem()
-                    sound_name = sound[0]
-                    sound_info = sound[1]
-                    logger.info("Loading {}".format(sound[0]))
-                    filepath = os.path.join(sounds_dir, sound_info['filename'])
-                    sw = SoundWrapper(sound_name=sound_name,
-                                      sound_filepath=filepath,
-                                      channel_id=sound_info['channel_id'])
-                    if sound_type == "quotes":
-                        loaded_sounds.setdefault("quotes", {})
-                        loaded_sounds['quotes'].setdefault(sound_name, sw)
-                    else:
-                        loaded_sounds.setdefault(sound_name, sw)
-                    if sound_info.get('play'):
-                        loops = sound_info.get('loops', -1)
-                        loaded_sounds[sound_name].play(loops)
+        # Load sounds from cfg
+        for sound_type in ['quotes', 'songs', 'sound_effects']:
+            for sound in main_cfg[sound_type]:
+                sound_name = sound['name']
+                logger.info("Loading {}".format(sound_name))
+                filepath = os.path.join(sounds_dir, sound['filename'])
+                sw = SoundWrapper(
+                    sound_name=sound_name,
+                    sound_filepath=filepath,
+                    channel_id=sound['channel_id'],
+                    play_opening=sound.get('play_opening', False),
+                    play_closing=sound.get('play_closing', False))
+                if sound_type == "quotes":
+                    loaded_sounds.setdefault("quotes", {})
+                    loaded_sounds['quotes'].setdefault(sound_name, sw)
+                else:
+                    loaded_sounds.setdefault(sound_name, sw)
+                if sw.play_opening:
+                    loops = sound.get('loops', 0)
+                    loaded_sounds[sound_name].play(loops)
 
-        load_sounds_from_cfg()
         quotes = list(loaded_sounds['quotes'].values())
 
         leds_channels = {'top': top_led, 'middle': middle_led, 'bottom': bottom_led}
@@ -543,18 +549,17 @@ def activate_dv(main_cfg):
         logger.info(_add_spaces_to_msg("Exiting..."))
     except KeyboardInterrupt:
         logger.info(_add_spaces_to_msg("Exiting..."))
-        if main_cfg['closing_sound']['play'] and loaded_sounds:
-            closing_sound = loaded_sounds['quotes'].get('nooooo')
-            if closing_sound and closing_sound.play:
-                closing_sound.play()
-                time.sleep(1)
+        closing_sound = loaded_sounds.get('closing_sound')
+        if closing_sound and closing_sound.play_closing:
+            closing_sound.play()
+            time.sleep(1)
 
     GPIO.setprinting(False)
     for gpio_name, gpio_pin in main_cfg['GPIO_channels'].items():
         if gpio_name.endswith("_led"):
             turn_off_led(gpio_pin)
     if th_slot_leds:
-        logger.info(_add_spaces_to_msg("Stopping thread ..."))
+        logger.debug(_add_spaces_to_msg("Stopping thread ..."))
         th_slot_leds.do_run = False
         th_slot_leds.join()
         logger.debug(_add_spaces_to_msg("Thread stopped: {}".format(th_slot_leds.name)))
@@ -822,6 +827,7 @@ def main():
                 }
                 GPIO.setchannelnames(channel_names)
                 GPIO.setkeymap(main_cfg_dict['key_to_channel_map'])
+                GPIO.setsymbols(main_cfg_dict['led_symbols'])
                 GPIO.setprinting(not main_cfg_dict['quiet'])
                 logger.info("Simulation mode enabled")
             else:
