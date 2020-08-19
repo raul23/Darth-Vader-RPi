@@ -15,7 +15,7 @@
     "quotes_button": 25
   },
 
-  "keyboard_key_to_channel_map":
+  "key_to_channel_map":
   {
     "cmd": 23,
     "alt": 24,
