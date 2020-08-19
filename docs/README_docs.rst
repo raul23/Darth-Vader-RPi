@@ -1,8 +1,13 @@
-.. _config file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L1
+.. TODO: use exact line
+.. _configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L1
+.. TODO: use exact line
 .. _default values: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L1
 .. _pygame: https://www.pygame.org/
 .. TODO: next reference might not work in GitHub
 .. _test the program on your own computer: #simulating-on-your-computer
+.. _Add Darth Vader quotes: change_default_settings.html#add-darth-vader-quotes
+.. _Change default settings: change_default_settings.html
+.. _Change keymap: file:///Users/nova/PycharmProjects/rpi_darth_vader/docs/_build/html/change_default_settings.html#change-keymap
 .. _Darth-Vader-RPi documentation: http://darth-vader-rpi.rtfd.io/
 .. _Darth-Vader-RPi GitHub: https://github.com/raul23/Darth-Vader-RPi
 .. TODO: test the following URL
@@ -10,10 +15,8 @@
 .. _"I am your father": https://www.youtube.com/watch?v=xuJEYdOFEP4
 .. _Imperial March song by Jacob Townsend: https://soundcloud.com/jacobtownsend1/imperial-march
 .. _"Nooooo": https://www.youtube.com/watch?v=ZscVhFvD6iE
-.. _Platform limitations: https://simulrpi.readthedocs.io/en/latest/api_reference.html#important-platform-limitations-label
 .. _RPi.GPIO: https://pypi.org/project/RPi.GPIO/
 .. _SimulRPi: https://github.com/raul23/SimulRPi
-.. _SimulRPi's documentation: https://simulrpi.readthedocs.io/en/latest/api_reference.html#content-default-keymap-label
 
 ======
 README
@@ -96,7 +99,7 @@ Here's how the various LEDs and push buttons are connected to the Raspberry Pi:
 * The lightsaber is illuminated by 3 LEDs connected in parallel
 * The *Bottom*, *Middle*, and *Top* LEDs illuminate the slots in Darth Vader's
   chest control box. They blink in a specific sequence as specified in the
-  `config file`_. See ``TODO`` to know how to change this sequence.
+  `configuration file`_. See ``TODO`` to know how to change this sequence.
 * When the *Lightsaber button* is first pressed, it produces the sound of
   drawing the sword, illuminates it, and a hum sound persists until the
   lightsaber is turned off. If the button is pressed again, it produces the
@@ -109,9 +112,10 @@ Here's how the various LEDs and push buttons are connected to the Raspberry Pi:
   testing purposes, the ``darth_vader_rpi`` package comes with two movie lines:
 
     * `"I am your father"`_
-    * `"Nooooo"`_
+    * `"Nooooo"`_: it is also used for the closing sound when the script
+      ``start_dv`` exits
 
-  However, you could add more quotes if you want to. Check ``TODO``.
+  However, you could add more quotes if you want to. Check `Add Darth Vader quotes`_.
 
 Dependencies
 ============
@@ -146,15 +150,10 @@ If you want to test the script on your computer (use the flag **-s**)::
 
 .. note::
 
-   Both previous commands will use the default values from the `config file`_
-   (e.g GPIO and audio channels).
+   Both previous commands will use the default values from the
+   `configuration file`_ (e.g GPIO channel numbers, channel volume).
 
-   To change these settings, use the command-line option **-e cfg** which will
-   open the configuration file with the default text editor::
-
-      $ start_dv -e cfg
-
-   Don't forget to save the changes!
+   Check `Change default settings`_ on how to modify these default settings.
 
 List of options
 ^^^^^^^^^^^^^^^
@@ -210,41 +209,8 @@ connected to an RPi:
 * ``alt_left``   -----> song button
 * ``alt_right``  -----> quotes button
 
-.. note::
-
-   If you want to change the default keymap, edit the setting
-   ``keyboard_key_to_channel_map`` in the configuration file which can be opened
-   with: ``$ start_dv -e cfg``.
-
-   .. code-block:: python
-
-      "keyboard_key_to_channel_map":
-      {
-        "cmd": 23,
-        "alt": 24,
-        "alt_r": 25
-      },
-
-   You will need to change the name of the keyboard key.
-
-   The names of keyboard keys that you can use are those specified in the
-   `SimulRPi's documentation`_, e.g. `media_play_pause`, `shift`, and
-   `shift_r`.
-
-   The value for each keyboard key is the GPIO channel number (integer)
-   associated with the push button, e.g. 23 is related to the
-   *ligthsaber_button*. See the setting ``GPIO_channels`` in the configuration
-   file to know how the GPIO channels are identified by default.
-
-.. note::
-
-   On mac, I recommend using the following keyboard keys because they don't
-   require running the script ``start_dv`` with ``sudo``: *alt*, *alt_r*,
-   *cmd*, *cmd_r*, *ctrl*, *ctrl_r*, *media_play_pause*,
-   *media_volume_down*, *media_volume_mute*, *media_volume_up*, *shift*,
-   and *shift_r*.
-
-   **Ref.:** `Platform limitations`_
+Check `Change keymap`_ if you want to change this default key to channel
+mapping.
 
 Resources
 =========
