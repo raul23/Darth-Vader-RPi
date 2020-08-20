@@ -5,40 +5,52 @@
   "mode": "BCM",
   "sounds_directory": "~/Data/star_wars_sound_effects/ogg",
 
-  "GPIO_channels": {
-    "top_led": 11,
-    "middle_led": 9,
-    "bottom_led": 10,
-    "lightsaber_led": 22,
-    "lightsaber_button": 23,
-    "song_button": 24,
-    "quotes_button": 25
-  },
-
-  "key_to_channel_map":
-  {
-    "cmd": 23,
-    "alt": 24,
-    "alt_r": 25
-  },
-
-  "audio_channels": [
+  "gpio_channels": [
     {
-      "channel_id": 0,
-      "volume": 0.2
+      "channel_name": "lightsaber_button",
+      "display_name": "lightsaber_button",
+      "channel_number": 23,
+      "key": "cmd"
     },
     {
-      "channel_id": 1,
-      "volume": 1.0
+      "channel_name": "song_button",
+      "display_name": "song_button",
+      "channel_number": 24,
+      "key": "alt"
     },
     {
-      "channel_id": 2,
-      "volume": 1.0
+      "channel_name": "quotes_button",
+      "display_name": "quotes_button",
+      "channel_number": 25,
+      "key": "alt_r"
+    },
+    {
+      "channel_name": "top_led",
+      "display_name": "top",
+      "channel_number": 11
+    },
+    {
+      "channel_name": "middle_led",
+      "display_name": "middle",
+      "channel_number": 9
+    },
+    {
+      "channel_name": "bottom_led",
+      "channel_number": 10
+    },
+    {
+      "channel_name": "lightsaber_led",
+      "display_name": "lightsaber",
+      "channel_number": 22,
+      "led_symbols": {
+        "ON": "\\033[1;31;48m⬤\\033[1;37;0m",
+        "OFF": "⬤"
+      }
     }
   ],
 
   "slot_leds":{
-    "delay_between_subsequences": 0.5,
+    "delay_subsequences": 0.5,
     "time_leds_on": 1,
     "sequence":[
       ["top", "middle", "bottom"],
@@ -60,92 +72,95 @@
     ]
   },
 
+  "audio_channels": [
+    {
+      "channel_id": 0,
+      "volume": 0.2
+    },
+    {
+      "channel_id": 1,
+      "volume": 1.0
+    },
+    {
+      "channel_id": 2,
+      "volume": 1.0
+    }
+  ],
+
   "quotes": [
     {
-      "i_am_your_father": {
-        "filename": "quote_i_am_your_father.ogg",
-        "channel_id": 1
-      }
+      "name": "i_am_your_father",
+      "filename": "quote_i_am_your_father.ogg",
+      "channel_id": 1
     },
     {
-      "dont_make_me_destroy_you": {
-        "filename": "quote_dont_make_me_destroy_you.ogg",
-        "channel_id": 1
-      }
+      "name": "dont_make_me_destroy_you",
+      "filename": "quote_dont_make_me_destroy_you.ogg",
+      "channel_id": 1
     },
     {
-      "give_yourself_to_the_dark_side": {
-        "filename": "quote_give_yourself_to_the_dark_side.ogg",
-        "channel_id": 1
-      }
+      "name": "give_yourself_to_the_dark_side",
+      "filename": "quote_give_yourself_to_the_dark_side.ogg",
+      "channel_id": 1
     },
     {
-      "if_you_only_knew_the_power_of_the_dark_side": {
-        "filename": "quote_if_you_only_knew_the_power_of_the_dark_side.ogg",
-        "channel_id": 1
-      }
+      "name": "if_you_only_knew_the_power_of_the_dark_side",
+      "filename": "quote_if_you_only_knew_the_power_of_the_dark_side.ogg",
+      "channel_id": 1
     },
     {
-      "nooooo": {
-        "filename": "quote_nooooo.ogg",
-        "channel_id": 1
-      }
+      "name": "nooooo",
+      "filename": "quote_nooooo.ogg",
+      "channel_id": 1
     },
     {
-      "there_is_no_escape": {
-        "filename": "quote_there_is_no_escape.ogg",
-        "channel_id": 1
-      }
+      "name": "there_is_no_escape",
+      "filename": "quote_there_is_no_escape.ogg",
+      "channel_id": 1
     },
     {
-      "your_lack_of_faith_is_disturbing": {
-        "filename": "quote_your_lack_of_faith_is_disturbing.ogg",
-        "channel_id": 1
-      }
+      "name": "your_lack_of_faith_is_disturbing",
+      "filename": "quote_your_lack_of_faith_is_disturbing.ogg",
+      "channel_id": 1
     }
   ],
 
   "songs": [
     {
-      "imperial_march_song": {
-        "filename": "song_the_imperial_march.ogg",
-        "channel_id": 1
-      }
+      "name": "imperial_march_song",
+      "filename": "song_the_imperial_march.ogg",
+      "channel_id": 1
     }
   ],
 
   "sound_effects": [
     {
-      "breathing_sound": {
-        "filename": "darth_vader_breathing.ogg",
-        "channel_id": 0,
-        "play": true,
-        "loops": -1
-      }
+      "name": "breathing_sound",
+      "filename": "darth_vader_breathing.ogg",
+      "channel_id": 0,
+      "play_opening": true,
+      "loops": -1
     },
     {
-      "lightsaber_drawing_sound": {
-        "filename": "lightsaber_drawing_sound.ogg",
-        "channel_id": 2
-      }
+      "name": "lightsaber_drawing_sound",
+      "filename": "lightsaber_drawing_sound.ogg",
+      "channel_id": 2
     },
     {
-      "lightsaber_hum_sound": {
-        "filename": "lightsaber_hum_sound.ogg",
-        "channel_id": 2
-      }
+      "name": "lightsaber_hum_sound",
+      "filename": "lightsaber_hum_sound.ogg",
+      "channel_id": 2
     },
     {
-      "lightsaber_retraction_sound": {
-        "filename": "lightsaber_retraction_sound.ogg",
-        "channel_id": 2
-      }
+      "name": "lightsaber_retraction_sound",
+      "filename": "lightsaber_retraction_sound.ogg",
+      "channel_id": 2
+    },
+    {
+      "name": "closing_sound",
+      "filename": "quote_nooooo.ogg",
+      "channel_id": 2,
+      "play_closing": false
     }
-  ],
-
-  "closing_sound": {
-    "filename": "lightsaber_retraction_sound.ogg",
-    "channel_id": 2,
-    "play": true
-  }
+  ]
 }
