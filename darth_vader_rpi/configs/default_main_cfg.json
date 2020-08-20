@@ -42,7 +42,7 @@
     {
       "channel_name": "lightsaber_led",
       "display_name": "lightsaber",
-      "channel_number": 22,
+      "channel_number": 22
     }
   ],
 
