@@ -261,14 +261,14 @@ def _get_cfg_dict(cfg_type):
     return cfg_dict
 
 
-def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="action",
-                               delay_between_subsequences=0.4,
+def turn_on_slot_leds_sequence(top_led, middle_led, bottom_led,
+                               leds_sequence="action", delay_subsequences=0.4,
                                time_leds_on=0.4,):
     """Turn on/off the three slot LEDs in a precise sequence.
 
     These three LEDs are associated with Darth Vader's three slots located on
-    his chest control box. These three LEDs are labeled as 'top', 'middle', and
-    'bottom' in the `leds_channels_map` dictionary.
+    his chest control box. These LEDs are labeled as 'top_led', 'middle_led',
+    and 'bottom_led', respectively.
 
     The three LEDs are turned on according to a default or custom sequence
     which repeats itself. The default values for `leds_sequence` are 'action'
@@ -287,7 +287,7 @@ def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="action",
 
     The LEDs will be turned on for `time_leds_on` seconds.
 
-    There will be a delay of `delay_between_subsequences` seconds between
+    There will be a delay of `delay_subsequences` seconds between
     subsequences of LEDs being turned on, i.e. between each step in the
     previous example.
 
@@ -296,10 +296,12 @@ def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="action",
 
     Parameters
     ----------
-    leds_channels_map : dict
-        Dictionary mapping the type of slot LED {'top', 'middle', 'bottom'} and 
-        its channel id (:obj:`int`).
-
+    top_led : int
+        TODO
+    middle_led : int
+        TODO
+    bottom_led : int
+        TODO
     leds_sequence : str or list, optional
         Sequence of slot LEDs on Darth Vader's chest box.
 
@@ -316,10 +318,9 @@ def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="action",
             3. middle LED turn on
             4. All LEDs turn off
 
-    delay_between_subsequences : float, optional
+    delay_subsequences : float, optional
         Delay in seconds between subsequences of LEDs. The default value is 0.4
         seconds.
-
     time_leds_on : float, optional
         Time in seconds the LEDs will be turned on. The default value is 0.4
         seconds.
@@ -351,7 +352,7 @@ def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="action",
             th.join()
 
     """
-    lcm = leds_channels_map
+    lcm = dict((('top', top_led), ('middle', middle_led), ('bottom', bottom_led)))
     if isinstance(leds_sequence, str):
         assert leds_sequence in _SEQ_TYPES_MAP.keys(), \
             "Wrong type of leds_sequence: '{}' (choose from {})".format(
@@ -367,15 +368,15 @@ def turn_on_slot_leds_sequence(leds_channels_map, leds_sequence="action",
         leds_subsequence = leds_sequence[subseq_idx % len(leds_sequence)]
         subseq_idx += 1
         for channel_label in leds_subsequence:
-            channel = leds_channels_map[channel_label]
+            channel = lcm[channel_label]
             turn_on_led(channel)
         time.sleep(time_leds_on)
         if leds_subsequence:
             turn_off_led(lcm['top'])
             turn_off_led(lcm['middle'])
             turn_off_led(lcm['bottom'])
-            time.sleep(delay_between_subsequences)
-    logger.debug("Stopping thread: {}".format(th.name))
+            time.sleep(delay_subsequences)
+    logger.debug(_add_spaces_to_msg("Stopping thread: {}".format(th.name)))
 
 
 def turn_off_led(channel):
@@ -439,37 +440,31 @@ def activate_dv(main_cfg):
     """
     retcode = 0
     th_slot_leds = None
+    gpio_channels = {}
     loaded_sounds = {}
     try:
         logger.info("pygame mixer initialization")
         pygame.mixer.init()
         logger.info("RPi initialization")
-        # TODO: get mode from config
         GPIO.setmode(GPIO.MODES[main_cfg['mode'].upper()])
         GPIO.setwarnings(False)
-        # LEDs
-        top_led = main_cfg['GPIO_channels']['top_led']
-        middle_led = main_cfg['GPIO_channels']['middle_led']
-        bottom_led = main_cfg['GPIO_channels']['bottom_led']
-        lightsaber_led = main_cfg['GPIO_channels']['lightsaber_led']
-        GPIO.setup(top_led, GPIO.OUT)
-        GPIO.setup(middle_led, GPIO.OUT)
-        GPIO.setup(bottom_led, GPIO.OUT)
-        GPIO.setup(lightsaber_led, GPIO.OUT)
-        # Buttons
-        lightsaber_button = main_cfg['GPIO_channels']['lightsaber_button']
-        song_button = main_cfg['GPIO_channels']['song_button']
-        quotes_button = main_cfg['GPIO_channels']['quotes_button']
-        GPIO.setup(lightsaber_button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        GPIO.setup(song_button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        GPIO.setup(quotes_button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        # Setup LEDs and buttons
+        for gpio_ch in main_cfg['gpio_channels']:
+            if gpio_ch['channel_name'].endswith("_led"):
+                # LEDs
+                GPIO.setup(gpio_ch['channel_number'], GPIO.OUT)
+            else:
+                # Buttons
+                GPIO.setup(gpio_ch['channel_number'], GPIO.IN,
+                           pull_up_down=GPIO.PUD_UP)
+            gpio_channels[gpio_ch['channel_name']] = gpio_ch['channel_number']
 
         ### Sound
         # Create separate channel
         # Ref.: stackoverflow.com/a/59742418
-        channels = main_cfg['audio_channels']
-        for ch_dict in channels:
-            channel = pygame.mixer.Channel(ch_dict['channel_id'])
+        audio_channels = main_cfg['audio_channels']
+        for ch_dict in audio_channels:
+            channel = pygame.mixer.Channel(ch_dict['audio_channel_id'])
             channel.set_volume(ch_dict['volume'])
 
         sounds_dir = os.path.expanduser(main_cfg['sounds_directory'])
@@ -484,7 +479,7 @@ def activate_dv(main_cfg):
                 sw = SoundWrapper(
                     sound_name=sound_name,
                     sound_filepath=filepath,
-                    channel_id=sound['channel_id'],
+                    channel_id=sound['audio_channel_id'],
                     play_opening=sound.get('play_opening', False),
                     play_closing=sound.get('play_closing', False))
                 if sound_type == "quotes":
@@ -495,27 +490,25 @@ def activate_dv(main_cfg):
                 if sw.play_opening:
                     loops = sound.get('loops', 0)
                     loaded_sounds[sound_name].play(loops)
-
         quotes = list(loaded_sounds['quotes'].values())
-
-        leds_channels = {'top': top_led, 'middle': middle_led, 'bottom': bottom_led}
         th_slot_leds = threading.Thread(
             name="thread_slot_leds",
             target=turn_on_slot_leds_sequence,
-            args=(leds_channels,
+            args=(gpio_channels['top_led'],
+                  gpio_channels['middle_led'],
+                  gpio_channels['bottom_led'],
                   main_cfg['slot_leds']['sequence'],
-                  main_cfg['slot_leds']['delay_between_subsequences'],
+                  main_cfg['slot_leds']['delay_subsequences'],
                   main_cfg['slot_leds']['time_leds_on']))
 
         th_slot_leds.start()
-
         logger.info("")
         logger.info(_add_spaces_to_msg("Press buttons"))
         pressed_lightsaber = False
         quote_idx = 0
 
         while True:
-            if not GPIO.input(lightsaber_button):
+            if not GPIO.input(gpio_channels['lightsaber_button']):
                 # logger.debug("\n\nButton {} pressed...".format(
                     # lightsaber_button))
                 if pressed_lightsaber:
@@ -528,13 +521,13 @@ def activate_dv(main_cfg):
                     loaded_sounds['lightsaber_drawing_sound'].play()
                     loaded_sounds['lightsaber_hum_sound'].play(-1)
                     time.sleep(0.1)
-                    turn_on_led(lightsaber_led)
+                    turn_on_led(gpio_channels['lightsaber_led'])
                 time.sleep(0.2)
-            elif not GPIO.input(song_button):
+            elif not GPIO.input(gpio_channels['song_button']):
                 # logger.debug("\n\nButton {} pressed...".format(song_button))
                 loaded_sounds['imperial_march_song'].play()
                 time.sleep(0.2)
-            elif not GPIO.input(quotes_button):
+            elif not GPIO.input(gpio_channels['quotes_button']):
                 # logger.debug("\n\nButton {} pressed...".format(quotes_button))
                 quote = quotes[quote_idx % len(quotes)]
                 quote_idx += 1
@@ -555,16 +548,17 @@ def activate_dv(main_cfg):
             time.sleep(1)
 
     GPIO.setprinting(False)
-    for gpio_name, gpio_pin in main_cfg['GPIO_channels'].items():
-        if gpio_name.endswith("_led"):
-            turn_off_led(gpio_pin)
+    if gpio_channels:
+        for channel_name, channel_number in gpio_channels.items():
+            if channel_name.endswith("_led"):
+                turn_off_led(channel_number)
     if th_slot_leds:
         logger.debug(_add_spaces_to_msg("Stopping thread ..."))
         th_slot_leds.do_run = False
         th_slot_leds.join()
         logger.debug(_add_spaces_to_msg("Thread stopped: {}".format(th_slot_leds.name)))
     for ch in main_cfg['audio_channels']:
-        pygame.mixer.Channel(ch['channel_id']).stop()
+        pygame.mixer.Channel(ch['audio_channel_id']).stop()
     logger.info(_add_spaces_to_msg("Cleanup..."))
     GPIO.cleanup()
 
@@ -819,15 +813,7 @@ def main():
         else:
             if main_cfg_dict['simulation']:
                 import SimulRPi.GPIO as GPIO
-                channel_names = {
-                    main_cfg_dict['GPIO_channels']['top_led']: "top",
-                    main_cfg_dict['GPIO_channels']['middle_led']: "middle",
-                    main_cfg_dict['GPIO_channels']['bottom_led']: "bottom",
-                    main_cfg_dict['GPIO_channels']['lightsaber_led']: "lightsaber"
-                }
-                GPIO.setchannelnames(channel_names)
-                GPIO.setkeymap(main_cfg_dict['key_to_channel_map'])
-                GPIO.setsymbols(main_cfg_dict['led_symbols'])
+                GPIO.setchannels(main_cfg_dict['gpio_channels'])
                 GPIO.setprinting(not main_cfg_dict['quiet'])
                 logger.info("Simulation mode enabled")
             else:
