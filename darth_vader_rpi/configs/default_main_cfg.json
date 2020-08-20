@@ -41,11 +41,7 @@
     {
       "channel_name": "lightsaber_led",
       "display_name": "lightsaber",
-      "channel_number": 22,
-      "led_symbols": {
-        "ON": "\\033[1;31;48m⬤\\033[1;37;0m",
-        "OFF": "⬤"
-      }
+      "channel_number": 22
     }
   ],
 
