@@ -1,13 +1,8 @@
-.. TODO: use exact line
+.. default_main_cfg
 .. _configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L1
-.. TODO: use exact line
 .. _default values: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L1
+.. external links
 .. _pygame: https://www.pygame.org/
-.. TODO: next reference might not work in GitHub
-.. _test the program on your own computer: #simulating-on-your-computer
-.. _Add Darth Vader quotes: change_default_settings.html#add-darth-vader-quotes
-.. _Change default settings: change_default_settings.html
-.. _Change keymap: file:///Users/nova/PycharmProjects/rpi_darth_vader/docs/_build/html/change_default_settings.html#change-keymap
 .. _Darth-Vader-RPi documentation: http://darth-vader-rpi.rtfd.io/
 .. _Darth-Vader-RPi GitHub: https://github.com/raul23/Darth-Vader-RPi
 .. TODO: test the following URL
@@ -17,6 +12,12 @@
 .. _"Nooooo": https://www.youtube.com/watch?v=ZscVhFvD6iE
 .. _RPi.GPIO: https://pypi.org/project/RPi.GPIO/
 .. _SimulRPi: https://github.com/raul23/SimulRPi
+.. internal links
+.. TODO: next reference might not work in GitHub
+.. _test the program on your own computer: #simulating-on-your-computer
+.. _Add Darth Vader quotes: change_default_settings.html#add-darth-vader-quotes
+.. _Change default settings: change_default_settings.html
+.. _Change keymap: change_default_settings.html#change-keymap
 
 ======
 README
