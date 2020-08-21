@@ -1,11 +1,18 @@
+.. TODO: check line numbers in URLs (https://github.com/raul23/Darth-Vader-RPi)
+.. _audio_channels: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L72
+.. _closing_sound: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L157
 .. _configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L1
+.. _gpio_channels: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L8
 .. _logging configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_logging_cfg.json
-.. _main configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json
+.. _quotes: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L87
 .. _setting GPIO_channels: #change-gpio-channels
+.. _sound_effects: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L133
+.. _sounds_directory: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L6
 .. _"I am your father": https://www.youtube.com/watch?v=xuJEYdOFEP4
 .. _"Nooooo": https://www.youtube.com/watch?v=ZscVhFvD6iE
 .. _Platform limitations: https://simulrpi.readthedocs.io/en/latest/api_reference.html#important-platform-limitations-label
 .. _SimulRPi's documentation: https://simulrpi.readthedocs.io/en/latest/api_reference.html#content-default-keymap-label
+.. _The main configuration file: main_config.html
 
 =======================
 Change default settings
@@ -15,37 +22,22 @@ Change default settings
    :depth: 2
    :local:
 
-Introduction
-============
-
-The default settings used by the script ``start_dv`` are found in the
-`main configuration file`_. It is referred to as *main* because there is another
-config file you could edit, the `logging configuration file`_.
-
-The *main* configuration file can be edited with the following command::
+Important tips
+==============
+- As explained in `The main configuration file`_, this is the command to edit
+  the configuration file with the **default** text editor::
 
    $ start_dv -e cfg
 
-The logging configuration file could be instead edited with the `-e log_cfg`
-command-line option.
+  Or with a **specific** text editor::
 
-This will open the configuration file with the default text editor that is
-associated with JSON files as specified in your system, e.g. *atom* on macOS or
-*vim* on Linux.
+   $ start_dv -e cfg -a APP_NAME
 
-If you want to use another text editor you can specify it with the `-a APP`
-command-line option::
-
-   $ start_dv -e cfg -a TextEdit
-
-Important tips
-==============
-- When adding audio files, use *ogg* (compressed) or *wav* (uncompressed) as the
-  file format. The reason is that other file formats like *mp3* won't work
-  well with pygame's simultaneous playback capability.
+- When adding audio files, don't use *mp3* as the file format. Instead, use
+  *ogg* (compressed) or *wav* (uncompressed). The reason is that *mp3* won't
+  work well with pygame's simultaneous playback capability.
 
   **Reference:** `stackoverflow <https://stackoverflow.com/a/59742418>`__
-- 
 
 Add Darth Vader quotes
 ======================
@@ -56,16 +48,16 @@ The script ``start_dv`` comes included with two movie lines:
 
 .. TODO: check line in URL to config file showing ``quotes``
 
-Quotes are represented in the `configuration file <https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L86>`__
+Quotes are represented in the `configuration file <https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L87>`__
 as objects having the following properties:
 
-   - ``name``: will be displayed in the terminal
-   - ``filename``: relative to the directory ``sounds_directory``
+   - ``name``: it will be displayed in the terminal
+   - ``filename``: it is relative to the directory ``sounds_directory``
    - ``audio_channel_id``: all quotes should be played in **channel 1** as
-     explained in `Change channel volume <#change-channel-volume>`__
+     explained in `audio_channels <main_config.html#audio-channels-label>`__
 
 If you want to add more Darth Vader quotes, you have to edit the setting
-``quotes`` in the configuration file. Open the configuration file with::
+`quotes`_ in the configuration file. Open the configuration file with::
 
    $ start_dv -e cfg
 
@@ -86,18 +78,8 @@ following example:
 
 Change channel volume
 =====================
-Three channels are used for this project:
-
-   - **channel 0**: used for the breathing sound which plays in the background
-     as soon as the script runs. Its volume is set by default at 0.2 since we
-     don't want to overwhelm the other sounds playing in the other channels.
-   - **channel 1**: used for playing the *Imperial March* song and all Darth
-     Vader quotes.  Its volume is set by default at 1.0
-   - **channel 2**: used for playing the lighsaber sound effects and the closing
-     sound. Its volume is set by default at 1.0
-
 To change the volume for an audio channel, open the configuration file and edit
-the channel's volume found in the setting ``audio_channels``::
+the channel's volume found in the setting `audio_channels`_::
 
    $ start_dv -e cfg
 
@@ -120,9 +102,15 @@ the channel's volume found in the setting ``audio_channels``::
      }
    ],
 
+What each channel controls:
+
+   - **Channel 0** controls Darth Vader's breathing sound
+   - **Channel 1** controls the *Imperial March song* and all Darth Vader quotes
+   - **Channel 2** controls the lighsaber sound effects and the closing sound
+
 .. note::
 
-   Volume takes values in the range 0.0 to 1.0 (inclusive). As per the `pygame's
+   Volume takes values in the range 0.0 to 1.0 (inclusive). As per the `pygame
    documentation <https://www.pygame.org/docs/ref/mixer.html#pygame.mixer.Sound.set_volume>`__.
 
 Change closing sound
@@ -130,21 +118,21 @@ Change closing sound
 When the script is exitng after the user presses ``ctrl`` + ``c``, a sound is
 produced which by default is the `"Nooooo"`_ quote.
 
-To change the default closing sound, edit the setting ``sound_effects`` in the
+To change the default closing sound, edit the setting `sound_effects`_ in the
 configuration file which can be opened with::
 
    $ start_dv -e cfg
 
-At the end of the list in ``sound_effects``, you will find the ``closing_sound``
-object. These are the properties you can modify:
+At the end of the list in ``sound_effects``, you will find the `closing_sound`_
+object. These are the properties you can modify for this object:
 
-   - ``filename``: relative to ``sound_directory``
+   - ``filename``: relative to ``sounds_directory``
    - ``play_closing``: if `true`, the closing sound will be played when the
      script is finishing. Otherwise, nothing will be played at the end.
 
 .. code-block:: python
    :emphasize-lines: 4
-   :caption: **Example:** choosing another closing sound
+   :caption: **Example:** choosing another closing sound by changing ``filename``
 
    "sound_effects": [
      {
@@ -155,15 +143,19 @@ object. These are the properties you can modify:
      }
    ]
 
-Change GPIO channels
-====================
+.. seealso::
+
+   `Mute breathing and closing sounds <#mute-breathing-and-closing-sounds>`__
+
+Change GPIO channel names and number
+====================================
 
 Change keymap
 =============
 .. TODO: check line numbers before publishing
 
 If you want to change the default keymap used for the three push buttons, edit
-the setting ``gpio_channels`` in the configuration file which can be opened with::
+the setting `gpio_channels`_ in the configuration file which can be opened with::
 
    $ start_dv -e cfg
 
@@ -210,7 +202,7 @@ By **default**, the symbols used for representing LEDs are the following:
    - 🛑 : LED turned ON
    - ⚪ : LED turned OFF
 
-To change these default symbols, edit the setting ``gpio_channels`` by opening
+To change these default symbols, edit the setting `gpio_channels`_ by opening
 the configuration file::
 
    $ start_dv -e cfg
@@ -254,15 +246,19 @@ symbols for a given LED.
    If you omit ``led_symbols`` as a property for a LED object, the default LED
    symbols will be used instead.
 
+.. seealso::
+
+   `Change slot LEDs sequence <#change-slot-leds-sequence>`__
+
 Change paths to audio files
 ===========================
 .. TODO: revisit this section once you are done with testing the installation of the package
 .. TODO: check line number in URL to config file for sounds_directory
 
-The setting ``sounds_directory`` in the `configuration file <https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L6>`__
-defines the directory where all audio files (e.g. quotes) are saved.
+The setting `sounds_directory`_ in the configuration file defines the directory
+where all audio files (e.g. quotes) are saved.
 
-The filename for each audio file is defined with respect to this directory
+The filename for each audio file is defined with respect to the directory
 ``sounds_directory``. Each audio object defined in the settings ``quotes``,
 ``songs`` and ``sound_effects`` have a ``filename`` property that you can
 modify.

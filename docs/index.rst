@@ -44,6 +44,7 @@ more info about the project.
    :caption: Contents
 
    README_docs
+   main_config
    change_default_settings
    api_reference
    changelog
