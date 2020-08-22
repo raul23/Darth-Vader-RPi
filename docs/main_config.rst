@@ -1,19 +1,19 @@
 .. TODO: check line numbers in URLs
 .. default_main_cfg
-.. _audio_channels: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L72
+.. _audio_channels: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L55
 .. _gpio_channels: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L8
-.. _logging configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_logging_cfg.json
-.. _main configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json
 .. _mode: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L5
 .. _quiet: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L2
-.. _quotes: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L87
+.. _quotes: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L73
 .. _simulation: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L3
 .. _slot_leds: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L49
-.. _songs: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L125
-.. _sound_effects: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L133
+.. _songs: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L111
+.. _sound_effects: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L119
 .. _sounds_directory: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L6
 .. _verbose: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L4
 .. external links
+.. _logging configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_logging_cfg.json
+.. _main configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json
 .. _pygame: https://www.pygame.org/docs/
 .. _"I am your father": https://www.youtube.com/watch?v=xuJEYdOFEP4
 .. _Imperial March song by Jacob Townsend: https://soundcloud.com/jacobtownsend1/imperial-march
@@ -21,6 +21,7 @@
 .. _RPi.GPIO: https://pypi.org/project/RPi.GPIO/
 .. _RPIO.GPIO documentation: https://sourceforge.net/p/raspberry-gpio-python/wiki/BasicUsage/
 .. _SimulRPi.GPIO: https://pypi.org/project/SimulRPi/
+.. _Empire Strikes Back chest box light sequence: https://youtu.be/E2J_xl2MbGU?t=333
 .. internal links
 .. _default LED symbols: #default-led-symbols-label
 .. _Add Darth Vader quotes: change_default_settings.html#add-darth-vader-quotes
@@ -61,9 +62,9 @@ In what follows, you wil find an explanation for each setting found in the
 Three audio channels are used for this project:
 
    - **channel 0**: used for the breathing sound which plays in the background
-     as soon as the script ``start_dv`` runs. Its volume is set by default at
-     0.2 since we don't want to overwhelm the other sounds playing in the other
-     channels.
+     almost as soon as the script ``start_dv`` runs. Its volume is set by
+     default at 0.2 since we don't want to overwhelm the other sounds playing
+     in the other channels
    - **channel 1**: used for playing the *Imperial March* song and all Darth
      Vader quotes.  Its volume is set by default at 1.0
    - **channel 2**: used for playing the lighsaber sound effects and the closing
@@ -73,7 +74,7 @@ The setting `audio_channels`_ in the configuration file defines these three
 audio channels with their default volume.
 
 .. code-block:: python
-   :emphasize-lines: 4, 8, 12
+   :emphasize-lines: 5, 10, 15
    :caption: **Audio channels and their default volume**
 
    "audio_channels": [
@@ -121,8 +122,8 @@ GPIO channels for the following I/O devices are defined:
      lightsaber
    - **Song button**: when pressed it plays the *Imperial March* song
    - **Quotes button**: when pressed it plays one of Darth Vader quotes
-   - **Slot LEDs**: consists of three LEDs referred to as Top, Middle, and Top
-     LEDs and are found on Darth Vader's chest control box
+   - **Slot LEDs**: consist of three LEDs referred to as *Top*, *Middle*, and
+     *Top* LEDs and are found on Darth Vader's chest control box
    - **Lightsaber LED**: when the lightsaber button is pressed, this LED is
      turned ON/OFF
 
@@ -130,18 +131,18 @@ GPIO channels for the following I/O devices are defined:
 
    - ``channel_name``: this property should **not be modified** because it is
      used to identify the correct GPIO channel when turning ON/OFF LEDs or
-     checking a button's state.
+     checking a button's state
    - ``display_name``: channel name that will be displayed in the terminal
      along with the LED symbol. By default, the channel number is displayed if
-     ``display_name`` is not given.
-   - ``channel_number``: based on the numbering system you have specified
-     (`BOARD` or `BCM`)
+     ``display_name`` is not given
+   - ``channel_number``: identifies the GPIO pin based on the numbering system
+     you have specified (`BOARD` or `BCM`)
    - ``key``: only defined for button objects. It specifies the mapping between
      a keyboard key and a push button so you can simulate push buttons with your
-     keyboard.
+     keyboard
    - ``led_symbols``: only defined for LED objects. It is a dictionary defining
      the symbols to be used when the LED is turned ON and OFF. If nof found for
-     a LED object, then the `default LED symbols`_ will be used.
+     a LED object, then the `default LED symbols`_ will be used
 
       .. code-block:: python
          :emphasize-lines: 5-7
@@ -206,7 +207,7 @@ As per the `RPIO.GPIO documentation`_:
 
 ``quiet``
 ^^^^^^^^^
-The setting `quiet`_ in the configuration file is a flag (set to False by
+The setting `quiet`_ in the configuration file is a flag (set to false by
 default) that allows you to run the script ``start_dv`` without printing anything
 on the terminal, not even the LED symbols when running the simulation nor the
 exceptions are printed.
@@ -215,7 +216,7 @@ exceptions are printed.
 
 .. code-block:: python
    :emphasize-lines: 2
-   :caption: The setting ``quiet`` set to False by default
+   :caption: The setting ``quiet`` set to false by default
 
    {
      "quiet": false,
@@ -284,7 +285,7 @@ following properties:
 
 ``simulation``
 ^^^^^^^^^^^^^^
-The setting `simulation`_ in the configuration file is a flag (set to False by
+The setting `simulation`_ in the configuration file is a flag (set to false by
 default) that allows you to run the script ``start_dv`` on your computer,
 instead of a Raspberry Pi (RPi).
 
@@ -304,6 +305,9 @@ This flag can also be set directly through the script's command-line option
 
 ``slot_leds``
 ^^^^^^^^^^^^^
+Three LEDs (labeled as *bottom*, *middle*, and *top*) illuminate the slots in
+Darth Vader's chest control box.
+
 The setting `slot_leds`_ in the configuration file defines the sequence the
 slot LEDs should be turned ON/OFF. This sequence corresponds to Darth Vader's
 physiological state, e.g. if he is in a calm mood the slot LEDs will blink in a
@@ -330,7 +334,7 @@ different pattern than if he was angry.
 
 The user can also provide its own sequence by using a list of LED labels
 {'top', 'midddle', 'bottom'} arranged in a sequence as to specify the order the
-slot LEDs should turn on/off.
+slot LEDs should turn ON/OFF.
 
 **Example:** custom slot LEDs sequence
 
@@ -343,12 +347,12 @@ slot LEDs should turn on/off.
      []
    ]
 
-This simple sequence will turn on/off the slot LEDs in this order::
+This simple sequence will turn ON/OFF the slot LEDs in this order::
 
-  1. top + bottom LEDs turned on
-  2. All LEDs turned off
-  3. middle LED turned on
-  4. All LEDs turned off
+  1. top + bottom LEDs turned ON
+  2. All LEDs turned OFF
+  3. middle LED turned ON
+  4. All LEDs turned OFF
 
 .. note::
 
@@ -392,6 +396,11 @@ This simple sequence will turn on/off the slot LEDs in this order::
         []
       ]
 
+.. note::
+
+   The default sequences of slot LEDs were obtained from
+   `Empire Strikes Back chest box light sequence`_.
+
 ``songs``
 ^^^^^^^^^
 The setting `songs`_ in the configuration file defines the songs that can be
@@ -420,22 +429,53 @@ properties:
 The setting `sound_effects`_ in the configuration file defines the following
 sounds:
 
-   - Breathing sound:
-   - Lightsaber drawing sound:
-   - Lightsaber hum sound:
-   - Lightsaber retraction sound:
-   - Closing sound:
+   - **Breathing sound**: almost as soon as the script ``start_dv`` runs, Darth
+     Vader's breathing sound starts playing in the background until the script
+     ends
+   - **Lightsaber drawing sound**: when the lightsaber button is pressed, the
+     drawing sound is played first followed by the hum sound until the button is
+     pressed again which will produce the retraction sound
+   - **Lightsaber hum sound**: plays immediately after the lightsaber drawing
+     sound until the lightsaber button is pressed again
+   - **Lightsaber retraction sound**: plays when the lightsaber button is
+     pressed while the hum sound is playing
+   - **Closing sound**: plays after the user presses ``ctrl`` + ``c`` to exit
+     from the script. By default, it is not played at the end
 
 ``sound_effects`` takes a list of sound objects having the following properties:
 
-   - ``name``:
-   - ``filename``:
-   - ``audio_channel_id``:
-   - ``play_opening``:
-   - ``loops``:
-   - ``play_closing``:
+   - ``name``: name of the sound which will be displayed in the terminal
+   - ``filename``: relative to the directory
+     `sounds_directory <#sounds-directory-label>`__
+   - ``audio_channel_id``: the audio channel used for playing the sound. See
+     `audio_channels <#audio-channels-label>`__ to know what channel is used for
+     each type of sounds
+   - ``play_opening``: if set to true, the sound will be played at the start of
+     the script
+   - ``loops``: number of times the sound should be repeated. If set to -1, it
+     will be repeated indefinitely
+   - ``play_closing``: only defined for the *closing_sound* object. If set to
+     true, the sound will play at the end of the script.
 
+.. code-block:: python
+   :emphasize-lines: 3, 10
+   :caption: **Example:** two sound effects
 
+      "sound_effects": [
+        {
+          "name": "breathing_sound",
+          "filename": "darth_vader_breathing.ogg",
+          "audio_channel_id": 0,
+          "play_opening": true,
+          "loops": -1
+        },
+        {
+          "name": "closing_sound",
+          "filename": "quote_nooooo.ogg",
+          "audio_channel_id": 2,
+          "play_closing": false
+        }
+      ]
 
 .. _sounds_directory-label:
 
@@ -466,7 +506,7 @@ the directory ``sounds_directory``.
 
 ``verbose``
 ^^^^^^^^^^^
-The setting `verbose`_ in the configuration file is a flag (set to False by
+The setting `verbose`_ in the configuration file is a flag (set to false by
 default) that allows you to run the script ``start_dv`` by logging to the
 terminal any message with at least a DEBUG level. Also, when there is an
 exception, a traceback is printed so you can pinpoint exactly where the error

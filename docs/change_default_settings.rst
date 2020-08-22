@@ -1,11 +1,11 @@
 .. TODO: check line numbers in URLs
 .. default_main_cfg
-.. _audio_channels: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L72
-.. _closing_sound: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L157
+.. _audio_channels: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L55
+.. _closing_sound: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L143
 .. _configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L1
 .. _gpio_channels: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L8
-.. _quotes: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L87
-.. _sound_effects: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L133
+.. _quotes: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L73
+.. _sound_effects: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L119
 .. _sounds_directory: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L6
 .. external links
 .. _logging configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_logging_cfg.json
@@ -24,8 +24,8 @@ Change default settings
 
 Important tips
 ==============
-- As explained in `The main configuration file`_, this is the command to edit
-  the configuration file with the **default** text editor::
+- This is the command to edit the configuration file with the **default** text
+  editor::
 
    $ start_dv -e cfg
 
@@ -33,6 +33,7 @@ Important tips
 
    $ start_dv -e cfg -a APP_NAME
 
+- To end the script ``start_dv``, press ``ctrl`` + ``c``
 - When adding audio files, don't use *mp3* as the file format. Instead, use
   *ogg* (compressed) or *wav* (uncompressed). The reason is that *mp3* won't
   work well with pygame's simultaneous playback capability.

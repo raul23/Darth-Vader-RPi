@@ -12,6 +12,7 @@
 .. _"Nooooo": https://www.youtube.com/watch?v=ZscVhFvD6iE
 .. _RPi.GPIO: https://pypi.org/project/RPi.GPIO/
 .. _SimulRPi: https://github.com/raul23/SimulRPi
+.. _Empire Strikes Back chest box light sequence: https://youtu.be/E2J_xl2MbGU?t=333
 .. internal links
 .. TODO: next reference might not work in GitHub
 .. _test the program on your own computer: #simulating-on-your-computer
@@ -76,8 +77,8 @@ control the following sounds:
 #. The Imperial march theme song
 #. The lightsaber opening and closing sounds and its illumination
 
-His iconic breathing sound plays in the background indefinitely as soon as the
-RPi is run with the script ``start_dv``.
+His iconic breathing sound plays in the background indefinitely almost as soon
+as the RPi is run with the script ``start_dv``.
 
 .. raw:: html
 
@@ -155,6 +156,10 @@ If you want to test the script on your computer (use the flag **-s**)::
    `configuration file`_ (e.g GPIO channel numbers, channel volume).
 
    Check `Change default settings`_ on how to modify these default settings.
+
+.. important::
+
+   In order to stop the script at any moment, press ``ctrl`` + ``c``.
 
 List of options
 ^^^^^^^^^^^^^^^
@@ -235,6 +240,7 @@ Credits
 =======
 .. TODO: specify not used anymore for music
 
+- **Slot LEDs sequences:** `Empire Strikes Back chest box light sequence`_.
 - **Darth Vader quotes:**
 
   - `"I am your father"`_
