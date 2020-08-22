@@ -1,17 +1,17 @@
-.. TODO: check line numbers in URLs (https://github.com/raul23/Darth-Vader-RPi)
+.. TODO: check line numbers in URLs
+.. default_main_cfg
 .. _audio_channels: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L72
 .. _closing_sound: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L157
 .. _configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L1
 .. _gpio_channels: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L8
-.. _logging configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_logging_cfg.json
 .. _quotes: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L87
-.. _setting GPIO_channels: #change-gpio-channels
 .. _sound_effects: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L133
 .. _sounds_directory: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L6
-.. _"I am your father": https://www.youtube.com/watch?v=xuJEYdOFEP4
+.. external links
+.. _logging configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_logging_cfg.json
 .. _"Nooooo": https://www.youtube.com/watch?v=ZscVhFvD6iE
-.. _Platform limitations: https://simulrpi.readthedocs.io/en/latest/api_reference.html#important-platform-limitations-label
-.. _SimulRPi's documentation: https://simulrpi.readthedocs.io/en/latest/api_reference.html#content-default-keymap-label
+.. internal links
+.. _default symbols: main_config.html#default-led-symbols-label
 .. _The main configuration file: main_config.html
 
 =======================
@@ -41,28 +41,20 @@ Important tips
 
 Add Darth Vader quotes
 ======================
-The script ``start_dv`` comes included with two movie lines:
-
-   - `"I am your father"`_
-   - `"Nooooo"`_
-
-.. TODO: check line in URL to config file showing ``quotes``
-
-Quotes are represented in the `configuration file <https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L87>`__
-as objects having the following properties:
-
-   - ``name``: it will be displayed in the terminal
-   - ``filename``: it is relative to the directory ``sounds_directory``
-   - ``audio_channel_id``: all quotes should be played in **channel 1** as
-     explained in `audio_channels <main_config.html#audio-channels-label>`__
-
 If you want to add more Darth Vader quotes, you have to edit the setting
 `quotes`_ in the configuration file. Open the configuration file with::
 
    $ start_dv -e cfg
 
-Add your object representing the quote to the list in ``quotes``, like in the
-following example:
+Each quote is represented in the configuration file as objects having the
+following properties:
+
+   - ``name``: it will be displayed in the terminal
+   - ``filename``: it is relative to the directory `sounds_directory <main_config.html#sounds-directory>`__
+   - ``audio_channel_id``: all quotes should be played in **channel 1** as
+     explained in `audio_channels <main_config.html#audio-channels-label>`__
+
+Add your quote object to the list in ``quotes``, like in the following example:
 
 .. code-block:: python
    :emphasize-lines: 2-6
@@ -76,6 +68,10 @@ following example:
      }
    ]
 
+.. seealso::
+
+   The setting `quotes <main_config.html#quotes-label>`__
+
 Change channel volume
 =====================
 To change the volume for an audio channel, open the configuration file and edit
@@ -84,19 +80,22 @@ the channel's volume found in the setting `audio_channels`_::
    $ start_dv -e cfg
 
 .. code-block:: python
-   :emphasize-lines: 4, 8, 12
+   :emphasize-lines: 5, 10, 15
    :caption: **Audio channels and their default volumes**
 
    "audio_channels": [
      {
+       "name": "breathing_sound",
        "audio_channel_id": 0,
        "volume": 0.2
      },
      {
+       "name": "song_and_quotes",
        "audio_channel_id": 1,
        "volume": 1.0
      },
      {
+       "name": "lightsaber_and_closing_sounds",
        "audio_channel_id": 2,
        "volume": 1.0
      }
@@ -112,6 +111,10 @@ What each channel controls:
 
    Volume takes values in the range 0.0 to 1.0 (inclusive). As per the `pygame
    documentation <https://www.pygame.org/docs/ref/mixer.html#pygame.mixer.Sound.set_volume>`__.
+
+.. seealso::
+
+   The setting `audio_channels <main_config.html#audio-channels-label>`__
 
 Change closing sound
 ====================
@@ -145,7 +148,8 @@ object. These are the properties you can modify for this object:
 
 .. seealso::
 
-   `Mute breathing and closing sounds <#mute-breathing-and-closing-sounds>`__
+   - `Mute breathing and closing sounds <#mute-breathing-and-closing-sounds>`__
+   - The setting `sound_effects <main_config.html#sound-effects-label>`__
 
 Change GPIO channel names and number
 ====================================
@@ -170,7 +174,8 @@ In order to change the default keymap, you will need to change the value for
 button.
 
 The names of keyboard keys that you can use are those specified in the
-`SimulRPi's documentation`_, e.g. `media_play_pause`, `shift`, and `shift_r`.
+:simulapi:`SimulRPi's documentation <content-default-keymap-label>`, e.g.
+`media_play_pause`, `shift`, and `shift_r`.
 
 .. code-block:: python
    :emphasize-lines: 6
@@ -193,37 +198,21 @@ The names of keyboard keys that you can use are those specified in the
    *media_volume_down*, *media_volume_mute*, *media_volume_up*, *shift*,
    and *shift_r*.
 
-   **Ref.:** `Platform limitations`_
+   **Ref.:** :simulapi:`Platform limitations <important-platform-limitations-label>`
+
+.. seealso::
+
+   The setting `gpio_channels <main_config.html#gpio-channels-label>`__
 
 Change LED symbols
 ==================
-By **default**, the symbols used for representing LEDs are the following:
-
-   - 🛑 : LED turned ON
-   - ⚪ : LED turned OFF
-
-To change these default symbols, edit the setting `gpio_channels`_ by opening
-the configuration file::
+To change the `default symbols`_ used for representing LEDs in the terminal,
+edit the setting `gpio_channels`_ by opening the configuration file::
 
    $ start_dv -e cfg
 
-As the name suggests, ``gpio_channels`` is a list of GPIO channels where each
-item is an object defining a LED or a button and having the following
-properties:
-
-   - ``channel_name``: this property should **not be modified** because it is
-     used to identify the correct GPIO channel when turning ON/OFF LEDs or
-     checking a button's state.
-   - ``display_name``: channel name that will be displayed in the terminal
-     along with the LED symbol. By default, the channel number is displayed if
-     ``display_name`` is not given.
-   - ``channel_number``: based on the numbering system you have specified
-     (`BOARD` or `BCM`).
-   - ``led_symbols``: only defined for LED objects. It is a dictionary defining
-     the symbols to be used when the LED is ON and OFF.
-
-It is ``led_symbols`` that you need to modify in order to change the default
-symbols for a given LED.
+You need to modify the property ``led_symbols`` for a given LED object defined
+in ``gpio_channels``.
 
 .. code-block:: bash
    :emphasize-lines: 7-8
@@ -243,12 +232,13 @@ symbols for a given LED.
 
 .. note::
 
-   If you omit ``led_symbols`` as a property for a LED object, the default LED
-   symbols will be used instead.
+   If you omit ``led_symbols`` as a property for a LED object, the
+   `default symbols`_ will be used instead.
 
 .. seealso::
 
-   `Change slot LEDs sequence <#change-slot-leds-sequence>`__
+   - `Change slot LEDs sequence <#change-slot-leds-sequence>`__
+   - The setting `gpio_channels <main_config.html#gpio-channels-label>`__
 
 Change paths to audio files
 ===========================
@@ -281,6 +271,10 @@ modify.
    Don't change the ``name`` property for *songs* and *sound_effects* objects
    because it is used to identify the correct audio file to play when some
    event happens.
+
+.. seealso::
+
+   The setting `sound_effects <main_config.html#sound-effects-label>`__
 
 Change slot LEDs sequence
 =========================
