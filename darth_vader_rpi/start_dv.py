@@ -79,6 +79,7 @@ import shutil
 import threading
 import time
 from logging import NullHandler
+from threading import Thread
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
@@ -102,7 +103,7 @@ If the `simulation` option (`-s`) is used with the :mod:`start_dv` script, the
 `SimulRPi.GPIO`_ module will be used instead.
 
 """
-
+_VERBOSE = False
 _LOG_CFG = "log_cfg"
 _MAIN_CFG = "cfg"
 """TODO"""
@@ -165,6 +166,22 @@ References
 _SEQ_TYPES_MAP = {'action': _ACTION_MODE, 'calm': _CALM_MODE}
 """TODO
 """
+
+
+class ExceptionThread(threading.Thread):
+    def __init__(self, *args, **kwargs):
+        threading.Thread.__init__(self, *args, **kwargs)
+        self.exc = None
+
+    def run(self):
+        try:
+            self._target(*self._args, **self._kwargs)
+        except Exception as e:
+            self.exc = e
+            if _VERBOSE:
+                logger.exception(_add_spaces_to_msg("Error: {}".format(e)))
+            else:
+                logger.error(_add_spaces_to_msg("Error: {}".format(e)))
 
 
 class SoundWrapper:
@@ -263,7 +280,7 @@ def _get_cfg_dict(cfg_type):
 
 def turn_on_slot_leds_sequence(top_led, middle_led, bottom_led,
                                leds_sequence="action", delay_subsequences=0.4,
-                               time_leds_on=0.4,):
+                               time_leds_on=0.4):
     """Turn on/off the three slot LEDs in a precise sequence.
 
     These three LEDs are associated with Darth Vader's three slots located on
@@ -354,6 +371,7 @@ def turn_on_slot_leds_sequence(top_led, middle_led, bottom_led,
     """
     lcm = dict((('top', top_led), ('middle', middle_led), ('bottom', bottom_led)))
     if isinstance(leds_sequence, str):
+        leds_sequence = leds_sequence.lower()
         assert leds_sequence in _SEQ_TYPES_MAP.keys(), \
             "Wrong type of leds_sequence: '{}' (choose from {})".format(
                 leds_sequence, ", ".join(_SEQ_TYPES_MAP.keys()))
@@ -491,7 +509,7 @@ def activate_dv(main_cfg):
                     loops = sound.get('loops', 0)
                     loaded_sounds[sound_name].play(loops)
         quotes = list(loaded_sounds['quotes'].values())
-        th_slot_leds = threading.Thread(
+        th_slot_leds = ExceptionThread(
             name="thread_slot_leds",
             target=turn_on_slot_leds_sequence,
             args=(gpio_channels['top_led'],
@@ -533,6 +551,10 @@ def activate_dv(main_cfg):
                 quote_idx += 1
                 quote.play()
                 time.sleep(0.2)
+            elif not th_slot_leds.is_alive():
+                retcode = 1
+                logger.info(_add_spaces_to_msg("Exiting..."))
+                break
     except Exception as e:
         retcode = 1
         if main_cfg['verbose']:
@@ -733,7 +755,7 @@ def main():
     Only one action at a time can be performed.
 
     """
-    global logger, GPIO
+    global logger, GPIO, _VERBOSE
     # Setup the default logger (whose name is __main__ since this file is run
     # as a script) which will be used for printing to the console before all
     # loggers defined in the JSON file will be configured. The printing with
@@ -768,16 +790,18 @@ def main():
         logging_cfg_dict = _get_cfg_dict('log')
         # TODO: sanity check on loggers (names based in package...)
         if main_cfg_dict['verbose']:
+            _VERBOSE = True
             keys = ['handlers', 'loggers']
             for k in keys:
                 for name, val in logging_cfg_dict[k].items():
                     val['level'] = "DEBUG"
-            logger.info("Verbose option enabled")
         logging.config.dictConfig(logging_cfg_dict)
         logger_name = "{}.{}".format(
             package_name,
             os.path.splitext(__file__)[0])
         logger = logging.getLogger(logger_name)
+        logger.info("Verbose option {}".format(
+            "enabled" if main_cfg_dict['verbose'] else "disabled"))
         msg1 = "Config options overriden by command-line arguments:\n"
         for cfg_name, old_v, new_v in retval.config_opts_overidden:
             msg1 += "{}: {} --> {}\n".format(cfg_name, old_v, new_v)
