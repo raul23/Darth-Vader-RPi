@@ -15,6 +15,7 @@
 .. _logging configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_logging_cfg.json
 .. _main configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json
 .. _pygame: https://www.pygame.org/docs/
+.. _pynput: https://pynput.readthedocs.io
 .. _"I am your father": https://www.youtube.com/watch?v=xuJEYdOFEP4
 .. _Imperial March song by Jacob Townsend: https://soundcloud.com/jacobtownsend1/imperial-march
 .. _"Nooooo": https://www.youtube.com/watch?v=ZscVhFvD6iE
@@ -24,10 +25,11 @@
 .. _Empire Strikes Back chest box light sequence: https://youtu.be/E2J_xl2MbGU?t=333
 .. internal links
 .. _default LED symbols: #default-led-symbols-label
+.. _start_dv: README_docs.html#script-start-dv
 .. _Add Darth Vader quotes: change_default_settings.html#add-darth-vader-quotes
 .. _Change GPIO channel names and number: change_default_settings.html#change-gpio-channel-names-and-number
-.. _Change keymap: change_default_settings.html#change-keymap
-.. _Change LED symbols: change_default_settings.html#change-led-symbols
+.. _Change keymap: change_default_settings.html#change-keymap-label
+.. _Change LED symbols: change_default_settings.html#change-led-symbols-label
 
 The main configuration file
 ===========================
@@ -53,6 +55,10 @@ command-line option::
 
 In what follows, you wil find an explanation for each setting found in the
 `main configuration file`_, presented in alphabetic order.
+
+.. seealso::
+
+    The script `start_dv`_
 
 .. _audio-channels-label:
 
@@ -140,6 +146,18 @@ GPIO channels for the following I/O devices are defined:
    - ``key``: only defined for button objects. It specifies the mapping between
      a keyboard key and a push button so you can simulate push buttons with your
      keyboard
+
+     .. code-block:: python
+         :emphasize-lines: 5
+         :caption: **Example:** changing keymap for the Song push button
+
+          {
+            "channel_name": "song_button",
+            "display_name": "song_button",
+            "channel_number": 24,
+            "key": "shift_r"
+          }
+
    - ``led_symbols``: only defined for LED objects. It is a dictionary defining
      the symbols to be used when the LED is turned ON and OFF. If nof found for
      a LED object, then the `default LED symbols`_ will be used
@@ -187,6 +205,8 @@ ON/OFF when the corresponding push button (or ``cmd`` key) is pressed.
    - `Change keymap`_
    - `Change LED symbols`_
 
+.. _mode-label:
+
 ``mode``
 ^^^^^^^^
 The setting `mode`_ in the configuration file defines the numbering system
@@ -205,9 +225,11 @@ As per the `RPIO.GPIO documentation`_:
    number goes to which pin on the RPi board. Your script could break between
    revisions of Raspberry Pi boards.
 
+.. _quiet-label:
+
 ``quiet``
 ^^^^^^^^^
-The setting `quiet`_ in the configuration file is a flag (set to false by
+The setting `quiet`_ in the configuration file is a flag (set to *false* by
 default) that allows you to run the script ``start_dv`` without printing anything
 on the terminal, not even the LED symbols when running the simulation nor the
 exceptions are printed.
@@ -216,7 +238,7 @@ exceptions are printed.
 
 .. code-block:: python
    :emphasize-lines: 2
-   :caption: The setting ``quiet`` set to false by default
+   :caption: The setting ``quiet`` set to *false* by default
 
    {
      "quiet": false,
@@ -283,9 +305,11 @@ following properties:
 
    `Add Darth Vader quotes`_
 
+.. _simulation-label:
+
 ``simulation``
 ^^^^^^^^^^^^^^
-The setting `simulation`_ in the configuration file is a flag (set to false by
+The setting `simulation`_ in the configuration file is a flag (set to *false* by
 default) that allows you to run the script ``start_dv`` on your computer,
 instead of a Raspberry Pi (RPi).
 
@@ -299,9 +323,16 @@ This flag can also be set directly through the script's command-line option
 
    $ start_dv -s
 
+.. note::
+
+   `SimulRPi.GPIO`_ makes use of the package `pynput`_ to monitor the keyboard
+   for any pressed key.
+
 .. seealso::
 
    `Script's list of options <README_docs.html#list-of-options>`__
+
+.. _slot-leds-label:
 
 ``slot_leds``
 ^^^^^^^^^^^^^
@@ -401,6 +432,8 @@ This simple sequence will turn ON/OFF the slot LEDs in this order::
    The default sequences of slot LEDs were obtained from
    `Empire Strikes Back chest box light sequence`_.
 
+.. _songs-label:
+
 ``songs``
 ^^^^^^^^^
 The setting `songs`_ in the configuration file defines the songs that can be
@@ -450,12 +483,12 @@ sounds:
    - ``audio_channel_id``: the audio channel used for playing the sound. See
      `audio_channels <#audio-channels-label>`__ to know what channel is used for
      each type of sounds
-   - ``play_opening``: if set to true, the sound will be played at the start of
+   - ``play_opening``: if set to *true*, the sound will be played at the start of
      the script
    - ``loops``: number of times the sound should be repeated. If set to -1, it
      will be repeated indefinitely
    - ``play_closing``: only defined for the *closing_sound* object. If set to
-     true, the sound will play at the end of the script.
+     *true*, the sound will play at the end of the script.
 
 .. code-block:: python
    :emphasize-lines: 3, 10
@@ -504,9 +537,11 @@ All the audio filenames found in the configuration file are defined relative to
 In this example, the audio file `darth_vader_breathing.ogg` is to be found in
 the directory ``sounds_directory``.
 
+.. _verbose-label:
+
 ``verbose``
 ^^^^^^^^^^^
-The setting `verbose`_ in the configuration file is a flag (set to false by
+The setting `verbose`_ in the configuration file is a flag (set to *false* by
 default) that allows you to run the script ``start_dv`` by logging to the
 terminal any message with at least a DEBUG level. Also, when there is an
 exception, a traceback is printed so you can pinpoint exactly where the error

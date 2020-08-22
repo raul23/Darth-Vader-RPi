@@ -12,6 +12,7 @@
 .. _"Nooooo": https://www.youtube.com/watch?v=ZscVhFvD6iE
 .. internal links
 .. _default symbols: main_config.html#default-led-symbols-label
+.. _start_dv: README_docs.html#script-start-dv
 .. _The main configuration file: main_config.html
 
 =======================
@@ -40,6 +41,12 @@ Important tips
 
   **Reference:** `stackoverflow <https://stackoverflow.com/a/59742418>`__
 
+.. seealso::
+
+     The script `start_dv`_
+
+.. _add-darth-vader-quotes-label:
+
 Add Darth Vader quotes
 ======================
 If you want to add more Darth Vader quotes, you have to edit the setting
@@ -51,7 +58,8 @@ Each quote is represented in the configuration file as objects having the
 following properties:
 
    - ``name``: it will be displayed in the terminal
-   - ``filename``: it is relative to the directory `sounds_directory <main_config.html#sounds-directory>`__
+   - ``filename``: it is relative to the directory
+     `sounds_directory <main_config.html#sounds-directory-label>`__
    - ``audio_channel_id``: all quotes should be played in **channel 1** as
      explained in `audio_channels <main_config.html#audio-channels-label>`__
 
@@ -73,6 +81,8 @@ Add your quote object to the list in ``quotes``, like in the following example:
 
    The setting `quotes <main_config.html#quotes-label>`__
 
+.. _change-channel-volume-label:
+
 Change channel volume
 =====================
 To change the volume for an audio channel, open the configuration file and edit
@@ -82,7 +92,7 @@ the channel's volume found in the setting `audio_channels`_::
 
 .. code-block:: python
    :emphasize-lines: 5, 10, 15
-   :caption: **Audio channels and their default volumes**
+   :caption: **Audio channels and their default volume**
 
    "audio_channels": [
      {
@@ -117,9 +127,11 @@ What each channel controls:
 
    The setting `audio_channels <main_config.html#audio-channels-label>`__
 
+.. _change-closing-sound-label:
+
 Change closing sound
 ====================
-When the script is exitng after the user presses ``ctrl`` + ``c``, a sound is
+When the script is exiting after the user presses ``ctrl`` + ``c``, a sound is
 produced which by default is the `"Nooooo"`_ quote.
 
 To change the default closing sound, edit the setting `sound_effects`_ in the
@@ -130,8 +142,9 @@ configuration file which can be opened with::
 At the end of the list in ``sound_effects``, you will find the `closing_sound`_
 object. These are the properties you can modify for this object:
 
-   - ``filename``: relative to ``sounds_directory``
-   - ``play_closing``: if `true`, the closing sound will be played when the
+   - ``filename``: relative to
+     `sounds_directory <main_config.html#sounds-directory-label>`__
+   - ``play_closing``: if *true*, the closing sound will be played when the
      script is finishing. Otherwise, nothing will be played at the end.
 
 .. code-block:: python
@@ -149,11 +162,15 @@ object. These are the properties you can modify for this object:
 
 .. seealso::
 
-   - `Mute breathing and closing sounds <#mute-breathing-and-closing-sounds>`__
+   - `Mute breathing and closing sounds <#mute-breathing-and-closing-sounds-label>`__
    - The setting `sound_effects <main_config.html#sound-effects-label>`__
+
+.. _change-gpio-channel-names-and-numer-label:
 
 Change GPIO channel names and number
 ====================================
+
+.. _change-keymap-label:
 
 Change keymap
 =============
@@ -205,6 +222,8 @@ The names of keyboard keys that you can use are those specified in the
 
    The setting `gpio_channels <main_config.html#gpio-channels-label>`__
 
+.. _change-led-symbols-label:
+
 Change LED symbols
 ==================
 To change the `default symbols`_ used for representing LEDs in the terminal,
@@ -238,7 +257,7 @@ in ``gpio_channels``.
 
 .. seealso::
 
-   - `Change slot LEDs sequence <#change-slot-leds-sequence>`__
+   - `Change slot LEDs sequence <#change-slot-leds-sequence-label>`__
    - The setting `gpio_channels <main_config.html#gpio-channels-label>`__
 
 Change paths to audio files
@@ -250,9 +269,9 @@ The setting `sounds_directory`_ in the configuration file defines the directory
 where all audio files (e.g. quotes) are saved.
 
 The filename for each audio file is defined with respect to the directory
-``sounds_directory``. Each audio object defined in the settings ``quotes``,
-``songs`` and ``sound_effects`` have a ``filename`` property that you can
-modify.
+`sounds_directory <main_config.html#sounds-directory-label>`__. Each audio
+object defined in the settings ``quotes``, ``songs`` and ``sound_effects`` have
+a ``filename`` property that you can modify.
 
 .. code-block:: python
    :emphasize-lines: 4
@@ -277,11 +296,17 @@ modify.
 
    The setting `sound_effects <main_config.html#sound-effects-label>`__
 
+.. _change-slot-leds-sequence-label:
+
 Change slot LEDs sequence
 =========================
 
+.. _mute-breathing-and-closing-sounds-label:
+
 Mute breathing and closing sounds
 =================================
+
+.. _run-script-as-quiet-or-verbose-label:
 
 Run script as quiet or verbose
 ==============================

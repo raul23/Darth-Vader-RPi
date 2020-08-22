@@ -15,10 +15,13 @@
 .. _Empire Strikes Back chest box light sequence: https://youtu.be/E2J_xl2MbGU?t=333
 .. internal links
 .. TODO: next reference might not work in GitHub
+.. _closing sound: change_default_settings.html#change-closing-sound-label
 .. _test the program on your own computer: #simulating-on-your-computer
-.. _Add Darth Vader quotes: change_default_settings.html#add-darth-vader-quotes
+.. _Add Darth Vader quotes: change_default_settings.html#add-darth-vader-quotes-label
 .. _Change default settings: change_default_settings.html
-.. _Change keymap: change_default_settings.html#change-keymap
+.. _Change keymap: change_default_settings.html#change-keymap-label
+.. _Change slot LEDs sequence: change_default_settings.html#change-slot-leds-sequence-label
+.. _Changelog: changelog.html
 
 ======
 README
@@ -74,8 +77,8 @@ by illuminating the lightsaber, chest control box, and belt. 3 push buttons
 control the following sounds:
 
 #. Some of his famous quotes
-#. The Imperial march theme song
-#. The lightsaber opening and closing sounds and its illumination
+#. The *Imperial march* theme song
+#. The lightsaber drawing and retraction sounds and its illumination
 
 His iconic breathing sound plays in the background indefinitely almost as soon
 as the RPi is run with the script ``start_dv``.
@@ -98,23 +101,26 @@ Here's how the various LEDs and push buttons are connected to the Raspberry Pi:
    <img src="https://raw.githubusercontent.com/raul23/images/master/Darth-Vader-RPi/schematics.png"/>
    </div>
 
+.. TODO: check line number in URL
+
 * The lightsaber is illuminated by 3 LEDs connected in parallel
 * The *Bottom*, *Middle*, and *Top* LEDs illuminate the slots in Darth Vader's
   chest control box. They blink in a specific sequence as specified in the
-  `configuration file`_. See ``TODO`` to know how to change this sequence.
-* When the *Lightsaber button* is first pressed, it produces the sound of
-  drawing the sword, illuminates it, and a hum sound persists until the
-  lightsaber is turned off. If the button is pressed again, it produces the
-  sound of retracting the lightsaber and turns it off.
+  `configuration file <https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L52>`__.
+  See `Change slot LEDs sequence`_ to know how to change this sequence.
+* When the *Lightsaber button* is first pressed, it produces the drawing sound,
+  illuminates the sword, and a hum sound persists until the *Lightsaber button*
+  is turned off. If the button is pressed again, it produces the sound of
+  retracting the lightsaber and turns it off.
 
   **NOTE:** the *Lightsaber button* can be pressed while the *Song button* or
   the *Quotes button* is playing audio since they use different channels.
 * The *Song button* plays the `Imperial March song by Jacob Townsend`_
-* The *Quotes button* plays a famous Darth Vader's quotes when pressed. For
+* The *Quotes button* plays a famous Darth Vader quotes when pressed. For
   testing purposes, the ``darth_vader_rpi`` package comes with two movie lines:
 
     * `"I am your father"`_
-    * `"Nooooo"`_: it is also used for the closing sound when the script
+    * `"Nooooo"`_: it is also used for the `closing sound`_ when the script
       ``start_dv`` exits
 
   However, you could add more quotes if you want to. Check `Add Darth Vader quotes`_.
@@ -194,8 +200,8 @@ by blinking red circles on the terminal and monitoring pressed keyboard keys::
 
    $ start_dv -s
 
-**NOTE:** the last command makes use of default values. See ``TODO`` on how
-to change these settings.
+**NOTE:** the last command makes use of default values. See
+`Change default settings`_ on how to change these settings.
 
 Here is a video of what it looks like in a terminal when running the script
 ``start_dv`` on a computer instead of an RPi:
@@ -222,12 +228,11 @@ Resources
 =========
 .. TODO: don't use documentation link for readthedocs
 .. TODO: don't show changelog and todos links for readthedocs
+.. `Darth-Vader-RPi PyPI`_
 
 * `Darth-Vader-RPi documentation`_
 * `Darth-Vader-RPi GitHub`_: source code
-* `Darth-Vader-RPi PyPI`_
-* `Changelog <changelog.html>`_
-* `TODOs <todos.html>`_
+* `Changelog`_
 
 References
 ==========
@@ -240,7 +245,6 @@ Credits
 =======
 .. TODO: specify not used anymore for music
 
-- **Slot LEDs sequences:** `Empire Strikes Back chest box light sequence`_.
 - **Darth Vader quotes:**
 
   - `"I am your father"`_
@@ -255,3 +259,6 @@ Credits
   - `Darth Vader breathing sound <https://www.youtube.com/watch?v=d28NrjMPERs>`_
   - `Darth Vader's lightsaber sound effect <https://www.youtube.com/watch?v=bord-573NWY>`_
   - `Darth Vader's lightsaber retraction sound effect <https://www.youtube.com/watch?v=m6buyGJF46k>`_
+- **Slot LEDs sequences:**
+
+  - `Empire Strikes Back chest box light sequence`_
