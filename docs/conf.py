@@ -16,13 +16,14 @@ sys.path.insert(0, os.path.abspath('../'))
 sys.path.insert(0, os.path.abspath('../darth_vader_rpi'))
 
 # -- Project information -----------------------------------------------------
+from darth_vader_rpi import __version__
 
 project = 'Darth-Vader-RPi'
 copyright = '2020, Raul C.'
 author = 'Raul C.'
 
 # The full version, including alpha/beta/rc tags
-release = '0.1'
+release = __version__
 
 
 # -- General configuration ---------------------------------------------------
@@ -36,6 +37,7 @@ master_doc = 'index'
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.coverage',
+    'sphinx.ext.extlinks',
     'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
@@ -61,6 +63,9 @@ intersphinx_mapping = {
     'python': ('https://docs.python.org/3', None),
     'pyutils': ('https://py-common-utils.readthedocs.io/en/latest', None)
 }
+
+extlinks = {'simulapi': ('https://simulrpi.readthedocs.io/en/latest/'
+                         'api_reference.html#%s', '')}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
