@@ -181,6 +181,7 @@ To display the script's list of options and their descriptions:
                         traceback when there is an exception. (default: False)
 
 Edit a configuration file:
+
   -e cfg_name, --edit cfg_name   Edit a configuration file. Provide **log_cfg**
                                  for the logging config file or **cfg** for the
                                  main config file. (default: None)
