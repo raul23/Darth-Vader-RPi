@@ -195,6 +195,8 @@ class SoundWrapper:
 
     Parameters
     ----------
+    sound_id : str
+        TODO
     sound_name : str
         Name of the sound file.
     sound_filepath : str
@@ -216,8 +218,9 @@ class SoundWrapper:
 
     """
 
-    def __init__(self, sound_name, sound_filepath, channel_id,
+    def __init__(self, sound_id, sound_name, sound_filepath, channel_id,
                  play_opening=False, play_closing=False):
+        self.sound_id = sound_id
         self.sound_name = sound_name
         self.sound_filepath = sound_filepath
         self.channel_id = channel_id
@@ -468,33 +471,41 @@ def activate_dv(main_cfg):
         GPIO.setwarnings(False)
         # Setup LEDs and buttons
         for gpio_ch in main_cfg['gpio_channels']:
-            if gpio_ch['channel_name'].endswith("_led"):
+            if gpio_ch['channel_id'].endswith("_led"):
                 # LEDs
                 GPIO.setup(gpio_ch['channel_number'], GPIO.OUT)
             else:
                 # Buttons
                 GPIO.setup(gpio_ch['channel_number'], GPIO.IN,
                            pull_up_down=GPIO.PUD_UP)
-            gpio_channels[gpio_ch['channel_name']] = gpio_ch['channel_number']
+            gpio_channels[gpio_ch['channel_id']] = {
+                'channel_number': gpio_ch['channel_number'],
+                'channel_name': gpio_ch['channel_name'],
+                'key': gpio_ch.get('key'),
+                'led_symbol': gpio_ch.get('led_symbols')
+            }
 
         ### Sound
         # Create separate channel
         # Ref.: stackoverflow.com/a/59742418
         audio_channels = main_cfg['audio_channels']
         for ch_dict in audio_channels:
-            channel = pygame.mixer.Channel(ch_dict['audio_channel_id'])
+            channel = pygame.mixer.Channel(ch_dict['channel_id'])
             channel.set_volume(ch_dict['volume'])
 
         sounds_dir = os.path.expanduser(main_cfg['sounds_directory'])
-        logger.info("Loading sound effects...")
 
+        logger.info("")
         # Load sounds from cfg
         for sound_type in ['quotes', 'songs', 'sound_effects']:
+            logger.info('Loading {}...'.format(sound_type.replace("_", " ")))
             for sound in main_cfg[sound_type]:
+                sound_id = sound['id']
                 sound_name = sound['name']
-                logger.info("Loading {}".format(sound_name))
+                logger.info('Loading "{}"'.format(sound_name))
                 filepath = os.path.join(sounds_dir, sound['filename'])
                 sw = SoundWrapper(
+                    sound_id=sound_id,
                     sound_name=sound_name,
                     sound_filepath=filepath,
                     channel_id=sound['audio_channel_id'],
@@ -502,19 +513,20 @@ def activate_dv(main_cfg):
                     play_closing=sound.get('play_closing', False))
                 if sound_type == "quotes":
                     loaded_sounds.setdefault("quotes", {})
-                    loaded_sounds['quotes'].setdefault(sound_name, sw)
+                    loaded_sounds['quotes'].setdefault(sound_id, sw)
                 else:
-                    loaded_sounds.setdefault(sound_name, sw)
+                    loaded_sounds.setdefault(sound_id, sw)
                 if sw.play_opening:
                     loops = sound.get('loops', 0)
-                    loaded_sounds[sound_name].play(loops)
+                    loaded_sounds[sound_id].play(loops)
+            logger.info("")
         quotes = list(loaded_sounds['quotes'].values())
         th_slot_leds = ExceptionThread(
             name="thread_slot_leds",
             target=turn_on_slot_leds_sequence,
-            args=(gpio_channels['top_led'],
-                  gpio_channels['middle_led'],
-                  gpio_channels['bottom_led'],
+            args=(gpio_channels['top_led']['channel_number'],
+                  gpio_channels['middle_led']['channel_number'],
+                  gpio_channels['bottom_led']['channel_number'],
                   main_cfg['slot_leds']['sequence'],
                   main_cfg['slot_leds']['delay_subsequences'],
                   main_cfg['slot_leds']['time_leds_on']))
@@ -526,27 +538,28 @@ def activate_dv(main_cfg):
         quote_idx = 0
 
         while True:
-            if not GPIO.input(gpio_channels['lightsaber_button']):
+            if not GPIO.input(gpio_channels['ls_button']['channel_number']):
                 # logger.debug("\n\nButton {} pressed...".format(
                     # lightsaber_button))
                 if pressed_lightsaber:
                     pressed_lightsaber = False
-                    loaded_sounds['lightsaber_retraction_sound'].play()
+                    loaded_sounds['ls_retraction_sound'].play()
                     time.sleep(0.1)
                     turn_off_led(22)
                 else:
                     pressed_lightsaber = True
-                    loaded_sounds['lightsaber_drawing_sound'].play()
-                    loaded_sounds['lightsaber_hum_sound'].play(-1)
+                    loaded_sounds['ls_drawing_sound'].play()
+                    loaded_sounds['ls_hum_sound'].play(-1)
                     time.sleep(0.1)
-                    turn_on_led(gpio_channels['lightsaber_led'])
+                    turn_on_led(gpio_channels['ls_led']['channel_number'])
                 time.sleep(0.2)
-            elif not GPIO.input(gpio_channels['song_button']):
+            elif not GPIO.input(gpio_channels['song_button']['channel_number']):
                 # logger.debug("\n\nButton {} pressed...".format(song_button))
                 loaded_sounds['imperial_march_song'].play()
                 time.sleep(0.2)
-            elif not GPIO.input(gpio_channels['quotes_button']):
-                # logger.debug("\n\nButton {} pressed...".format(quotes_button))
+            elif not GPIO.input(gpio_channels['quotes_button']['channel_number']):
+                logger.debug("\n\nButton {} pressed...".format(
+                    gpio_channels['quotes_button']['channel_name']))
                 quote = quotes[quote_idx % len(quotes)]
                 quote_idx += 1
                 quote.play()
@@ -571,16 +584,16 @@ def activate_dv(main_cfg):
 
     GPIO.setprinting(False)
     if gpio_channels:
-        for channel_name, channel_number in gpio_channels.items():
-            if channel_name.endswith("_led"):
-                turn_off_led(channel_number)
+        for channel_id, channel_info in gpio_channels.items():
+            if channel_id.endswith("_led"):
+                turn_off_led(channel_info['channel_number'])
     if th_slot_leds:
         logger.debug(_add_spaces_to_msg("Stopping thread ..."))
         th_slot_leds.do_run = False
         th_slot_leds.join()
         logger.debug(_add_spaces_to_msg("Thread stopped: {}".format(th_slot_leds.name)))
     for ch in main_cfg['audio_channels']:
-        pygame.mixer.Channel(ch['audio_channel_id']).stop()
+        pygame.mixer.Channel(ch['channel_id']).stop()
     logger.info(_add_spaces_to_msg("Cleanup..."))
     GPIO.cleanup()
 
