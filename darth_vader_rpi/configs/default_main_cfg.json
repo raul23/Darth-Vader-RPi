@@ -60,12 +60,12 @@
     },
     {
       "channel_id": 1,
-      "name": "song_and_quotes",
+      "channel_name": "song_and_quotes",
       "volume": 1.0
     },
     {
       "channel_id": 2,
-      "name": "lightsaber_and_closing_sounds",
+      "channel_name": "lightsaber_and_closing_sounds",
       "volume": 1.0
     }
   ],
