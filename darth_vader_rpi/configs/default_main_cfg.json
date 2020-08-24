@@ -7,41 +7,41 @@
 
   "gpio_channels": [
     {
+      "channel_id": "ls_button",
       "channel_name": "lightsaber_button",
-      "display_name": "lightsaber_button",
       "channel_number": 23,
       "key": "cmd"
     },
     {
+      "channel_id": "song_button",
       "channel_name": "song_button",
-      "display_name": "song_button",
       "channel_number": 24,
       "key": "alt"
     },
     {
+      "channel_id": "quotes_button",
       "channel_name": "quotes_button",
-      "display_name": "quotes_button",
       "channel_number": 25,
       "key": "alt_r"
     },
     {
-      "channel_name": "top_led",
-      "display_name": "top",
+      "channel_id": "top_led",
+      "channel_name": "top",
       "channel_number": 11
     },
     {
-      "channel_name": "middle_led",
-      "display_name": "middle",
+      "channel_id": "middle_led",
+      "channel_name": "middle",
       "channel_number": 9
     },
     {
-      "channel_name": "bottom_led",
-      "display_name": "bottom",
+      "channel_id": "bottom_led",
+      "channel_name": "bottom",
       "channel_number": 10
     },
     {
-      "channel_name": "lightsaber_led",
-      "display_name": "lightsaber",
+      "channel_id": "ls_led",
+      "channel_name": "lightsaber",
       "channel_number": 22
     }
   ],
@@ -54,55 +54,62 @@
 
   "audio_channels": [
     {
-      "name": "breathing_sound",
-      "audio_channel_id": 0,
+      "channel_id": 0,
+      "channel_name": "breathing_sound",
       "volume": 0.2
     },
     {
+      "channel_id": 1,
       "name": "song_and_quotes",
-      "audio_channel_id": 1,
       "volume": 1.0
     },
     {
+      "channel_id": 2,
       "name": "lightsaber_and_closing_sounds",
-      "audio_channel_id": 2,
       "volume": 1.0
     }
   ],
 
   "quotes": [
     {
-      "name": "i_am_your_father",
+      "id": "i_am_your_father",
+      "name": "I am your father",
       "filename": "quote_i_am_your_father.ogg",
       "audio_channel_id": 1
     },
     {
-      "name": "dont_make_me_destroy_you",
+      "id": "dont_make_me_destroy_you",
+      "name": "Don't make me destroy you",
       "filename": "quote_dont_make_me_destroy_you.ogg",
       "audio_channel_id": 1
     },
     {
-      "name": "give_yourself_to_the_dark_side",
+      "id": "give_yourself_to_the_dark_side",
+      "name": "Give yourself to the dark side",
       "filename": "quote_give_yourself_to_the_dark_side.ogg",
       "audio_channel_id": 1
     },
     {
-      "name": "if_you_only_knew_the_power_of_the_dark_side",
+      "id": "if_you_only_knew_the_power_of_the_dark_side",
+      "name": "If you only knew the power of the dark side",
       "filename": "quote_if_you_only_knew_the_power_of_the_dark_side.ogg",
       "audio_channel_id": 1
     },
     {
-      "name": "nooooo",
+      "id": "nooooo",
+      "name": "Nooooo",
       "filename": "quote_nooooo.ogg",
       "audio_channel_id": 1
     },
     {
-      "name": "there_is_no_escape",
+      "id": "there_is_no_escape",
+      "name": "There is no escape",
       "filename": "quote_there_is_no_escape.ogg",
       "audio_channel_id": 1
     },
     {
-      "name": "your_lack_of_faith_is_disturbing",
+      "id": "your_lack_of_faith_is_disturbing",
+      "name": "Your lack of faith is disturbing",
       "filename": "quote_your_lack_of_faith_is_disturbing.ogg",
       "audio_channel_id": 1
     }
@@ -110,7 +117,8 @@
 
   "songs": [
     {
-      "name": "imperial_march_song",
+      "id": "imperial_march_song",
+      "name": "Imperial March song",
       "filename": "song_the_imperial_march.ogg",
       "audio_channel_id": 1
     }
@@ -118,29 +126,34 @@
 
   "sound_effects": [
     {
-      "name": "breathing_sound",
+      "id": "breathing_sound",
+      "name": "Breathing sound",
       "filename": "darth_vader_breathing.ogg",
       "audio_channel_id": 0,
       "play_opening": true,
       "loops": -1
     },
     {
-      "name": "lightsaber_drawing_sound",
+      "id": "ls_drawing_sound",
+      "name": "Lightsaber drawing sound",
       "filename": "lightsaber_drawing_sound.ogg",
       "audio_channel_id": 2
     },
     {
-      "name": "lightsaber_hum_sound",
+      "id": "ls_hum_sound",
+      "name": "Lightsaber hum sound",
       "filename": "lightsaber_hum_sound.ogg",
       "audio_channel_id": 2
     },
     {
-      "name": "lightsaber_retraction_sound",
+      "id": "ls_retraction_sound",
+      "name": "Lightsaber retraction sound",
       "filename": "lightsaber_retraction_sound.ogg",
       "audio_channel_id": 2
     },
     {
-      "name": "closing_sound",
+      "id": "closing_sound",
+      "name": "Nooooo [Closing]",
       "filename": "quote_nooooo.ogg",
       "audio_channel_id": 2,
       "play_closing": false
