@@ -47,8 +47,8 @@
   ],
 
   "slot_leds":{
-    "delay_subsequences": 0.5,
-    "time_leds_on": 1,
+    "delay_between_steps": 0.5,
+    "time_per_step": 1,
     "sequence": "action"
   },
 
