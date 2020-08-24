@@ -7,8 +7,8 @@
 .. _quotes: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L73
 .. _simulation: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L3
 .. _slot_leds: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L49
-.. _songs: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L111
-.. _sound_effects: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L119
+.. _songs: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L118
+.. _sound_effects: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L127
 .. _sounds_directory: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L6
 .. _verbose: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L4
 .. external links
@@ -85,18 +85,18 @@ audio channels with their default volume.
 
    "audio_channels": [
      {
-       "name": "breathing_sound",
-       "audio_channel_id": 0,
+       "channel_id": 0,
+       "channel_name": "breathing_sound",
        "volume": 0.2
      },
      {
+       "channel_id": 1,
        "name": "song_and_quotes",
-       "audio_channel_id": 1,
        "volume": 1.0
      },
      {
+       "channel_id": 2,
        "name": "lightsaber_and_closing_sounds",
-       "audio_channel_id": 2,
        "volume": 1.0
      }
    ],
