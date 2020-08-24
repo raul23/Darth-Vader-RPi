@@ -343,7 +343,7 @@ filename for each audio file is defined with respect to the directory
 .. important::
 
    Don't change the ``id`` property for *songs* and *sound_effects* objects
-   because it is used to uniquely identify the songs and sound effects.
+   because it is used to uniquely identify them.
 
 .. seealso::
 

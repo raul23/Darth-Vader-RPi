@@ -218,9 +218,9 @@ Here is a video of what it looks like in a terminal when running the script
 Here's how the keyboard keys are related **by default** to push buttons
 connected to an RPi:
 
-* ``cmd_left``   -----> lightsaber button
-* ``alt_left``   -----> song button
-* ``alt_right``  -----> quotes button
+   * ``cmd_left``   -----> lightsaber button
+   * ``alt_left``   -----> song button
+   * ``alt_right``  -----> quotes button
 
 Check `Change keymap`_ if you want to change this default key to channel
 mapping.
