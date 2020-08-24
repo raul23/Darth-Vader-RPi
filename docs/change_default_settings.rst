@@ -7,6 +7,7 @@
 .. _quotes: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L73
 .. _sound_effects: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L119
 .. _sounds_directory: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L6
+.. _GPIO channels: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L8
 .. external links
 .. _logging configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_logging_cfg.json
 .. _"Nooooo": https://www.youtube.com/watch?v=ZscVhFvD6iE
@@ -57,7 +58,7 @@ If you want to add more Darth Vader quotes, you have to edit the setting
 Each quote is represented in the configuration file as objects having the
 following properties:
 
-   - ``name``: it will be displayed in the terminal
+   - ``id``: it will be displayed in the terminal
    - ``filename``: it is relative to the directory
      `sounds_directory <main_config.html#sounds-directory-label>`__
    - ``audio_channel_id``: all quotes should be played in **channel 1** as
@@ -71,7 +72,7 @@ Add your quote object to the list in ``quotes``, like in the following example:
 
    "quotes": [
      {
-       "name": "there_is_no_escape",
+       "id": "there_is_no_escape",
        "filename": "quote_there_is_no_escape.ogg",
        "audio_channel_id": 1
      }
@@ -96,17 +97,17 @@ the channel's volume found in the setting `audio_channels`_::
 
    "audio_channels": [
      {
-       "name": "breathing_sound",
+       "id": "breathing_sound",
        "audio_channel_id": 0,
        "volume": 0.2
      },
      {
-       "name": "song_and_quotes",
+       "id": "song_and_quotes",
        "audio_channel_id": 1,
        "volume": 1.0
      },
      {
-       "name": "lightsaber_and_closing_sounds",
+       "id": "lightsaber_and_closing_sounds",
        "audio_channel_id": 2,
        "volume": 1.0
      }
@@ -153,7 +154,7 @@ object. These are the properties you can modify for this object:
 
    "sound_effects": [
      {
-       "name": "closing_sound",
+       "id": "closing_sound",
        "filename": "bye.ogg",
        "audio_channel_id": 2,
        "play_closing": false
@@ -165,10 +166,36 @@ object. These are the properties you can modify for this object:
    - `Mute breathing and closing sounds <#mute-breathing-and-closing-sounds-label>`__
    - The setting `sound_effects <main_config.html#sound-effects-label>`__
 
-.. _change-gpio-channel-names-and-numer-label:
+.. _change-gpio-channel-name-and-number-label:
 
-Change GPIO channel names and number
-====================================
+Change GPIO channel name and number
+===================================
+The `GPIO channels`_ are identified in the terminal by their ``channel_name``
+along with their LED symbols. If ``channel_name`` is not available, then its
+``channel_number`` is shown.
+
+To change a GPIO channel's ``channel_name``, open the configuration file with::
+
+   $ start_dv -e cfg
+
+And edit its ``channel_name`` property, like in the following example.
+
+.. code-block:: python
+   :emphasize-lines: 4
+   :caption: **Example:** changing the ``channel_name`` for the bottom LED
+
+   "gpio_channels": [
+     {
+       "channel_id": "bottom_led",
+       "channel_name": "bottom",
+       "channel_number": 10
+     },
+   ]
+
+.. important::
+
+   Don't change the property ``channel_id`` since it is used to uniquely
+   identify the GPIO channels between them.
 
 .. _change-keymap-label:
 
@@ -201,7 +228,7 @@ The names of keyboard keys that you can use are those specified in the
 
     "gpio_channels": [
       {
-        "channel_name": "quotes_button",
+        "channel_id": "quotes_button",
         "displa_name": "quotes_button",
         "channel_number": 25,
         "key": "shift_r"
@@ -240,8 +267,8 @@ in ``gpio_channels``.
 
     "gpio_channels": [
       {
-         "channel_name": "lightsaber_led",
-         "display_name": "lightsaber",
+         "channel_id": "lightsaber_led",
+         "channel_name": "lightsaber",
          "channel_number": 22,
          "led_symbols": {
            "ON": "\\033[1;31;48m(0)\\033[1;37;0m",
@@ -279,7 +306,7 @@ a ``filename`` property that you can modify.
 
    "sound_effects": [
      {
-       "name": "closing_sound",
+       "id": "closing_sound",
        "filename": "quote_nooooo.ogg",
        "audio_channel_id": 2,
        "play_closing": false
@@ -288,7 +315,7 @@ a ``filename`` property that you can modify.
 
 .. important::
 
-   Don't change the ``name`` property for *songs* and *sound_effects* objects
+   Don't change the ``id`` property for *songs* and *sound_effects* objects
    because it is used to identify the correct audio file to play when some
    event happens.
 

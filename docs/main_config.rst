@@ -27,7 +27,7 @@
 .. _default LED symbols: #default-led-symbols-label
 .. _start_dv: README_docs.html#script-start-dv
 .. _Add Darth Vader quotes: change_default_settings.html#add-darth-vader-quotes
-.. _Change GPIO channel names and number: change_default_settings.html#change-gpio-channel-names-and-number
+.. _Change GPIO channel display name and number: change_default_settings.html#change-gpio-channel-display-name-and-number
 .. _Change keymap: change_default_settings.html#change-keymap-label
 .. _Change LED symbols: change_default_settings.html#change-led-symbols-label
 
@@ -135,12 +135,11 @@ GPIO channels for the following I/O devices are defined:
 
 ``gpio_channels`` lists GPIO channel objects with the following properties:
 
-   - ``channel_name``: this property should **not be modified** because it is
-     used to identify the correct GPIO channel when turning ON/OFF LEDs or
-     checking a button's state
-   - ``display_name``: channel name that will be displayed in the terminal
+   - ``channel_id``: this property should **not be modified** because it is
+     used to identify the GPIO channels between them
+   - ``channel_name``: channel name that will be displayed in the terminal
      along with the LED symbol. By default, the channel number is displayed if
-     ``display_name`` is not given
+     ``channel_name`` is not given
    - ``channel_number``: identifies the GPIO pin based on the numbering system
      you have specified (`BOARD` or `BCM`)
    - ``key``: only defined for button objects. It specifies the mapping between
@@ -152,8 +151,8 @@ GPIO channels for the following I/O devices are defined:
          :caption: **Example:** changing keymap for the Song push button
 
           {
+            "channel_id": "song_button",
             "channel_name": "song_button",
-            "display_name": "song_button",
             "channel_number": 24,
             "key": "shift_r"
           }
@@ -168,8 +167,8 @@ GPIO channels for the following I/O devices are defined:
                    lightsaber LED
 
           {
-            "channel_name": "lightsaber_led",
-            "display_name": "lightsaber",
+            "channel_id": "lightsaber_led",
+            "channel_name": "lightsaber",
             "channel_number": 22,
             "led_symbols": {
               "ON": "\\033[1;31;48m(0)\\033[1;37;0m",
@@ -201,7 +200,7 @@ ON/OFF when the corresponding push button (or ``cmd`` key) is pressed.
 
 .. seealso::
 
-   - `Change GPIO channel names and number`_
+   - `Change GPIO channel display name and number`_
    - `Change keymap`_
    - `Change LED symbols`_
 
@@ -273,7 +272,7 @@ By default, two movie lines are included:
 Each quote is represented in the configuration file as objects having the
 following properties:
 
-   - ``name``: it will be displayed in the terminal
+   - ``id``: it will be displayed in the terminal
    - ``filename``: it is relative to the directory
      `sounds_directory <#sounds-directory-label>`__
    - ``audio_channel_id``: all quotes should be played in **channel 1** as
@@ -477,7 +476,7 @@ sounds:
 
 ``sound_effects`` takes a list of sound objects having the following properties:
 
-   - ``name``: name of the sound which will be displayed in the terminal
+   - ``id``: name of the sound which will be displayed in the terminal
    - ``filename``: relative to the directory
      `sounds_directory <#sounds-directory-label>`__
    - ``audio_channel_id``: the audio channel used for playing the sound. See
