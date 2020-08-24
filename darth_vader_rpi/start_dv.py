@@ -538,20 +538,20 @@ def activate_dv(main_cfg):
         quote_idx = 0
 
         while True:
-            if not GPIO.input(gpio_channels['ls_button']['channel_number']):
+            if not GPIO.input(gpio_channels['lightsaber_button']['channel_number']):
                 # logger.debug("\n\nButton {} pressed...".format(
                     # lightsaber_button))
                 if pressed_lightsaber:
                     pressed_lightsaber = False
-                    loaded_sounds['ls_retraction_sound'].play()
+                    loaded_sounds['lightsaber_retraction_sound'].play()
                     time.sleep(0.1)
                     turn_off_led(22)
                 else:
                     pressed_lightsaber = True
-                    loaded_sounds['ls_drawing_sound'].play()
-                    loaded_sounds['ls_hum_sound'].play(-1)
+                    loaded_sounds['lightsaber_drawing_sound'].play()
+                    loaded_sounds['lightsaber_hum_sound'].play(-1)
                     time.sleep(0.1)
-                    turn_on_led(gpio_channels['ls_led']['channel_number'])
+                    turn_on_led(gpio_channels['lightsaber_led']['channel_number'])
                 time.sleep(0.2)
             elif not GPIO.input(gpio_channels['song_button']['channel_number']):
                 # logger.debug("\n\nButton {} pressed...".format(song_button))
