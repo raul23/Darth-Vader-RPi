@@ -795,6 +795,7 @@ def main():
     # NOTE: if quiet and verbose are both activated, only quiet will have an
     # effect
     if main_cfg_dict['quiet']:
+        # TODO: disable logging completely? even error messages?
         logger.disabled = True
     else:
         # Setup logger
