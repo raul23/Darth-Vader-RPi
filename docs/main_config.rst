@@ -99,12 +99,12 @@ audio channels with their default volume.
      },
      {
        "channel_id": 1,
-       "name": "song_and_quotes",
+       "channel_name": "song_and_quotes",
        "volume": 1.0
      },
      {
        "channel_id": 2,
-       "name": "lightsaber_and_closing_sounds",
+       "channel_name": "lightsaber_and_closing_sounds",
        "volume": 1.0
      }
    ],
@@ -137,7 +137,7 @@ GPIO channels for the following I/O devices are defined:
    - **Song button**: when pressed it plays the *Imperial March* song
    - **Quotes button**: when pressed it plays one of Darth Vader quotes
    - **Slot LEDs**: consist of three LEDs referred to as *Top*, *Middle*, and
-     *Top* LEDs and are found on Darth Vader's chest control box
+     *Bottom* LEDs and are found on Darth Vader's chest control box
    - **Lightsaber LED**: when the lightsaber button is pressed, this LED is
      turned ON/OFF
 
@@ -145,9 +145,9 @@ GPIO channels for the following I/O devices are defined:
 
    - ``channel_id``: this property should **not be modified** because it is
      used to uniquely identify the GPIO channels
-   - ``channel_name``: channel name that will be displayed in the terminal
-     along with the LED symbol. By default, the channel number is displayed if
-     ``channel_name`` is not given
+   - ``channel_name``: will be displayed in the terminal along with the LED
+     symbol. By default, the channel number is displayed if ``channel_name`` is
+     not given
    - ``channel_number``: identifies the GPIO pin based on the numbering system
      you have specified (`BOARD` or `BCM`)
    - ``key``: only defined for button objects. It specifies the mapping between
@@ -291,7 +291,7 @@ following properties:
      explained in `audio_channels <#audio-channels-label>`__
 
 .. code-block:: python
-   :emphasize-lines: 3-5, 8-10
+   :emphasize-lines: 3-6, 8-12
    :caption: **Example:** two Darth Vader quotes
 
     "quotes": [
@@ -352,7 +352,7 @@ This flag can also be set directly through the script's command-line option
 
 ``slot_leds``
 ^^^^^^^^^^^^^
-Three LEDs (labeled as *bottom*, *middle*, and *top*) illuminate the slots in
+Three LEDs (labeled as *top*, *middle*, and *top*) illuminate the slots in
 Darth Vader's chest control box.
 
 The setting `slot_leds`_ in the configuration file defines the sequence the
@@ -362,25 +362,25 @@ different pattern than if he was angry.
 
 ``slot_leds`` is an object that takes the following properties:
 
-   - ``delay_subsequences``: delay in seconds between subsequences of LEDs, i.e.
-     between each step in the sequence
-   - ``time_leds_on``: time in seconds the LEDs will be turned on at a time
-   - ``sequence``: the name of the sequence which can be either *"action"*,
-     *"calm"* or a `custom sequence <#custom-sequence-label>`__
+   - ``delay_between_steps``: delay in seconds between each step in the sequence
+   - ``time_per_step``: time in seconds each step will last
+   - ``sequence``: the type of the sequence which can be either *"action"*,
+     *"calm"* or a `custom sequence <#custom-sequence-label>`__. The sequence
+     will keep on repeating until the script exits
 
 .. code-block:: python
    :caption: **Example:** a slot_leds object with the calm sequence
 
       "slot_leds":{
-        "delay_subsequences": 0.5,
-        "time_leds_on": 1,
+        "delay_between_steps": 0.5,
+        "time_per_step": 1,
         "sequence": "calm"
       },
 
 .. _custom-sequence-label:
 
 The user can also provide its own sequence by using a list of LED labels
-{*'top'*, *'midddle'*, *'bottom'*} arranged in a sequence specifying the
+{*'top'*, *'middle'*, *'bottom'*} arranged in a sequence specifying the
 order the slot LEDs should turn ON/OFF.
 
 **Example:** custom slot LEDs sequence
@@ -400,6 +400,10 @@ This simple sequence will turn ON/OFF the slot LEDs in this order::
   2. All LEDs turned OFF
   3. middle LED turned ON
   4. All LEDs turned OFF
+
+Each step in the sequence will lasts for ``time_per_step`` seconds and there will
+be a delay of ``delay_between_steps`` seconds between each step in the sequence.
+And the whole sequence will keep on repeating until the script exits.
 
 .. note::
 
@@ -445,7 +449,7 @@ This simple sequence will turn ON/OFF the slot LEDs in this order::
 
 .. note::
 
-   The default sequences of slot LEDs were obtained from
+   The default sequences of slot LEDs were obtained from this YouTube video:
    `Empire Strikes Back chest box light sequence`_.
 
 .. seealso::
@@ -527,12 +531,13 @@ sounds:
      `audio_channels <#audio-channels-label>`__ to know what channel is used for
      each type of sounds
    - ``mute``: only defined for the breathing and closing sounds. If set to
-     *true*, the sound will not be played. Otherwise, it will be played.
-   - ``loops``: number of times the sound should be repeated. If set to -1, it
-     will be repeated indefinitely
+     *true*, the sound will not be played
+   - ``loops``: only defined for the breathing sound. It is the number of times
+     the sound should be repeated. If set to -1, it will be repeated
+     indefinitely
 
 .. code-block:: python
-   :emphasize-lines: 3, 5, 10, 12
+   :emphasize-lines: 6, 14
    :caption: **Example:** two sound effects playing in different audio channels
 
       "sound_effects": [
@@ -562,6 +567,7 @@ sounds:
 
 .. seealso::
 
+   - The setting `audio_channels <#audio-channels-label>`__
    - `Change closing sound <change_default_settings.html#change-closing-sound-label>`__
    - `Change paths to audio files <change_default_settings.html#change-paths-to-audio-files-label>`__
    - `Mute breathing sound <change_default_settings.html#mute-breathing-sound-label>`__

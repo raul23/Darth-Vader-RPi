@@ -29,8 +29,8 @@ Change default settings
 
 Important tips
 ==============
-- This is the command to edit the configuration file with the **default** text
-  editor::
+- This is the command to edit the `configuration file`_ with the **default**
+  text editor::
 
    $ start_dv -e cfg
 
@@ -201,7 +201,7 @@ And edit its properties ``channel_name`` and ``channel_number``, like in the
 following example.
 
 .. code-block:: python
-   :emphasize-lines: 4
+   :emphasize-lines: 4-5
    :caption: **Example:** changing the ``channel_name`` and ``channel_number``
              for the bottom LED
 
@@ -347,6 +347,8 @@ filename for each audio file is defined with respect to the directory
 
 .. seealso::
 
+   - The setting `quotes_directory <main_config.html#quotes-label>`__
+   - The setting `songs <main_config.html#songs-label>`__
    - The setting `sound_effects <main_config.html#sound-effects-label>`__
    - The setting `sounds_directory <main_config.html#sounds-directory-label>`__
 
@@ -362,9 +364,9 @@ To change the default sequence, open the configuration file::
    $ start_dv -e cfg
 
 The ``slot_leds`` object defines the property ``sequence`` which can take a
-string value (*action* or *calm*) or a custom sequence.
+string value ('*action*' or '*calm*') or a custom sequence.
 
-The custom sequence consists of a list of LED labels {*'top'*, *'midddle'*,
+The custom sequence consists of a list of LED labels {*'top'*, *'middle'*,
 *'bottom'*} arranged in a sequence specifying the order the slot LEDs should
 turn ON/OFF.
 
@@ -372,8 +374,8 @@ turn ON/OFF.
    :caption: **Example:** a slot_leds object with the calm sequence
 
       "slot_leds":{
-        "delay_subsequences": 0.5,
-        "time_leds_on": 1,
+        "delay_between_steps": 0.5,
+        "time_per_step": 1,
         "sequence": "calm"
       },
 
@@ -381,8 +383,8 @@ turn ON/OFF.
    :caption: **Example:** a slot_leds object with a custom sequence
 
       "slot_leds":{
-        "delay_subsequences": 0.5,
-        "time_leds_on": 1,
+        "delay_between_steps": 0.5,
+        "time_per_step": 1,
         "sequence":[
           ["top", "bottom"],
           [],
@@ -390,6 +392,18 @@ turn ON/OFF.
           []
         ]
       },
+
+This simple custom sequence will turn ON/OFF the slot LEDs in this order::
+
+  1. top + bottom LEDs turned ON
+  2. All LEDs turned OFF
+  3. middle LED turned ON
+  4. All LEDs turned OFF
+
+Each step in the sequence will lasts for ``time_per_step`` seconds and there will
+be a delay of ``delay_between_steps`` seconds between each step in the sequence.
+And the whole sequence will keep on repeating until the script exits by
+pressing ``ctrl`` + ``c``.
 
 .. seealso::
 
@@ -409,7 +423,7 @@ Set the *breathing_sound* object's ``mute`` to *false*.
 
 .. code-block:: python
    :emphasize-lines: 7
-   :caption: **Example:** Mute breathing sound
+   :caption: **Example:** Mute the breathing sound
 
       "sound_effects": [
         {
@@ -447,8 +461,8 @@ able to hear sounds and interact with the push buttons or keyboard.
 
 .. important::
 
-   if ``quiet`` and ``verbose`` are both activated, only ``quiet`` will have an
-   effect.
+   if ``quiet`` and ``verbose`` are both activated at the same time, only
+   ``quiet`` will have an effect.
 
 .. seealso::
 

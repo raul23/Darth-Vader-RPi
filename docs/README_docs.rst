@@ -3,6 +3,7 @@
 .. _default values: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L1
 .. external links
 .. _pygame: https://www.pygame.org/
+.. _pynput: https://pynput.readthedocs.io
 .. _Darth-Vader-RPi documentation: http://darth-vader-rpi.rtfd.io/
 .. _Darth-Vader-RPi GitHub: https://github.com/raul23/Darth-Vader-RPi
 .. TODO: test the following URL
@@ -11,11 +12,14 @@
 .. _Imperial March song by Jacob Townsend: https://soundcloud.com/jacobtownsend1/imperial-march
 .. _"Nooooo": https://www.youtube.com/watch?v=ZscVhFvD6iE
 .. _RPi.GPIO: https://pypi.org/project/RPi.GPIO/
-.. _SimulRPi: https://github.com/raul23/SimulRPi
+.. TODO: SimulRPi points to PyPI or github?
+.. _SimulRPi: https://pypi.org/project/SimulRPi/
 .. _Empire Strikes Back chest box light sequence: https://youtu.be/E2J_xl2MbGU?t=333
 .. internal links
 .. TODO: next reference might not work in GitHub
 .. _closing sound: change_default_settings.html#change-closing-sound-label
+.. _installed: #installation-instructions-label
+.. _start_dv: #script-start-dv
 .. _test the program on your own computer: #simulating-on-your-computer
 .. _Add Darth Vader quotes: change_default_settings.html#add-darth-vader-quotes-label
 .. _Change default settings: change_default_settings.html
@@ -59,8 +63,8 @@ playing sounds such as some of his famous quotes.
    If you don't have an RPi, don't worry. You can still `test the program on
    your own computer`_ because the package ``darth_vader_rpi`` uses the library
    `SimulRPi`_ to simulate I/O devices connected to an RPi such as LEDs and
-   push buttons by blinking small circles on the terminal and playing sounds
-   when a keyboard key is pressed. Almost like testing with a real RPi!
+   push buttons by blinking red dots on the terminal and playing sounds when a
+   keyboard key is pressed. Almost like testing with a real RPi!
 
    **Disclaimer:** I also wrote the `SimulRPi`_ library
 
@@ -81,7 +85,7 @@ control the following sounds:
 #. The lightsaber drawing and retraction sounds and its illumination
 
 His iconic breathing sound plays in the background indefinitely almost as soon
-as the RPi is run with the script ``start_dv``.
+as the RPi is run with the script `start_dv`_.
 
 .. raw:: html
 
@@ -104,7 +108,7 @@ Here's how the various LEDs and push buttons are connected to the Raspberry Pi:
 .. TODO: check line number in URL
 
 * The lightsaber is illuminated by 3 LEDs connected in parallel
-* The *Bottom*, *Middle*, and *Top* LEDs illuminate the slots in Darth Vader's
+* The *Top*, *Middle*, and *Bottom* LEDs illuminate the slots in Darth Vader's
   chest control box. They blink in a specific sequence as specified in the
   `configuration file <https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L52>`__.
   See `Change slot LEDs sequence`_ to know how to change this sequence.
@@ -116,7 +120,7 @@ Here's how the various LEDs and push buttons are connected to the Raspberry Pi:
   **NOTE:** the *Lightsaber button* can be pressed while the *Song button* or
   the *Quotes button* is playing audio since they use different channels.
 * The *Song button* plays the `Imperial March song by Jacob Townsend`_
-* The *Quotes button* plays a famous Darth Vader quotes when pressed. For
+* The *Quotes button* plays famous Darth Vader quotes when pressed. For
   testing purposes, the ``darth_vader_rpi`` package comes with two movie lines:
 
     * `"I am your father"`_
@@ -127,25 +131,33 @@ Here's how the various LEDs and push buttons are connected to the Raspberry Pi:
 
 Dependencies
 ============
+.. TODO: check version for SimulRPi
+
 * **Platforms:** macOS, Linux
 * **Python**: 3.5, 3.6, 3.7, 3.8
 * **Packages**
 
   * ``pygame``>=1.9.6: for playing sounds
-  * ``SimulRPi`` >=0.0.1a0: for partly faking `RPI.GPIO`_ and simulating I/O
+  * ``SimulRPi`` >=0.1.0a0: for partly faking `RPI.GPIO`_ and simulating I/O
     devices connected to an RPi such as LEDs and push buttons in case that you
     don't have access to an RPi. See `SimulRPi`_ for more info about this
     library.
 
+.. _installation-instructions-label:
+
 Installation instructions
 =========================
+.. TODO: add installation instructions
 
 Usage
 =====
 Script ``start_dv``
 -------------------
-Once you install ``darth_vader_rpi``, you should have access to the script
-``start_dv`` which turns on LEDs and plays sound effects on a Raspberry Pi.
+.. TODO: test script on RPi
+
+Once the ``darth_vader_rpi`` package is `installed`_, you should have access to
+the script ``start_dv`` which turns on LEDs and plays sound effects on a
+Raspberry Pi (RPi).
 
 Run the script on your RPi with `default values`_ for the GPIO channels and other
 settings::
@@ -161,7 +173,7 @@ If you want to test the script on your computer (use the flag **-s**)::
    Both previous commands will use the default values from the
    `configuration file`_ (e.g GPIO channel numbers, channel volume).
 
-   Check `Change default settings`_ on how to modify these default settings.
+   Check `Change default settings`_ on how to modify these values.
 
 .. important::
 
@@ -197,12 +209,12 @@ Simulating on your computer
 If you don't have access to a Raspberry Pi (RPi) and want to try out the script
 ``start_dv``, you can run the script with the flag **-s**. It will make use of
 the library `SimulRPi`_ to simulate LEDs and push buttons connected to an RPi
-by blinking red circles on the terminal and monitoring pressed keyboard keys::
+by blinking red dots in the terminal and monitoring pressed keyboard keys::
 
    $ start_dv -s
 
 **NOTE:** the last command makes use of default values. See
-`Change default settings`_ on how to change these settings.
+`Change default settings`_ on how to change these values.
 
 Here is a video of what it looks like in a terminal when running the script
 ``start_dv`` on a computer instead of an RPi:
@@ -240,11 +252,13 @@ References
 * `pygame`_: package used for playing sounds
 * `RPI.GPIO`_: a module to control RPi GPIO channels
 * `SimulRPi`_: package that partly fakes ``RPi.GPIO`` and simulates some I/O
-  devices on a Raspberry Pi
+  devices on a Raspberry Pi. It makes use of the library `pynput`_ for
+  monitoring the keyboard for any pressed key.
 
 Credits
 =======
 .. TODO: specify not used anymore for music
+.. TODO: specify that you trim the 4 (?) seconds of the start of the Imperial March song
 
 - **Darth Vader quotes:**
 
