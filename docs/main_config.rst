@@ -33,7 +33,7 @@
 
 The main configuration file
 ===========================
-The default settings used by the script ``start_dv`` are found in the
+The default settings used by the script `start_dv`_ are found in the
 `main configuration file`_. It is referred to as *main* because there is another
 config file you could edit, the `logging configuration file`_.
 
@@ -136,7 +136,7 @@ GPIO channels for the following I/O devices are defined:
 ``gpio_channels`` lists GPIO channel objects with the following properties:
 
    - ``channel_id``: this property should **not be modified** because it is
-     used to identify the GPIO channels between them
+     used to uniquely identify the GPIO channels
    - ``channel_name``: channel name that will be displayed in the terminal
      along with the LED symbol. By default, the channel number is displayed if
      ``channel_name`` is not given
@@ -272,7 +272,8 @@ By default, two movie lines are included:
 Each quote is represented in the configuration file as objects having the
 following properties:
 
-   - ``id``: it will be displayed in the terminal
+   - ``id``: unique identifier
+   - ``name``: it will be displayed in the terminal
    - ``filename``: it is relative to the directory
      `sounds_directory <#sounds-directory-label>`__
    - ``audio_channel_id``: all quotes should be played in **channel 1** as
@@ -284,12 +285,14 @@ following properties:
 
     "quotes": [
       {
-        "name": "dont_make_me_destroy_you",
+        "id": "dont_make_me_destroy_you",
+        "name": "Don't make me destroy you",
         "filename": "quote_dont_make_me_destroy_you.ogg",
         "audio_channel_id": 1
       },
       {
-        "name": "give_yourself_to_the_dark_side",
+        "id": "give_yourself_to_the_dark_side",
+        "name": "Give yourself to the dark side",
         "filename": "quote_give_yourself_to_the_dark_side.ogg",
         "audio_channel_id": 1
       }
@@ -348,16 +351,16 @@ different pattern than if he was angry.
    - ``delay_subsequences``: delay in seconds between subsequences of LEDs, i.e.
      between each step in the sequence
    - ``time_leds_on``: time in seconds the LEDs will be turned on
-   - ``sequence``: the name of the sequence which can be either *"action"*
-     or *"calm"* or a `custom sequence <#custom-sequence-label>`__
+   - ``sequence``: the name of the sequence which can be either *"action"*,
+     *"calm"* or a `custom sequence <#custom-sequence-label>`__
 
 .. code-block:: python
-   :caption: **Example:** a slot_leds object with the action sequence
+   :caption: **Example:** a slot_leds object with the calm sequence
 
       "slot_leds":{
         "delay_subsequences": 0.5,
         "time_leds_on": 1,
-        "sequence": "action"
+        "sequence": "calm"
       },
 
 .. _custom-sequence-label:
@@ -443,11 +446,26 @@ At the moment, only the `Imperial March song by Jacob Townsend`_ is supported.
 The setting ``songs`` takes a list of song objects having the following
 properties:
 
+   - ``id``: this property should **not be modified** because it is
+     used to uniquely identify the songs
    - ``name``: the name of the song which will be shown in the terminal
    - ``filename``: is relative to the directory
      `sounds_directory <#sounds-directory-label>`__
    - ``audio_channel_id``: all songs should be played in **channel 1** as
      explained in `audio_channels <#audio-channels-label>`__
+
+.. code-block:: python
+   :emphasize-lines: 4
+   :caption: The **Imperial March** song playing in audio channel #1
+
+      "songs": [
+        {
+          "id": "imperial_march_song",
+          "name": "Imperial March song",
+          "filename": "song_the_imperial_march.ogg",
+          "audio_channel_id": 1
+        }
+      ],
 
 .. important::
 
@@ -476,7 +494,9 @@ sounds:
 
 ``sound_effects`` takes a list of sound objects having the following properties:
 
-   - ``id``: name of the sound which will be displayed in the terminal
+   - ``id``: this property should **not be modified** because it is
+     used to uniquely identify the sound effects
+   - ``name``: name of the sound which will be displayed in the terminal
    - ``filename``: relative to the directory
      `sounds_directory <#sounds-directory-label>`__
    - ``audio_channel_id``: the audio channel used for playing the sound. See
@@ -490,24 +510,33 @@ sounds:
      *true*, the sound will play at the end of the script.
 
 .. code-block:: python
-   :emphasize-lines: 3, 10
-   :caption: **Example:** two sound effects
+   :emphasize-lines: 3, 5, 10, 12
+   :caption: **Example:** two sound effects playing in different audio channels
 
       "sound_effects": [
         {
-          "name": "breathing_sound",
+          "id": "breathing_sound",
+          "name": "Breathing sound",
           "filename": "darth_vader_breathing.ogg",
           "audio_channel_id": 0,
           "play_opening": true,
           "loops": -1
         },
         {
-          "name": "closing_sound",
+          "id": "closing_sound",
+          "name": "Nooooo [Closing]",
           "filename": "quote_nooooo.ogg",
           "audio_channel_id": 2,
           "play_closing": false
         }
       ]
+
+.. important::
+
+   The breathing sound should use channel 0, while the other sound effects
+   should use channel 2. Hence, the breathing sound can be heard in
+   the background while a sound effect is also being played (e.g. the drawing
+   sound of the lightsaber). See `audio_channels <#audio-channels-label>`__.
 
 .. _sounds_directory-label:
 
@@ -520,16 +549,17 @@ All the audio filenames found in the configuration file are defined relative to
 ``sounds_directory``.
 
 .. code-block:: python
-   :emphasize-lines: 4
+   :emphasize-lines: 5
    :caption: **Example:** Filename for the breathing-sound audio file
 
    "sound_effects": [
      {
-       "name": "breathing_sound",
-        "filename": "darth_vader_breathing.ogg",
-        "audio_channel_id": 0,
-        "play_opening": true,
-        "loops": -1
+       "id": "breathing_sound",
+       "name": "Breathing sound",
+       "filename": "darth_vader_breathing.ogg",
+       "audio_channel_id": 0,
+       "play_opening": true,
+       "loops": -1
      }
    ]
 

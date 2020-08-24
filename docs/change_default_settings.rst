@@ -35,16 +35,12 @@ Important tips
 
    $ start_dv -e cfg -a APP_NAME
 
-- To end the script ``start_dv``, press ``ctrl`` + ``c``
+- To end the script `start_dv`_, press ``ctrl`` + ``c``
 - When adding audio files, don't use *mp3* as the file format. Instead, use
   *ogg* (compressed) or *wav* (uncompressed). The reason is that *mp3* won't
   work well with pygame's simultaneous playback capability.
 
   **Reference:** `stackoverflow <https://stackoverflow.com/a/59742418>`__
-
-.. seealso::
-
-     The script `start_dv`_
 
 .. _add-darth-vader-quotes-label:
 
@@ -67,12 +63,13 @@ following properties:
 Add your quote object to the list in ``quotes``, like in the following example:
 
 .. code-block:: python
-   :emphasize-lines: 2-6
+   :emphasize-lines: 3-6
    :caption: **Example:** adding a new quote
 
    "quotes": [
      {
        "id": "there_is_no_escape",
+       "name": "There is no escape",
        "filename": "quote_there_is_no_escape.ogg",
        "audio_channel_id": 1
      }
@@ -97,18 +94,18 @@ the channel's volume found in the setting `audio_channels`_::
 
    "audio_channels": [
      {
-       "id": "breathing_sound",
-       "audio_channel_id": 0,
+       "channel_id": 0,
+       "channel_name": "breathing_sound",
        "volume": 0.2
      },
      {
-       "id": "song_and_quotes",
-       "audio_channel_id": 1,
+       "channel_id": 1,
+       "name": "song_and_quotes",
        "volume": 1.0
      },
      {
-       "id": "lightsaber_and_closing_sounds",
-       "audio_channel_id": 2,
+       "channel_id": 2,
+       "name": "lightsaber_and_closing_sounds",
        "volume": 1.0
      }
    ],
@@ -132,8 +129,9 @@ What each channel controls:
 
 Change closing sound
 ====================
-When the script is exiting after the user presses ``ctrl`` + ``c``, a sound is
-produced which by default is the `"Nooooo"`_ quote.
+When the script ``start_dv`` is exiting after the user presses
+``ctrl`` + ``c``, a sound is produced. By default, no closing sound is produced
+and it is the `"Nooooo"`_ quote.
 
 To change the default closing sound, edit the setting `sound_effects`_ in the
 configuration file which can be opened with::
@@ -149,17 +147,24 @@ object. These are the properties you can modify for this object:
      script is finishing. Otherwise, nothing will be played at the end.
 
 .. code-block:: python
-   :emphasize-lines: 4
+   :emphasize-lines: 5
    :caption: **Example:** choosing another closing sound by changing ``filename``
 
    "sound_effects": [
      {
        "id": "closing_sound",
+       "name": "Nooooo [Closing]",
        "filename": "bye.ogg",
        "audio_channel_id": 2,
-       "play_closing": false
+       "play_closing": true
      }
    ]
+
+.. note::
+
+   By default, the closing sound is not played at the end of the script
+   ``start_dv``. Set its ``play_closing`` to true in order to play the closing
+   sound when the script exits.
 
 .. seealso::
 
@@ -195,7 +200,7 @@ And edit its ``channel_name`` property, like in the following example.
 .. important::
 
    Don't change the property ``channel_id`` since it is used to uniquely
-   identify the GPIO channels between them.
+   identify the GPIO channels.
 
 .. _change-keymap-label:
 
@@ -295,10 +300,10 @@ Change paths to audio files
 The setting `sounds_directory`_ in the configuration file defines the directory
 where all audio files (e.g. quotes) are saved.
 
-The filename for each audio file is defined with respect to the directory
-`sounds_directory <main_config.html#sounds-directory-label>`__. Each audio
-object defined in the settings ``quotes``, ``songs`` and ``sound_effects`` have
-a ``filename`` property that you can modify.
+Each audio object defined in the settings ``quotes``, ``songs`` and
+``sound_effects`` have a ``filename`` property that you can modify. The
+filename for each audio file is defined with respect to the directory
+`sounds_directory <main_config.html#sounds-directory-label>`__.
 
 .. code-block:: python
    :emphasize-lines: 4
@@ -316,8 +321,7 @@ a ``filename`` property that you can modify.
 .. important::
 
    Don't change the ``id`` property for *songs* and *sound_effects* objects
-   because it is used to identify the correct audio file to play when some
-   event happens.
+   because it is used to uniquely identify the songs and sound effects.
 
 .. seealso::
 
