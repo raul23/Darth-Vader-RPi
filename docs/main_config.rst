@@ -27,7 +27,7 @@
 .. _default LED symbols: #default-led-symbols-label
 .. _start_dv: README_docs.html#script-start-dv
 .. _Add Darth Vader quotes: change_default_settings.html#add-darth-vader-quotes
-.. _Change GPIO channel display name and number: change_default_settings.html#change-gpio-channel-display-name-and-number
+.. _Change GPIO channel name and number: change_default_settings.html#change-gpio-channel-name-and-number
 .. _Change keymap: change_default_settings.html#change-keymap-label
 .. _Change LED symbols: change_default_settings.html#change-led-symbols-label
 
@@ -55,6 +55,14 @@ command-line option::
 
 In what follows, you wil find an explanation for each setting found in the
 `main configuration file`_, presented in alphabetic order.
+
+.. important::
+
+   Some of the settings (`quiet <#quiet-label>`__,
+   `simulation <#simulation-label>`__, and `verbose <#verbose-label>`__) in
+   the configuration file can be also set through the script's command-line
+   arguments. In that case, the command-line arguments will override the
+   settings found in the configuration file.
 
 .. seealso::
 
@@ -200,7 +208,7 @@ ON/OFF when the corresponding push button (or ``cmd`` key) is pressed.
 
 .. seealso::
 
-   - `Change GPIO channel display name and number`_
+   - `Change GPIO channel name and number`_
    - `Change keymap`_
    - `Change LED symbols`_
 
@@ -232,6 +240,9 @@ The setting `quiet`_ in the configuration file is a flag (set to *false* by
 default) that allows you to run the script ``start_dv`` without printing anything
 on the terminal, not even the LED symbols when running the simulation nor the
 exceptions are printed.
+
+However, you will still be able to hear sounds and interact with the push
+buttons or keyboard.
 
 .. TODO: exceptions are displayed if happening before setting up logger in start_dv
 
@@ -305,7 +316,10 @@ following properties:
 
 .. seealso::
 
-   `Add Darth Vader quotes`_
+   - The setting `audio_channels <#audio-channels-label>`__
+   - `Add Darth Vader quotes`_
+   - `Change channel volume <change_default_settings.html#change-channel-volume-label>`__
+   - `Change paths to audio files <change_default_settings.html#change-paths-to-audio-files-label>`__
 
 .. _simulation-label:
 
@@ -350,7 +364,7 @@ different pattern than if he was angry.
 
    - ``delay_subsequences``: delay in seconds between subsequences of LEDs, i.e.
      between each step in the sequence
-   - ``time_leds_on``: time in seconds the LEDs will be turned on
+   - ``time_leds_on``: time in seconds the LEDs will be turned on at a time
    - ``sequence``: the name of the sequence which can be either *"action"*,
      *"calm"* or a `custom sequence <#custom-sequence-label>`__
 
@@ -366,8 +380,8 @@ different pattern than if he was angry.
 .. _custom-sequence-label:
 
 The user can also provide its own sequence by using a list of LED labels
-{'top', 'midddle', 'bottom'} arranged in a sequence as to specify the order the
-slot LEDs should turn ON/OFF.
+{*'top'*, *'midddle'*, *'bottom'*} arranged in a sequence specifying the
+order the slot LEDs should turn ON/OFF.
 
 **Example:** custom slot LEDs sequence
 
@@ -434,6 +448,10 @@ This simple sequence will turn ON/OFF the slot LEDs in this order::
    The default sequences of slot LEDs were obtained from
    `Empire Strikes Back chest box light sequence`_.
 
+.. seealso::
+
+   `Change slot LEDs sequence <change_default_settings.html#change-slot-leds-sequence-label>`__
+
 .. _songs-label:
 
 ``songs``
@@ -472,6 +490,12 @@ properties:
    All songs should be played in **channel 1** as explained in
    `audio_channels <#audio-channels-label>`__
 
+.. seealso::
+
+   - The setting `audio_channels <#audio-channels-label>`__
+   - `Change channel volume <change_default_settings.html#change-channel-volume-label>`__
+   - `Change paths to audio files <change_default_settings.html#change-paths-to-audio-files-label>`__
+
 .. _sound-effects-label:
 
 ``sound_effects``
@@ -502,12 +526,10 @@ sounds:
    - ``audio_channel_id``: the audio channel used for playing the sound. See
      `audio_channels <#audio-channels-label>`__ to know what channel is used for
      each type of sounds
-   - ``play_opening``: if set to *true*, the sound will be played at the start of
-     the script
+   - ``mute``: only defined for the breathing and closing sounds. If set to
+     *true*, the sound will not be played. Otherwise, it will be played.
    - ``loops``: number of times the sound should be repeated. If set to -1, it
      will be repeated indefinitely
-   - ``play_closing``: only defined for the *closing_sound* object. If set to
-     *true*, the sound will play at the end of the script.
 
 .. code-block:: python
    :emphasize-lines: 3, 5, 10, 12
@@ -519,7 +541,7 @@ sounds:
           "name": "Breathing sound",
           "filename": "darth_vader_breathing.ogg",
           "audio_channel_id": 0,
-          "play_opening": true,
+          "mute": false,
           "loops": -1
         },
         {
@@ -527,7 +549,7 @@ sounds:
           "name": "Nooooo [Closing]",
           "filename": "quote_nooooo.ogg",
           "audio_channel_id": 2,
-          "play_closing": false
+          "mute": true
         }
       ]
 
@@ -537,6 +559,12 @@ sounds:
    should use channel 2. Hence, the breathing sound can be heard in
    the background while a sound effect is also being played (e.g. the drawing
    sound of the lightsaber). See `audio_channels <#audio-channels-label>`__.
+
+.. seealso::
+
+   - `Change closing sound <change_default_settings.html#change-closing-sound-label>`__
+   - `Change paths to audio files <change_default_settings.html#change-paths-to-audio-files-label>`__
+   - `Mute breathing sound <change_default_settings.html#mute-breathing-sound-label>`__
 
 .. _sounds_directory-label:
 
@@ -558,13 +586,17 @@ All the audio filenames found in the configuration file are defined relative to
        "name": "Breathing sound",
        "filename": "darth_vader_breathing.ogg",
        "audio_channel_id": 0,
-       "play_opening": true,
+       "mute": false,
        "loops": -1
      }
    ]
 
 In this example, the audio file `darth_vader_breathing.ogg` is to be found in
 the directory ``sounds_directory``.
+
+.. seealso::
+
+   `Change paths to audio files <change_default_settings.html#change-paths-to-audio-files-label>`__
 
 .. _verbose-label:
 

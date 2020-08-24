@@ -4,10 +4,13 @@
 .. _closing_sound: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L155
 .. _configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L1
 .. _gpio_channels: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L8
+.. _quiet: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L2
 .. _quotes: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L73
+.. _slot_leds: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L49
 .. _sound_effects: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L127
 .. _sounds_directory: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L6
 .. _GPIO channels: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L8
+.. _verbose: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L4
 .. external links
 .. _logging configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_logging_cfg.json
 .. _"Nooooo": https://www.youtube.com/watch?v=ZscVhFvD6iE
@@ -54,7 +57,8 @@ If you want to add more Darth Vader quotes, you have to edit the setting
 Each quote is represented in the configuration file as objects having the
 following properties:
 
-   - ``id``: it will be displayed in the terminal
+   - ``id``: unique identifier
+   - ``name``: it will be displayed in the terminal
    - ``filename``: it is relative to the directory
      `sounds_directory <main_config.html#sounds-directory-label>`__
    - ``audio_channel_id``: all quotes should be played in **channel 1** as
@@ -77,14 +81,17 @@ Add your quote object to the list in ``quotes``, like in the following example:
 
 .. seealso::
 
-   The setting `quotes <main_config.html#quotes-label>`__
+   - The setting `audio_channels <main_config.html#audio-channels-label>`__
+   - The setting `quotes <main_config.html#quotes-label>`__
+   - `Change channel volume <#change-channel-volume-label>`__
+   - `Change paths to audio files <#change-paths-to-audio-files-label>`__
 
 .. _change-channel-volume-label:
 
 Change channel volume
 =====================
 To change the volume for an audio channel, open the configuration file and edit
-the channel's volume found in the setting `audio_channels`_::
+the channel's ``volume`` found in the setting `audio_channels`_::
 
    $ start_dv -e cfg
 
@@ -141,10 +148,11 @@ configuration file which can be opened with::
 At the end of the list in ``sound_effects``, you will find the `closing_sound`_
 object. These are the properties you can modify for this object:
 
+   - ``name``: name of the sound which will be displayed in the terminal
    - ``filename``: relative to
      `sounds_directory <main_config.html#sounds-directory-label>`__
-   - ``play_closing``: if *true*, the closing sound will be played when the
-     script is finishing. Otherwise, nothing will be played at the end.
+   - ``mute``: if *true*, nothing will be played at the end of the script.
+     Otherwise, the closing sound will be played when the script is finishing.
 
 .. code-block:: python
    :emphasize-lines: 5
@@ -156,20 +164,22 @@ object. These are the properties you can modify for this object:
        "name": "Nooooo [Closing]",
        "filename": "bye.ogg",
        "audio_channel_id": 2,
-       "play_closing": true
+       "mute": false
      }
    ]
 
 .. note::
 
    By default, the closing sound is not played at the end of the script
-   ``start_dv``. Set its ``play_closing`` to true in order to play the closing
-   sound when the script exits.
+   ``start_dv``. Set its property ``mute`` to *false* in order to play the
+   closing sound when the script exits.
 
 .. seealso::
 
-   - `Mute breathing and closing sounds <#mute-breathing-and-closing-sounds-label>`__
+   - The setting `audio_channels <main_config.html#audio-channels-label>`__
    - The setting `sound_effects <main_config.html#sound-effects-label>`__
+   - `Change channel volume <#change-channel-volume-label>`__
+   - `Change paths to audio files <#change-paths-to-audio-files-label>`__
 
 .. _change-gpio-channel-name-and-number-label:
 
@@ -179,21 +189,27 @@ The `GPIO channels`_ are identified in the terminal by their ``channel_name``
 along with their LED symbols. If ``channel_name`` is not available, then its
 ``channel_number`` is shown.
 
-To change a GPIO channel's ``channel_name``, open the configuration file with::
+The ``channel_number`` is the GPIO channel number of a pin used for connecting
+an I/O device (e.g. LED).
+
+To change a GPIO channel's ``channel_name`` and ``channel_number``, open the
+configuration file with::
 
    $ start_dv -e cfg
 
-And edit its ``channel_name`` property, like in the following example.
+And edit its properties ``channel_name`` and ``channel_number``, like in the
+following example.
 
 .. code-block:: python
    :emphasize-lines: 4
-   :caption: **Example:** changing the ``channel_name`` for the bottom LED
+   :caption: **Example:** changing the ``channel_name`` and ``channel_number``
+             for the bottom LED
 
    "gpio_channels": [
      {
        "channel_id": "bottom_led",
-       "channel_name": "bottom",
-       "channel_number": 10
+       "channel_name": "Bottom LED",
+       "channel_number": 15
      },
    ]
 
@@ -201,6 +217,10 @@ And edit its ``channel_name`` property, like in the following example.
 
    Don't change the property ``channel_id`` since it is used to uniquely
    identify the GPIO channels.
+
+.. seealso::
+
+   The setting `gpio_channels <main_config.html#gpio-channels-label>`__
 
 .. _change-keymap-label:
 
@@ -289,8 +309,10 @@ in ``gpio_channels``.
 
 .. seealso::
 
-   - `Change slot LEDs sequence <#change-slot-leds-sequence-label>`__
    - The setting `gpio_channels <main_config.html#gpio-channels-label>`__
+   - `Change slot LEDs sequence <#change-slot-leds-sequence-label>`__
+
+.. _change-paths-to-audio-files-label:
 
 Change paths to audio files
 ===========================
@@ -314,7 +336,7 @@ filename for each audio file is defined with respect to the directory
        "id": "closing_sound",
        "filename": "quote_nooooo.ogg",
        "audio_channel_id": 2,
-       "play_closing": false
+       "mute": false
      }
    ]
 
@@ -325,19 +347,110 @@ filename for each audio file is defined with respect to the directory
 
 .. seealso::
 
-   The setting `sound_effects <main_config.html#sound-effects-label>`__
+   - The setting `sound_effects <main_config.html#sound-effects-label>`__
+   - The setting `sounds_directory <main_config.html#sounds-directory-label>`__
 
 .. _change-slot-leds-sequence-label:
 
 Change slot LEDs sequence
 =========================
+The setting `slot_leds`_ in the configuration file control how the blinking
+pattern of the three slot LEDs in Darth Vader's control box.
 
-.. _mute-breathing-and-closing-sounds-label:
+To change the default sequence, open the configuration file::
 
-Mute breathing and closing sounds
-=================================
+   $ start_dv -e cfg
+
+The ``slot_leds`` object defines the property ``sequence`` which can take a
+string value (*action* or *calm*) or a custom sequence.
+
+The custom sequence consists of a list of LED labels {*'top'*, *'midddle'*,
+*'bottom'*} arranged in a sequence specifying the order the slot LEDs should
+turn ON/OFF.
+
+.. code-block:: python
+   :caption: **Example:** a slot_leds object with the calm sequence
+
+      "slot_leds":{
+        "delay_subsequences": 0.5,
+        "time_leds_on": 1,
+        "sequence": "calm"
+      },
+
+.. code-block:: python
+   :caption: **Example:** a slot_leds object with a custom sequence
+
+      "slot_leds":{
+        "delay_subsequences": 0.5,
+        "time_leds_on": 1,
+        "sequence":[
+          ["top", "bottom"],
+          [],
+          ["middle"],
+          []
+        ]
+      },
+
+.. seealso::
+
+   The setting `slot_leds <main_config.html#slot-leds-label>`__
+
+.. _mute-breathing-sound-label:
+
+Mute breathing sound
+====================
+To mute Darth Vader's breathing sound which plays almost as soon as the
+script ``start_dv`` runs, edit the setting `sound_effects`_ in the
+configuration file which can be opened with::
+
+   $ start_dv -e cfg
+
+Set the *breathing_sound* object's ``mute`` to *false*.
+
+.. code-block:: python
+   :emphasize-lines: 7
+   :caption: **Example:** Mute breathing sound
+
+      "sound_effects": [
+        {
+          "id": "breathing_sound",
+          "name": "Breathing sound",
+          "filename": "darth_vader_breathing.ogg",
+          "audio_channel_id": 0,
+          "mute": false,
+          "loops": -1
+        }
+      ]
+
+.. seealso::
+
+   - The setting `sound_effects <main_config.html#sound-effects-label>`__
+   - `Change channel volume <#change-channel-volume-label>`__
 
 .. _run-script-as-quiet-or-verbose-label:
 
 Run script as quiet or verbose
 ==============================
+To run the script as quiet or verbose, open the configuration file with::
+
+   $ start_dv -e cfg
+
+And set the setting `quiet`_ or `verbose`_ to *true*.
+
+When running the script as ``verbose``, all messages with log level at least
+*DEBUG* will be displayed and when there is an exception, the traceback will be
+shown.
+
+On the other hand, when running the script as ``quiet``, nothing will be
+printed to the terminal, not even error messages. However, you will still be
+able to hear sounds and interact with the push buttons or keyboard.
+
+.. important::
+
+   if ``quiet`` and ``verbose`` are both activated, only ``quiet`` will have an
+   effect.
+
+.. seealso::
+
+   - The setting `quiet <main_config.html#quiet-label>`__
+   - The setting `verbose <main_config.html#verbose-label>`__
