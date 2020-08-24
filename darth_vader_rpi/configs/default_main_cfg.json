@@ -130,7 +130,7 @@
       "name": "Breathing sound",
       "filename": "darth_vader_breathing.ogg",
       "audio_channel_id": 0,
-      "play_opening": true,
+      "mute": false,
       "loops": -1
     },
     {
@@ -156,7 +156,7 @@
       "name": "Nooooo [Closing]",
       "filename": "quote_nooooo.ogg",
       "audio_channel_id": 2,
-      "play_closing": false
+      "mute": true
     }
   ]
 }
