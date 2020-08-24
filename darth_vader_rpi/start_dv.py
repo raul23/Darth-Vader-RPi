@@ -205,9 +205,7 @@ class SoundWrapper:
         Channel id associated with an instance of
         :class:`pygame.mixer.Channel` for controlling playback. It must take an
         :obj:`int` value starting from 0.
-    play_opening : bool
-        TODO
-    play_closing : bool
+    mute : bool, optional
         TODO
 
     .. note::
@@ -219,13 +217,12 @@ class SoundWrapper:
     """
 
     def __init__(self, sound_id, sound_name, sound_filepath, channel_id,
-                 play_opening=False, play_closing=False):
+                 mute=False):
         self.sound_id = sound_id
         self.sound_name = sound_name
         self.sound_filepath = sound_filepath
         self.channel_id = channel_id
-        self.play_opening = play_opening
-        self.play_closing = play_closing
+        self.mute = mute
         self._channel = pygame.mixer.Channel(channel_id)
         # Load sound file
         self._pygame_sound = pygame.mixer.Sound(self.sound_filepath)
@@ -296,7 +293,7 @@ def turn_on_slot_leds_sequence(top_led, middle_led, bottom_led,
     of LEDs blinking in a particular order.
 
     The user can also provide its own `leds_sequence` by using a list of LED
-    labels {'top', 'midddle', 'bottom'} arranged in a sequence as to specify
+    labels {'top', 'midddle', 'bottom'} arranged in a sequence specifying
     the order the slot LEDs should turn on/off, e.g. ``[['top', 'bottom'], [],
     ['middle'], []]`` will turn on/off the slot LEDs in this order::
 
@@ -305,7 +302,7 @@ def turn_on_slot_leds_sequence(top_led, middle_led, bottom_led,
         3. middle LED turned on
         4. All LEDs turned off
 
-    The LEDs will be turned on for `time_leds_on` seconds.
+    The LEDs will be turned on for `time_leds_on` seconds at a time.
 
     There will be a delay of `delay_subsequences` seconds between
     subsequences of LEDs being turned on, i.e. between each step in the
@@ -342,8 +339,8 @@ def turn_on_slot_leds_sequence(top_led, middle_led, bottom_led,
         Delay in seconds between subsequences of LEDs. The default value is 0.4
         seconds.
     time_leds_on : float, optional
-        Time in seconds the LEDs will be turned on. The default value is 0.4
-        seconds.
+        Time in seconds the LEDs will be turned on at a tine. The default value
+        is 0.4 seconds.
 
         .. important::
 
@@ -509,14 +506,13 @@ def activate_dv(main_cfg):
                     sound_name=sound_name,
                     sound_filepath=filepath,
                     channel_id=sound['audio_channel_id'],
-                    play_opening=sound.get('play_opening', False),
-                    play_closing=sound.get('play_closing', False))
+                    mute=sound.get('mute', False))
                 if sound_type == "quotes":
                     loaded_sounds.setdefault("quotes", {})
                     loaded_sounds['quotes'].setdefault(sound_id, sw)
                 else:
                     loaded_sounds.setdefault(sound_id, sw)
-                if sw.play_opening:
+                if sw.sound_id == 'breathing_sound' and not sw.mute:
                     loops = sound.get('loops', 0)
                     loaded_sounds[sound_id].play(loops)
             logger.info("")
@@ -580,7 +576,7 @@ def activate_dv(main_cfg):
     except KeyboardInterrupt:
         logger.info(_add_spaces_to_msg("Exiting..."))
         closing_sound = loaded_sounds.get('closing_sound')
-        if closing_sound and closing_sound.play_closing:
+        if closing_sound and not closing_sound.mute:
             closing_sound.play()
             time.sleep(1)
 
