@@ -354,7 +354,7 @@ filename for each audio file is defined with respect to the directory
 
 Change slot LEDs sequence
 =========================
-The setting `slot_leds`_ in the configuration file control how the blinking
+The setting `slot_leds`_ in the configuration file control the blinking
 pattern of the three slot LEDs in Darth Vader's control box.
 
 To change the default sequence, open the configuration file::
