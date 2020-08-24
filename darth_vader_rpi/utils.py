@@ -4,7 +4,11 @@
 .. _default main configuration file: https://bit.ly/39x8o3e
 
 """
+import codecs
+import json
 import os
+import shlex
+import subprocess
 from collections import namedtuple
 
 from darth_vader_rpi import configs
@@ -91,6 +95,38 @@ def get_cfg_filepath(file_type):
     return os.path.join(get_cfg_dirpath(), filename)
 
 
+def load_json(filepath, encoding='utf8'):
+    """Load JSON data from a file on disk.
+
+    Parameters
+    ----------
+    filepath : str
+        Path to the JSON file which will be read.
+    encoding : str, optional
+        Encoding to be used for opening the JSON file in read mode (the default
+        value is 'utf8').
+
+    Returns
+    -------
+    data
+        Data loaded from the JSON file.
+
+    Raises
+    ------
+    OSError
+        Raised if any I/O related error occurs while reading the file, e.g. the
+        file doesn't exist.
+
+    """
+    try:
+        with codecs.open(filepath, 'r', encoding) as f:
+            data = json.load(f)
+    except OSError:
+        raise
+    else:
+        return data
+
+
 def override_config_with_args(config, parser):
     """Override a config dictionary with arguments from the command-line.
 
@@ -132,3 +168,47 @@ def override_config_with_args(config, parser):
                 config[opt_name] = new_val
                 retval.config_opts_overidden.append((opt_name, old_val, new_val))
     return retval
+
+
+# NOTE: taken from pyutils.genutils
+def run_cmd(cmd, stderr=subprocess.STDOUT):
+    """Run a command with arguments.
+
+    The command is given as a string but the function will split it in order to
+    get a list having the name of the command and its arguments as items.
+
+    Parameters
+    ----------
+    cmd : str
+        Command to be executed, e.g. ::
+
+            open -a TextEdit text.txt
+    stderr
+
+    Returns
+    -------
+    retcode: int
+        Return code which is 0 if the command was successfully completed.
+        Otherwise, the return code is non-zero.
+
+    Raises
+    ------
+    FileNotFoundError
+        TODO command not recognized, e.g. `$ TextEdit {filepath}`
+
+    """
+    try:
+        # `check_call()` takes as input a list. Thus, the string command must
+        # be split to get the command name and its arguments as items of a list.
+        # NOTE: To suppress stdout or stderr, supply a value of DEVNULL
+        #       Ref.: https://bit.ly/35NqiN0
+        """
+        retcode = subprocess.check_call(shlex.split(cmd), stderr=stderr)
+        """
+        result = subprocess.run(shlex.split(cmd), capture_output=True)
+    except subprocess.CalledProcessError as e:
+        return e
+    except FileNotFoundError:
+        raise
+    else:
+        return result
