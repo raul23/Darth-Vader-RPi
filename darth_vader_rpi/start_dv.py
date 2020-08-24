@@ -558,8 +558,10 @@ def activate_dv(main_cfg):
                 loaded_sounds['imperial_march_song'].play()
                 time.sleep(0.2)
             elif not GPIO.input(gpio_channels['quotes_button']['channel_number']):
+                """
                 logger.debug("\n\nButton {} pressed...".format(
                     gpio_channels['quotes_button']['channel_name']))
+                """
                 quote = quotes[quote_idx % len(quotes)]
                 quote_idx += 1
                 quote.play()
