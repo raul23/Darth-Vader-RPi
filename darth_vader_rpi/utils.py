@@ -14,21 +14,22 @@ from collections import namedtuple
 from darth_vader_rpi import configs
 
 
+# TODO: explain
 _CFG_EXT = "json"
 _LOG_CFG_FILENAME = 'logging_cfg'
 _MAIN_CFG_FILENAME = 'main_cfg'
-_cfg_filenames = namedtuple("cfg_filenames", "user_cfg default_cfg")
+_CFG_FILENAMES = namedtuple("cfg_filenames", "user_cfg default_cfg")
 
 
 def _add_cfg_filenames():
     """TODO
     """
-    _cfg_filenames.user_cfg = {
+    _CFG_FILENAMES.user_cfg = {
         'log': '{}.'.format(_LOG_CFG_FILENAME) + _CFG_EXT,
         'main': '{}.'.format(_MAIN_CFG_FILENAME) + _CFG_EXT}
-    _cfg_filenames.default_cfg = dict(
+    _CFG_FILENAMES.default_cfg = dict(
         [("default_" + k, "default_" + v)
-         for k, v in _cfg_filenames.user_cfg.items()])
+         for k, v in _CFG_FILENAMES.user_cfg.items()])
 
 
 _add_cfg_filenames()
@@ -41,10 +42,6 @@ def get_cfg_dirpath():
     -------
     dirpath : str
         The path to the directory containing the config files.
-
-    See Also
-    --------
-    get_cfg_filepath : Get the path to a config file.
 
     """
     return configs.__path__[0]
@@ -83,15 +80,15 @@ def get_cfg_filepath(file_type):
 
     """
     # TODO: explain
-    valid_file_types = list(_cfg_filenames.user_cfg.keys()) \
-        + list(_cfg_filenames.default_cfg.keys())
+    valid_file_types = list(_CFG_FILENAMES.user_cfg.keys()) \
+        + list(_CFG_FILENAMES.default_cfg.keys())
     assert file_type in valid_file_types, \
         "Wrong type of config file: '{}' (choose from {})".format(
             file_type, ", ".join(valid_file_types))
     if file_type.startswith('default'):
-        filename = _cfg_filenames.default_cfg[file_type]
+        filename = _CFG_FILENAMES.default_cfg[file_type]
     else:
-        filename = _cfg_filenames.user_cfg[file_type]
+        filename = _CFG_FILENAMES.user_cfg[file_type]
     return os.path.join(get_cfg_dirpath(), filename)
 
 
@@ -194,7 +191,8 @@ def run_cmd(cmd, stderr=subprocess.STDOUT):
     Raises
     ------
     FileNotFoundError
-        TODO command not recognized, e.g. `$ TextEdit {filepath}`
+        Raised if the command ``cmd`` is not recognized, e.g.
+        ``$ TextEdit {filepath}`` since `TextEdit` is not an executable.
 
     """
     try:
