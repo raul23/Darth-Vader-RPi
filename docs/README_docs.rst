@@ -222,8 +222,8 @@ Here is a video of what it looks like in a terminal when running the script
 .. raw:: html
 
    <div align="center">
-   <a href="https://youtu.be/SqyU1ZwYxyk"><img src="https://img.youtube.com/vi/SqyU1ZwYxyk/0.jpg"
-   alt="LEDs and buttons simulaion in a terminal [Darth-Vader-RPi project]"></a>
+   <a href="https://youtu.be/NwVQlh5eu1g"><img src="https://img.youtube.com/vi/NwVQlh5eu1g/0.jpg"
+   alt="LEDs and buttons simulation in a terminal [Darth-Vader-RPi project]"></a>
    <p><b>Click on the above image for the full video</b></p>
    </div>
 
