@@ -132,12 +132,12 @@ connected to LEDs and push buttons.
 
 GPIO channels for the following I/O devices are defined:
 
-   - **Lightsaber button**: controls the LEDs and sound effects for the
+   - **Lightsaber button**: it controls the LEDs and sound effects for the
      lightsaber
    - **Song button**: when pressed it plays the *Imperial March* song
    - **Quotes button**: when pressed it plays one of Darth Vader quotes
-   - **Slot LEDs**: consist of three LEDs referred to as *Top*, *Middle*, and
-     *Bottom* LEDs and are found on Darth Vader's chest control box
+   - **Slot LEDs**: they consist of three LEDs referred to as *Top*, *Middle*,
+     and *Bottom* LEDs and are found on Darth Vader's chest control box
    - **Lightsaber LED**: when the lightsaber button is pressed, this LED is
      turned ON/OFF
 
@@ -145,14 +145,14 @@ GPIO channels for the following I/O devices are defined:
 
    - ``channel_id``: this property should **not be modified** because it is
      used to uniquely identify the GPIO channels
-   - ``channel_name``: will be displayed in the terminal along with the LED
+   - ``channel_name``: it will be displayed in the terminal along with the LED
      symbol. By default, the channel number is displayed if ``channel_name`` is
-     not given
-   - ``channel_number``: identifies the GPIO pin based on the numbering system
-     you have specified (`BOARD` or `BCM`)
-   - ``key``: only defined for button objects. It specifies the mapping between
-     a keyboard key and a push button so you can simulate push buttons with your
-     keyboard
+     the empty string, i.e. ``channel_name = ""``
+   - ``channel_number``: it identifies the GPIO pin based on the numbering
+     system you have specified (`BOARD` or `BCM`)
+   - ``key``: it is only defined for button objects. It specifies the mapping
+     between a keyboard key and a push button so you can simulate push buttons
+     with your keyboard
 
      .. code-block:: python
          :emphasize-lines: 5
@@ -165,9 +165,9 @@ GPIO channels for the following I/O devices are defined:
             "key": "shift_r"
           }
 
-   - ``led_symbols``: only defined for LED objects. It is a dictionary defining
-     the symbols to be used when the LED is turned ON and OFF. If nof found for
-     a LED object, then the `default LED symbols`_ will be used
+   - ``led_symbols``: it is only defined for LED objects. It is a dictionary
+     defining the symbols to be used when the LED is turned ON and OFF. If nof
+     found for a LED object, then the `default LED symbols`_ will be used
 
       .. code-block:: python
          :emphasize-lines: 5-7
@@ -471,7 +471,7 @@ properties:
    - ``id``: this property should **not be modified** because it is
      used to uniquely identify the songs
    - ``name``: the name of the song which will be shown in the terminal
-   - ``filename``: is relative to the directory
+   - ``filename``: it is relative to the directory
      `sounds_directory <#sounds-directory-label>`__
    - ``audio_channel_id``: all songs should be played in **channel 1** as
      explained in `audio_channels <#audio-channels-label>`__
@@ -511,10 +511,10 @@ sounds:
      Vader's breathing sound starts playing in the background until the script
      ends
    - **Lightsaber drawing sound**: when the lightsaber button is pressed, the
-     drawing sound is played first followed by the hum sound until the button is
-     pressed again which will produce the retraction sound
+     drawing sound is played first followed by the hum sound which goes on
+     until the button is pressed again which will produce the retraction sound
    - **Lightsaber hum sound**: plays immediately after the lightsaber drawing
-     sound until the lightsaber button is pressed again
+     sound and goes on until the lightsaber button is pressed again
    - **Lightsaber retraction sound**: plays when the lightsaber button is
      pressed while the hum sound is playing
    - **Closing sound**: plays after the user presses ``ctrl`` + ``c`` to exit
@@ -524,14 +524,15 @@ sounds:
 
    - ``id``: this property should **not be modified** because it is
      used to uniquely identify the sound effects
-   - ``name``: name of the sound which will be displayed in the terminal
-   - ``filename``: relative to the directory
+   - ``name``: it is the name of the sound which will be displayed in the
+     terminal
+   - ``filename``: it is relative to the directory
      `sounds_directory <#sounds-directory-label>`__
    - ``audio_channel_id``: the audio channel used for playing the sound. See
      `audio_channels <#audio-channels-label>`__ to know what channel is used for
      each type of sounds
-   - ``mute``: only defined for the breathing and closing sounds. If set to
-     *true*, the sound will not be played
+   - ``mute``: it is only defined for the breathing and closing sounds. If set
+     to *true*, the sound will not be played
    - ``loops``: only defined for the breathing sound. It is the number of times
      the sound should be repeated. If set to -1, it will be repeated
      indefinitely

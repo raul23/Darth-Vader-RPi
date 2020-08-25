@@ -148,8 +148,9 @@ configuration file which can be opened with::
 At the end of the list in ``sound_effects``, you will find the `closing_sound`_
 object. These are the properties you can modify for this object:
 
-   - ``name``: name of the sound which will be displayed in the terminal
-   - ``filename``: relative to
+   - ``name``: it is the name of the sound which will be displayed in the
+     terminal
+   - ``filename``: it is relative to
      `sounds_directory <main_config.html#sounds-directory-label>`__
    - ``mute``: if *true*, nothing will be played at the end of the script.
      Otherwise, the closing sound will be played when the script is finishing.
