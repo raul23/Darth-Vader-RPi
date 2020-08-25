@@ -166,6 +166,32 @@ _SEQ_TYPES_MAP = {'action': _ACTION_MODE, 'calm': _CALM_MODE}
 """
 
 
+# TODO: clear buffer
+# TODO: add description
+def _add_spaces_to_msg(msg, nb_spaces=60):
+    return "{}{}".format(msg, " " * nb_spaces)
+
+
+# TODO: add description
+def _get_cfg_dict(cfg_type):
+    test_cfg = {'main': _TEST_MAIN_CFG,
+                'log': _TEST_LOGGING_CFG}
+    cfg_dict = test_cfg[cfg_type]
+    if cfg_dict is None:
+        cfg_filepath = get_cfg_filepath(cfg_type)
+        try:
+            cfg_dict = load_json(cfg_filepath)
+        except FileNotFoundError:
+            # Config file not found
+            # Copy it from the default one
+            # TODO: IMPORTANT destination with default?
+            default_cfg_type = "default_{}".format(cfg_type)
+            src = get_cfg_filepath(default_cfg_type)
+            shutil.copy(src, cfg_filepath)
+            cfg_dict = load_json(cfg_filepath)
+    return cfg_dict
+
+
 class ExceptionThread(threading.Thread):
     """A subclass from :class:`threading.Thread` that defines threads that can
     catch errors if their target function raises an exception.
@@ -261,8 +287,9 @@ class SoundWrapper:
             played the first time. The default value (zero) means the sound is
             not repeated, and so is only played once. If `loops` is set to -1
             the sound will loop indefinitely (though you can still call
-            :meth:`stop` to stop it). Reference from
-            :meth:`pygame.mixer.Sound.play`.
+            :meth:`stop` to stop it).
+
+            **Reference:** :meth:`pygame.mixer.Sound.play`
 
         """
         self._channel.play(self._pygame_sound, loops)
@@ -274,32 +301,30 @@ class SoundWrapper:
         self._channel.stop()
 
 
-# TODO: clear buffer
-# TODO: add description
-def _add_spaces_to_msg(msg, nb_spaces=60):
-    return "{}{}".format(msg, " " * nb_spaces)
+def turn_off_led(channel):
+    """Turn off a LED from a given channel.
+
+    Parameters
+    ----------
+    channel : int
+        Channel number associated with a LED which will be turned off.
+
+    """
+    # logger.debug("LED {} off".format(led))
+    GPIO.output(channel, GPIO.LOW)
 
 
-# TODO: add description
-def _get_cfg_dict(cfg_type):
-    global_cfg = {'main': _TEST_MAIN_CFG,
-                  'log': _TEST_LOGGING_CFG
-                  }
-    if global_cfg[cfg_type]:
-        # Performing tests-suite
-        cfg_dict = global_cfg[cfg_type]
-    else:
-        cfg_filepath = get_cfg_filepath(cfg_type)
-        try:
-            cfg_dict = load_json(cfg_filepath)
-        except FileNotFoundError:
-            # Config file not found
-            # Copy it from the default one
-            default_cfg_type = "default_{}".format(cfg_type)
-            src = get_cfg_filepath(default_cfg_type)
-            shutil.copy(src, cfg_filepath)
-            cfg_dict = load_json(cfg_filepath)
-    return cfg_dict
+def turn_on_led(channel):
+    """Turn on a LED from a given channel.
+
+    Parameters
+    ----------
+    channel : int
+        Channel number associated with a LED which will be turned on.
+
+    """
+    # logger.debug("LED {} on".format(led))
+    GPIO.output(channel, GPIO.HIGH)
 
 
 def turn_on_slot_leds_sequence(top_led, middle_led, bottom_led,
@@ -308,16 +333,16 @@ def turn_on_slot_leds_sequence(top_led, middle_led, bottom_led,
     """Turn on/off the three slot LEDs in a precise sequence.
 
     These three LEDs are associated with Darth Vader's three slots located on
-    his chest control box. These LEDs are labeled as 'top_led', 'middle_led',
-    and 'bottom_led', respectively.
+    his chest control box. These LEDs are labeled as '`top`', '`middle`', and
+    '`bottom`', respectively.
 
     The three LEDs are turned on according to a default or custom sequence
-    which repeats itself. The default values for `leds_sequence` are 'action'
-    and 'calm' which represent Darth Vader's physiological state as a sequence
-    of LEDs blinking in a particular order.
+    which repeats itself. The accepted values for ``leds_sequence`` are
+    '`action`' and '`calm`' which represent Darth Vader's physiological state
+    as a sequence of LEDs blinking in a particular order.
 
-    The user can also provide its own `leds_sequence` by using a list of LED
-    labels {'top', 'midddle', 'bottom'} arranged in a sequence specifying
+    The user can also provide its own ``leds_sequence`` by using a list of LED
+    labels {'`top`', '`midddle`', '`bottom`'} arranged in a sequence specifying
     the order the slot LEDs should turn on/off, e.g. ``[['top', 'bottom'], [],
     ['middle'], []]`` will turn on/off the slot LEDs in this order::
 
@@ -326,9 +351,9 @@ def turn_on_slot_leds_sequence(top_led, middle_led, bottom_led,
         3. middle LED turned on
         4. All LEDs turned off
 
-    Each step in the sequence will last for `time_per_step` seconds.
+    Each step in the sequence will last for ``time_per_step`` seconds.
 
-    There will be a delay of `delay_between_steps` seconds between
+    There will be a delay of ``delay_between_steps`` seconds between
     each step in the previous example.
 
     The default sequences of slot LEDs were obtained from this
@@ -337,21 +362,22 @@ def turn_on_slot_leds_sequence(top_led, middle_led, bottom_led,
     Parameters
     ----------
     top_led : int
-        TODO
+        Channel number associated with the `Top` slot LED.
     middle_led : int
-        TODO
+        Channel number associated with the `Middle` slot LED.
     bottom_led : int
-        TODO
+        Channel number associated with the `Bottom` slot LED.
     leds_sequence : str or list, optional
         Sequence of slot LEDs on Darth Vader's chest box.
 
-        If `leds_sequence` is a string, then it takes on one of these values
+        If ``leds_sequence`` is a string, then it takes on one of these values
         which represent Darth Vader's physiological state: {'action', 'calm'}.
 
-        If `leds_sequence` is a list, then it must be a list of slot LED labels
-        {'top', 'middle', 'bottom'} arranged in a sequence as to specify the
-        order the slot LEDs should turn on/off, e.g. ``[['top', 'bottom'], [],
-        ['middle'], []]`` will turn on/off the slot LEDs in this order::
+        If ``leds_sequence`` is a list, then it must be a list of slot LED
+        labels {'`top`', '`middle`', '`bottom`'} arranged in a sequence as to
+        specify the order the slot LEDs should turn on/off, e.g.
+        ``[['top', 'bottom'], [], ['middle'], []]`` will turn on/off the slot
+        LEDs in this order::
 
             1. top + bottom LEDs turn on
             2. All LEDs turn off
@@ -368,7 +394,7 @@ def turn_on_slot_leds_sequence(top_led, middle_led, bottom_led,
         .. important::
 
             This also affects the time all LEDs will remain turned off if a
-            subsequence in `leds_sequence` is an empty list.
+            step in ``leds_sequence`` is an empty list.
 
 
     .. important::
@@ -418,32 +444,6 @@ def turn_on_slot_leds_sequence(top_led, middle_led, bottom_led,
             turn_off_led(lcm['bottom'])
             time.sleep(delay_between_steps)
     logger.debug(_add_spaces_to_msg("Stopping thread: {}".format(th.name)))
-
-
-def turn_off_led(channel):
-    """Turn off a LED from a given channel.
-
-    Parameters
-    ----------
-    channel : int
-        Channel number associated with a LED which will be turned off.
-
-    """
-    # logger.debug("LED {} off".format(led))
-    GPIO.output(channel, GPIO.LOW)
-
-
-def turn_on_led(channel):
-    """Turn on a LED from a given channel.
-
-    Parameters
-    ----------
-    channel : int
-        Channel number associated with a LED which will be turned on.
-
-    """
-    # logger.debug("LED {} on".format(led))
-    GPIO.output(channel, GPIO.HIGH)
 
 
 def activate_dv(main_cfg):
@@ -594,11 +594,13 @@ def activate_dv(main_cfg):
         if main_cfg['verbose']:
             logger.exception(_add_spaces_to_msg("Error: {}".format(e)))
         else:
-            logger.error(_add_spaces_to_msg(e.__repr__()))
-        logger.info(_add_spaces_to_msg("Exiting..."))
+            # logger.error(_add_spaces_to_msg(e.__repr__()))
+            # TODO: add next line in a utility function
+            err_msg = "{}: {}".format(str(e.__class__).split("'")[1], e)
+            logger.error(_add_spaces_to_msg(err_msg))
+        closing_sound = loaded_sounds.get('closing_sound')
     except KeyboardInterrupt:
         logger.info(_add_spaces_to_msg("Exiting..."))
-        # TODO: play closing sound also when there is an exception?
         closing_sound = loaded_sounds.get('closing_sound')
         if closing_sound and not closing_sound.mute:
             closing_sound.play()
@@ -610,7 +612,6 @@ def activate_dv(main_cfg):
             if channel_id.endswith("_led"):
                 turn_off_led(channel_info['channel_number'])
     if th_slot_leds:
-        logger.debug(_add_spaces_to_msg("Stopping thread ..."))
         th_slot_leds.do_run = False
         th_slot_leds.join()
         logger.debug(_add_spaces_to_msg("Thread stopped: {}".format(th_slot_leds.name)))
@@ -639,7 +640,7 @@ def edit_config(cfg_type, app=None):
         `logging config file`_, and 'main' to the `main config file`_ used to
         setup the Darth-Vader-RPi project such as specifying the sound effects
         or the GPIO channels.
-    app : str
+    app : str, optional
         Name of the application to use for opening the config file, e.g. 
         `TextEdit` (the default value is :obj:`None` which implies that the
         default application will be used to open the config file).
@@ -672,24 +673,25 @@ def edit_config(cfg_type, app=None):
     result = None
     try:
         # IMPORTANT: if the user provided the name of an app, it will be used as
-        # a command along with the file path, e.g. `$ atom {filepath}`. However,
-        # this case might not work if the user provided an app name that doesn't
-        # refer to an executable, e.g. `$ TextEdit {filepath}` won't work. The
-        # failed case is further processed in `except FileNotFoundError`.
+        # a command along with the file path, e.g. ``$ atom {filepath}``.
+        # However, this case might not work if the user provided an app name
+        # that doesn't refer to an executable, e.g. ``$ TextEdit {filepath}``
+        # won't work. The failed case is further processed in the except block.
         result = run_cmd(cmd.format(filepath=filepath))
         retcode = result.returncode
     except FileNotFoundError:
         # This error happens if the name of the app can't be called as an
-        # executable on the terminal
-        # e.g. TextEdit can't be run on the terminal but atom can since the
+        # executable in the terminal
+        # e.g. `TextEdit` can't be run in the terminal but `atom` can since the
         # latter refers to an executable.
-        # To open TextEdit from the terminal, the command `open -a TextEdit`
+        # To open `TextEdit` from the terminal, the command ``open -a TextEdit``
         # must be used on macOS.
-        # TODO: add the open commands for the other OSes
+        # TODO: IMPORTANT add the open commands for the other OSes
         specific_cmd_dict = {'Darwin': 'open -a {app}'.format(app=app)}
         # Get the command to open the file with the user-specified app
         cmd = specific_cmd_dict.get(platform.system(), app) + " " + filepath
         # TODO: explain DEVNULL, suppress stderr since we will display the error
+        # TODO: IMPORTANT you might geta FileNotFoundError again?
         result = run_cmd(cmd)  # stderr=subprocess.DEVNULL)
         retcode = result.returncode
     if retcode == 0:
