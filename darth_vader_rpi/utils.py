@@ -35,6 +35,56 @@ def _add_cfg_filenames():
 _add_cfg_filenames()
 
 
+# TODO: fix in genutils new changes
+def dumps_json(filepath, data, encoding='utf8', ensure_ascii=False,
+               indent=None, sort_keys=False):
+    """Write data to a JSON file.
+
+    The data is first serialized to a JSON formatted string and then saved
+    to disk.
+
+    Parameters
+    ----------
+    filepath : str
+        Path to the JSON file where the data will be saved.
+    data
+        Data to be written to the JSON file.
+    encoding : str, optional
+        Encoding to be used for opening the JSON file in write mode (the
+        default value is 'utf8').
+    ensure_ascii : bool, optional
+        If ``ensure_ascii`` is False, then the return value can contain
+        non-ASCII characters if they appear in strings contained in ``data``.
+        Otherwise, all such characters are escaped in JSON strings. See the
+        :meth:`json.dumps` docstring description (the default value is False).
+    indent : int or None, optional
+        If ``indent`` is a non-negative integer, then JSON array elements and
+        object members will be pretty-printed with that indent level. An indent
+        level of 0 will only insert newlines. :obj:`None` is the most compact
+        representation. See the :meth:`json.dumps` docstring description. (the
+        default value is :obj:`None`).
+    sort_keys : bool, optional
+        If `sort_keys` is true, then the output of dictionaries will be sorted
+        by key. See the :meth:`json.dumps` docstring description. (the default
+        value is False).
+
+    Raises
+    ------
+    OSError
+        Raised if any I/O related occurs while writing the data to disk, e.g.
+        the file doesn't exist.
+
+    """
+    try:
+        with codecs.open(filepath, 'w', encoding) as f:
+            f.write(json.dumps(data,
+                               ensure_ascii=ensure_ascii,
+                               indent=indent,
+                               sort_keys=sort_keys))
+    except OSError:
+        raise
+
+
 def get_cfg_dirpath():
     """Get the path to the directory containing the config files.
 
@@ -130,7 +180,6 @@ def override_config_with_args(config, parser):
     Parameters
     ----------
     config : dict
-
     parser : argparse.ArgumentParser
         Argument parser.
 
