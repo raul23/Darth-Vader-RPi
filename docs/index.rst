@@ -32,8 +32,8 @@ more info about the project.
    If you don't have an RPi, don't worry. You can still test the program on
    your own computer because the package ``darth_vader_rpi`` uses the library
    `SimulRPi`_ to simulate I/O devices connected to an RPi such as LEDs and
-   push buttons by blinking small circles on the terminal and playing sounds
-   when a keyboard key is pressed. Almost like testing with a real RPi!
+   push buttons by blinking red dots in the terminal and playing sounds when a
+   keyboard key is pressed. Almost like testing with a real RPi!
 
    **Disclaimer:** I also wrote the `SimulRPi`_ library
 
