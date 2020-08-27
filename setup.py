@@ -34,7 +34,10 @@ with open(os.path.join(dirpath, "requirements.txt")) as f:
 
 setup(name='Darth-Vader-RPi',
       version=VERSION,
-      description='WRITEME',
+      description='A Raspberry Pi project about activating a Darth Vader '
+                  'action figure by turning on LEDs on his suit and '
+                  'lightsaber, and by playing sounds such as some of his '
+                  'famous quotes.',
       long_description=README,
       long_description_content_type='text/x-rst',
       classifiers=[
