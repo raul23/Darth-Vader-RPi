@@ -82,8 +82,9 @@ from logging import NullHandler
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 
+from dv_sounds.utils import get_dirpath, get_filepath
 from darth_vader_rpi import __name__ as package_name, __version__
-from darth_vader_rpi.utils import (get_cfg_filepath, load_json,
+from darth_vader_rpi.utils import (dumps_json, get_cfg_filepath, load_json,
                                    override_config_with_args, run_cmd)
 
 logger = logging.getLogger(__name__)
@@ -318,6 +319,24 @@ class SoundWrapper:
         """
         self._channel.stop()
         self._channel.stop()
+
+
+def check_sound_files(main_cfg):
+    default_directory = False
+    if not main_cfg['sounds_directory']:
+        default_directory = True
+        main_cfg['sounds_directory'] = get_dirpath()
+        dumps_json(get_cfg_filepath('main'), main_cfg, indent=2)
+    sound_types = ['quotes', 'songs', 'sound_effects']
+    for sound_type in sound_types:
+        for sound in main_cfg[sound_type]:
+            filename = sound['filename']
+            if default_directory:
+                filepath = get_filepath(filename)
+            else:
+                filepath = os.path.join(main_cfg['sounds_directory'], filename)
+            if not os.path.exists(filepath):
+                raise FileNotFoundError("No such file: {}".format(filepath))
 
 
 def turn_off_led(channel):
@@ -873,6 +892,7 @@ def main():
     retcode = 0
     # TODO: enlarge try? even if logger not setup completely
     try:
+        check_sound_files(main_cfg_dict)
         if args.edit:
             if args.edit == _MAIN_CFG:
                 args.edit = "main"
