@@ -859,6 +859,7 @@ def main():
     # this default logger will only be done in the cases that the user allows
     # it, e.g. the verbose option is enabled.
     # IMPORTANT: the config options need to be read before using any logger
+    # TODO: default logger not used
     logger.setLevel(logging.DEBUG)
     ch = logging.StreamHandler()
     ch.setLevel(logging.DEBUG)
@@ -896,9 +897,12 @@ def main():
                 for name, val in logging_cfg_dict[k].items():
                     val['level'] = "DEBUG"
         logging.config.dictConfig(logging_cfg_dict)
-        logger_name = "{}.{}".format(
-            package_name,
-            os.path.splitext(__file__)[0])
+        if __name__ == '__main__':
+            logger_name = "{}.{}".format(
+                package_name,
+                os.path.splitext(__file__)[0])
+        else:
+            logger_name = __name__
         logger = logging.getLogger(logger_name)
         # Logger now setup
         logger.info("{} v{}".format(package_name, package_version))
