@@ -335,7 +335,7 @@ def check_sound_files(main_cfg):
     """
     default_directory = False
     if main_cfg['sounds_directory']:
-        logger.info("sounds_directory: {}".format(
+        logger.debug("sounds_directory: {}".format(
             main_cfg['sounds_directory']))
     else:
         logger.info("No sounds_directory defined in config file")
@@ -543,9 +543,9 @@ def activate_dv(main_cfg):
     gpio_channels = {}
     loaded_sounds = {}
     try:
-        logger.info("pygame mixer initialization")
+        logger.debug("pygame mixer initialization")
         pygame.mixer.init()
-        logger.info("RPi initialization")
+        logger.debug("RPi initialization")
         GPIO.setmode(GPIO.MODES[main_cfg['mode'].upper()])
         GPIO.setwarnings(False)
         # Setup LEDs and buttons
@@ -572,15 +572,17 @@ def activate_dv(main_cfg):
             channel = pygame.mixer.Channel(ch_dict['channel_id'])
             channel.set_volume(ch_dict['volume'])
 
-        logger.info("")
+        logger.debug("")
         sounds_dir = main_cfg['sounds_directory']
         # Load sounds from cfg
+        logger.info('Loading sounds...')
+        logger.debug("")
         for sound_type in ['quotes', 'songs', 'sound_effects']:
-            logger.info('Loading {}...'.format(sound_type.replace("_", " ")))
+            logger.debug('Loading {}'.format(sound_type.replace("_", " ")))
             for sound in main_cfg[sound_type]:
                 sound_id = sound['id']
                 sound_name = sound['name']
-                logger.info('Loading "{}"'.format(sound_name))
+                logger.debug('Loading "{}"'.format(sound_name))
                 filepath = os.path.join(sounds_dir, sound['filename'])
                 sw = SoundWrapper(
                     sound_id=sound_id,
@@ -596,7 +598,7 @@ def activate_dv(main_cfg):
                 if sw.sound_id == 'breathing_sound' and not sw.mute:
                     loops = sound.get('loops', 0)
                     loaded_sounds[sound_id].play(loops)
-            logger.info("")
+            logger.debug("")
         quotes = list(loaded_sounds['quotes'].values())
         th_slot_leds = ExceptionThread(
             name="thread_slot_leds",
@@ -944,7 +946,7 @@ def main():
                 import SimulRPi.GPIO as GPIO
                 GPIO.setchannels(main_cfg_dict['gpio_channels'])
                 GPIO.setprinting(not main_cfg_dict['quiet'])
-                logger.info("Simulation mode enabled")
+                logger.debug("Simulation mode enabled")
             else:
                 import RPi.GPIO as GPIO
             # TODO: works on UNIX shell only, not Windows
