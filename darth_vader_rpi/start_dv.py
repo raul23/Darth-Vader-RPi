@@ -83,7 +83,9 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 
 from dv_sounds.utils import get_dirpath, get_filepath
-from darth_vader_rpi import __name__ as package_name, __version__
+from darth_vader_rpi import (__name__ as package_name,
+                             __path__ as package_path,
+                             __version__ as package_version)
 from darth_vader_rpi.utils import (dumps_json, get_cfg_filepath, load_json,
                                    override_config_with_args, run_cmd)
 
@@ -333,7 +335,7 @@ def check_sound_files(main_cfg):
     """
     default_directory = False
     if main_cfg['sounds_directory']:
-        logger.info("Using sounds_directory: {}".format(
+        logger.info("sounds_directory: {}".format(
             main_cfg['sounds_directory']))
     else:
         logger.info("No sounds_directory defined in config file")
@@ -793,7 +795,7 @@ config file to have access to the complete list of options, i.e.
     # General options
     # ===============
     parser.add_argument("--version", action='version',
-                        version='%(prog)s {}'.format(__version__))
+                        version='%(prog)s {}'.format(package_version))
     parser.add_argument("-q", "--quiet", action="store_true",
                         help="Enable quiet mode, i.e. nothing will be printed.")
     parser.add_argument("-s", "--simulation", action="store_true",
@@ -896,6 +898,9 @@ def main():
             package_name,
             os.path.splitext(__file__)[0])
         logger = logging.getLogger(logger_name)
+        # Logger now setup
+        logger.info("{} v.{}".format(package_name, package_version))
+        logger.debug("Package path: {}".format(package_path[0]))
         logger.info("Verbose option {}".format(
             "enabled" if main_cfg_dict['verbose'] else "disabled"))
         msg1 = "Config options overridden by command-line arguments:\n"
