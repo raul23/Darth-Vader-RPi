@@ -1,2 +1,2 @@
 pygame>=1.9.6
-DV-RPi-Sounds @ https://github.com/raul23/DV-RPi-Sounds/tarball/master
+py-common-utils @ https://github.com/raul23/py-common-utils/tarball/master
