@@ -899,7 +899,7 @@ def main():
             os.path.splitext(__file__)[0])
         logger = logging.getLogger(logger_name)
         # Logger now setup
-        logger.info("{} v.{}".format(package_name, package_version))
+        logger.info("{} v{}".format(package_name, package_version))
         logger.debug("Package path: {}".format(package_path[0]))
         logger.info("Verbose option {}".format(
             "enabled" if main_cfg_dict['verbose'] else "disabled"))
