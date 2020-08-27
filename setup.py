@@ -13,7 +13,7 @@ from darth_vader_rpi import __version__, __test_version__
 
 
 # Choose the correct version based on script's arg
-if sys.argv[1] == "testing":
+if len(sys.argv) > 1 and sys.argv[1] == "testing":
     VERSION = __test_version__
     # Remove "testing" from args so setup doesn't process "testing" as a cmd
     sys.argv.remove("testing")
@@ -29,7 +29,8 @@ with open(os.path.join(dirpath, "README_pypi.rst")) as f:
 
 # The text of the requirements.txt file
 with open(os.path.join(dirpath, "requirements.txt")) as f:
-    REQUIREMENTS = f.read().split()
+    REQUIREMENTS = f.read().splitlines()
+
 
 setup(name='Darth-Vader-RPi',
       version=VERSION,
