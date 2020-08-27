@@ -318,10 +318,19 @@ class SoundWrapper:
         """Stop playback on the specified channel `channel_id`.
         """
         self._channel.stop()
-        self._channel.stop()
 
 
 def check_sound_files(main_cfg):
+    """TODO
+
+    Parameters
+    ----------
+    main_cfg
+
+    Raises
+    ------
+
+    """
     default_directory = False
     if not main_cfg['sounds_directory']:
         default_directory = True
