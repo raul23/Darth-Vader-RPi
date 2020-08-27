@@ -166,14 +166,33 @@ _SEQ_TYPES_MAP = {'action': _ACTION_MODE, 'calm': _CALM_MODE}
 """
 
 
-# TODO: clear buffer
-# TODO: add description
+# TODO: clear buffer?
 def _add_spaces_to_msg(msg, nb_spaces=60):
+    """TODO
+
+    Parameters
+    ----------
+    msg
+    nb_spaces
+
+    Returns
+    -------
+
+    """
     return "{}{}".format(msg, " " * nb_spaces)
 
 
-# TODO: add description
 def _get_cfg_dict(cfg_type):
+    """TODO
+
+    Parameters
+    ----------
+    cfg_type
+
+    Returns
+    -------
+
+    """
     test_cfg = {'main': _TEST_MAIN_CFG,
                 'log': _TEST_LOGGING_CFG}
     cfg_dict = test_cfg[cfg_type]
