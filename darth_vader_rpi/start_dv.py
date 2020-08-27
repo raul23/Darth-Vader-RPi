@@ -560,9 +560,8 @@ def activate_dv(main_cfg):
             channel = pygame.mixer.Channel(ch_dict['channel_id'])
             channel.set_volume(ch_dict['volume'])
 
-        sounds_dir = os.path.expanduser(main_cfg['sounds_directory'])
-
         logger.info("")
+        sounds_dir = main_cfg['sounds_directory']
         # Load sounds from cfg
         for sound_type in ['quotes', 'songs', 'sound_effects']:
             logger.info('Loading {}...'.format(sound_type.replace("_", " ")))
@@ -858,6 +857,8 @@ def main():
 
     # Get main config dict
     main_cfg_dict = _get_cfg_dict('main')
+    main_cfg_dict['sounds_directory'] = os.path.expanduser(
+        main_cfg_dict['sounds_directory'])
 
     # Override logging configuration with command-line arguments
     retval = override_config_with_args(main_cfg_dict, parser)
