@@ -3,7 +3,7 @@
   "simulation": false,
   "verbose": false,
   "mode": "BCM",
-  "sounds_directory": "~/Data/star_wars_sound_effects/ogg",
+  "sounds_directory": "",
 
   "gpio_channels": [
     {
@@ -78,39 +78,9 @@
       "audio_channel_id": 1
     },
     {
-      "id": "dont_make_me_destroy_you",
-      "name": "Don't make me destroy you",
-      "filename": "quote_dont_make_me_destroy_you.ogg",
-      "audio_channel_id": 1
-    },
-    {
-      "id": "give_yourself_to_the_dark_side",
-      "name": "Give yourself to the dark side",
-      "filename": "quote_give_yourself_to_the_dark_side.ogg",
-      "audio_channel_id": 1
-    },
-    {
-      "id": "if_you_only_knew_the_power_of_the_dark_side",
-      "name": "If you only knew the power of the dark side",
-      "filename": "quote_if_you_only_knew_the_power_of_the_dark_side.ogg",
-      "audio_channel_id": 1
-    },
-    {
       "id": "nooooo",
       "name": "Nooooo",
       "filename": "quote_nooooo.ogg",
-      "audio_channel_id": 1
-    },
-    {
-      "id": "there_is_no_escape",
-      "name": "There is no escape",
-      "filename": "quote_there_is_no_escape.ogg",
-      "audio_channel_id": 1
-    },
-    {
-      "id": "your_lack_of_faith_is_disturbing",
-      "name": "Your lack of faith is disturbing",
-      "filename": "quote_your_lack_of_faith_is_disturbing.ogg",
       "audio_channel_id": 1
     }
   ],
@@ -128,7 +98,7 @@
     {
       "id": "breathing_sound",
       "name": "Breathing sound",
-      "filename": "darth_vader_breathing.ogg",
+      "filename": "breathing.ogg",
       "audio_channel_id": 0,
       "mute": false,
       "loops": -1
