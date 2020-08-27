@@ -332,11 +332,19 @@ def check_sound_files(main_cfg):
 
     """
     default_directory = False
-    if not main_cfg['sounds_directory']:
+    if main_cfg['sounds_directory']:
+        logger.info("Using sounds_directory: {}".format(
+            main_cfg['sounds_directory']))
+    else:
+        logger.info("No sounds_directory defined in config file")
+        dirpath = get_dirpath()
+        logger.info("Setting sounds_directory with default location: "
+                    "{}".format(dirpath))
         default_directory = True
-        main_cfg['sounds_directory'] = get_dirpath()
+        main_cfg['sounds_directory'] = dirpath
         dumps_json(get_cfg_filepath('main'), main_cfg, indent=2)
     sound_types = ['quotes', 'songs', 'sound_effects']
+    logger.debug("Checking sound files...")
     for sound_type in sound_types:
         for sound in main_cfg[sound_type]:
             filename = sound['filename']
@@ -344,7 +352,9 @@ def check_sound_files(main_cfg):
                 filepath = get_filepath(filename)
             else:
                 filepath = os.path.join(main_cfg['sounds_directory'], filename)
-            if not os.path.exists(filepath):
+            if os.path.exists(filepath):
+                logger.debug("File checked: {}".format(filepath))
+            else:
                 raise FileNotFoundError("No such file: {}".format(filepath))
 
 
@@ -889,8 +899,11 @@ def main():
         logger.info("Verbose option {}".format(
             "enabled" if main_cfg_dict['verbose'] else "disabled"))
         msg1 = "Config options overridden by command-line arguments:\n"
-        for cfg_name, old_v, new_v in retval.config_opts_overidden:
-            msg1 += "{}: {} --> {}\n".format(cfg_name, old_v, new_v)
+        nb_items = len(retval.config_opts_overidden)
+        for i, (cfg_name, old_v, new_v) in enumerate(retval.config_opts_overidden):
+            msg1 += "\t {}: {} --> {}".format(cfg_name, old_v, new_v)
+            if i + 1 < nb_items:
+                msg1 += "\n"
         msg2 = "Command-line arguments not found in JSON config file: " \
                "{}".format(retval.args_not_found)
         logger.debug(msg1)
