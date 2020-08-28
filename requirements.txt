@@ -1,2 +1,3 @@
+dv_sounds @ https://github.com/raul23/DV-RPi-Sounds/tarball/master
 pygame>=1.9.6
-DV-RPi-Sounds @ https://github.com/raul23/DV-RPi-Sounds/tarball/master
+SimulRPi @ https://github.com/raul23/SimulRPi/tarball/master
