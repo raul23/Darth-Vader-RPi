@@ -338,13 +338,15 @@ def check_sound_files(main_cfg):
         logger.debug("sounds_directory: {}".format(
             main_cfg['sounds_directory']))
     else:
+        default_directory = True
         logger.info("No sounds_directory defined in config file")
         dirpath = get_dirpath()
         logger.info("Setting sounds_directory with default location: "
                     "{}".format(dirpath))
-        default_directory = True
+        orig_main_cfg = _get_cfg_dict('main')
+        orig_main_cfg['sounds_directory'] = dirpath
         main_cfg['sounds_directory'] = dirpath
-        dumps_json(get_cfg_filepath('main'), main_cfg, indent=2)
+        dumps_json(get_cfg_filepath('main'), orig_main_cfg, indent=2)
     sound_types = ['quotes', 'songs', 'sound_effects']
     logger.debug("Checking sound files...")
     for sound_type in sound_types:
@@ -582,8 +584,8 @@ def activate_dv(main_cfg):
             for sound in main_cfg[sound_type]:
                 sound_id = sound['id']
                 sound_name = sound['name']
-                logger.debug('Loading "{}"'.format(sound_name))
                 filepath = os.path.join(sounds_dir, sound['filename'])
+                logger.debug('Loading "{}": {}'.format(sound_name, filepath))
                 sw = SoundWrapper(
                     sound_id=sound_id,
                     sound_name=sound_name,
