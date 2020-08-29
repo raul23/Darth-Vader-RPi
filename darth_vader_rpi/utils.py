@@ -259,7 +259,7 @@ def run_cmd(cmd, stderr=subprocess.STDOUT):
         if sys.version_info.major == 3 and sys.version_info.minor <= 6:
             # Ref.: https://stackoverflow.com/a/53209196
             #       https://bit.ly/3lvdGlG
-            result = subprocess.run(shlex.split(cmd), stdout=PIPE, stderr=PIPE)
+            result = subprocess.run(shlex.split(cmd))
         else:
             result = subprocess.run(shlex.split(cmd), capture_output=True)
         """
