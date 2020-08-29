@@ -232,6 +232,7 @@ def run_cmd(cmd, stderr=subprocess.STDOUT):
 
             open -a TextEdit text.txt
     stderr
+        TODO
 
     Returns
     -------
