@@ -548,7 +548,9 @@ def activate_dv(main_cfg):
         logger.debug("pygame mixer initialization")
         pygame.mixer.init()
         logger.debug("RPi initialization")
-        GPIO.setmode(GPIO.MODES[main_cfg['mode'].upper()])
+        # Set the numbering system used to identify the I/O pins on an RPi
+        modes = {'BOARD': GPIO.BOARD, 'BCM': GPIO.BCM}
+        GPIO.setmode(modes[main_cfg['mode'].upper()])
         GPIO.setwarnings(False)
         # Setup LEDs and buttons
         for gpio_ch in main_cfg['gpio_channels']:
@@ -660,7 +662,6 @@ def activate_dv(main_cfg):
             # TODO: add next line in a utility function
             err_msg = "{}: {}".format(str(e.__class__).split("'")[1], e)
             logger.error(_add_spaces_to_msg(err_msg))
-        closing_sound = loaded_sounds.get('closing_sound')
     except KeyboardInterrupt:
         logger.info(_add_spaces_to_msg("Exiting..."))
         closing_sound = loaded_sounds.get('closing_sound')
@@ -668,7 +669,8 @@ def activate_dv(main_cfg):
             closing_sound.play()
             time.sleep(1)
 
-    GPIO.setprinting(False)
+    if hasattr(GPIO, "setprinting"):
+        GPIO.setprinting(False)
     if gpio_channels:
         for channel_id, channel_info in gpio_channels.items():
             if channel_id.endswith("_led"):
