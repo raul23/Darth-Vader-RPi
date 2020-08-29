@@ -1,7 +1,5 @@
-=======
-License
-=======
-**GPL3**
-
+=============
+License: GPL3
+=============
 .. include:: license.txt
    :literal:
