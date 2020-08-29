@@ -257,6 +257,7 @@ def run_cmd(cmd, stderr=subprocess.STDOUT):
         retcode = subprocess.check_call(shlex.split(cmd), stderr=stderr)
         """
         if sys.version_info.major == 3 and sys.version_info.minor <= 6:
+            # TODO: PIPE not working as arguments
             # Ref.: https://stackoverflow.com/a/53209196
             #       https://bit.ly/3lvdGlG
             result = subprocess.run(shlex.split(cmd))
