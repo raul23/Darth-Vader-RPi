@@ -1,3 +1,3 @@
 pygame>=1.9.3
 DV-Sounds@git+git://github.com/raul23/DV-Sounds@master
-SimulRPi@git+https://ggithub.com/raul23/SimulRPi.git@master#egg=SimulRPi-0.1.0a1
+SimulRPi@git+https://github.com/raul23/SimulRPi.git@master#egg=SimulRPi
