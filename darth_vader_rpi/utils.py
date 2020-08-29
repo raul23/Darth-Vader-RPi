@@ -9,7 +9,9 @@ import json
 import os
 import shlex
 import subprocess
+import sys
 from collections import namedtuple
+from subprocess import PIPE
 
 from darth_vader_rpi import configs
 
@@ -245,16 +247,24 @@ def run_cmd(cmd, stderr=subprocess.STDOUT):
 
     """
     try:
+        # TODO: remove following comments
         # `check_call()` takes as input a list. Thus, the string command must
         # be split to get the command name and its arguments as items of a list.
         # NOTE: To suppress stdout or stderr, supply a value of DEVNULL
-        #       Ref.: https://bit.ly/35NqiN0
+        # Ref.: https://bit.ly/35NqiN0
         """
         retcode = subprocess.check_call(shlex.split(cmd), stderr=stderr)
         """
-        result = subprocess.run(shlex.split(cmd), capture_output=True)
-    except subprocess.CalledProcessError as e:
-        return e
+        if sys.version_info.major == 3 and sys.version_info.minor <= 6:
+            # Ref.: https://stackoverflow.com/a/53209196
+            #       https://bit.ly/3lvdGlG
+            result = subprocess.run(shlex.split(cmd), stdout=PIPE, stderr=PIPE)
+        else:
+            result = subprocess.run(shlex.split(cmd), capture_output=True)
+        """
+        except subprocess.CalledProcessError:
+            return e
+        """
     except FileNotFoundError:
         raise
     else:
