@@ -5,8 +5,8 @@
   "mode": "BCM",
   "sounds_directory": "",
   "default_led_symbols": {
-    "ON": "",
-    "OFF": ""
+    "ON": "🛑",
+    "OFF": "⚪"
   },
   "gpio_channels": [
     {
@@ -98,7 +98,7 @@
       "name": "Breathing sound",
       "filename": "breathing.ogg",
       "audio_channel_id": 0,
-      "mute": true,
+      "mute": false,
       "loops": -1
     },
     {
