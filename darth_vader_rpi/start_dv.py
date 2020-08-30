@@ -75,8 +75,10 @@ import logging.config
 import os
 import platform
 import shutil
+import sys
 import threading
 import time
+from collections import OrderedDict
 from logging import NullHandler
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
@@ -211,6 +213,9 @@ def _get_cfg_dict(cfg_type):
             src = get_cfg_filepath(default_cfg_type)
             shutil.copy(src, cfg_filepath)
             cfg_dict = load_json(cfg_filepath)
+    if sys.version_info.major == 3 and sys.version_info.minor <= 7:
+        # TODO: explain. Preserve order when writing dict to JSON
+        cfg_dict = OrderedDict(cfg_dict)
     return cfg_dict
 
 
@@ -952,7 +957,24 @@ def main():
         else:
             if main_cfg_dict['simulation']:
                 import SimulRPi.GPIO as GPIO
+                """
+                GPIO.setchannelnames({
+                    10: "led 10",
+                    11: "led 11"
+                })
+                GPIO.setsymbols({
+                    "10": {
+                        "ON": "\\033[1;31;48mO\\033[1;37;0m",
+                        "OFF": "x"
+                    },
+                    "9": {
+                        "ON": "\\033[1;31;48mV\\033[1;37;0m",
+                        "OFF": "x"
+                    }
+                })
+                """
                 GPIO.setchannels(main_cfg_dict['gpio_channels'])
+                GPIO.setdefaultsymbols(main_cfg_dict['default_led_symbols'])
                 GPIO.setprinting(not main_cfg_dict['quiet'])
                 logger.debug("Simulation mode enabled")
             else:
