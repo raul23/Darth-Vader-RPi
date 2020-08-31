@@ -78,7 +78,7 @@ import shutil
 import sys
 import threading
 import time
-from collections import OrderedDict
+from collections import namedtuple, OrderedDict
 from logging import NullHandler
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
@@ -187,6 +187,72 @@ def _add_spaces_to_msg(msg, nb_spaces=60):
     return "{}{}".format(msg, " " * nb_spaces)
 
 
+def _check_user_cfg_dict(cfg_type, user_cfg_dict):
+    """TODO
+
+    Parameters
+    ----------
+    cfg_type
+    user_cfg_dict
+
+    """
+    retval = namedtuple("retval", "keys_not_found user_cfg_filepath")
+    retval.keys_not_found = []
+    user_cfg_filepath = get_cfg_filepath(cfg_type)
+    retval.user_cfg_filepath = user_cfg_filepath
+    default_cfg_filepath = get_cfg_filepath("default_{}".format(cfg_type))
+    default_cfg_dict = _get_ordered_dict(load_json(default_cfg_filepath))
+    default_keys = set(default_cfg_dict.keys())
+    user_keys = set(user_cfg_dict.keys())
+    diff_keys = default_keys - user_keys
+    for k in diff_keys:
+        retval.keys_not_found.append(k)
+        user_cfg_dict.setdefault(k, default_cfg_dict[k])
+    if diff_keys:
+        dumps_json(filepath=user_cfg_filepath, data=user_cfg_dict, indent=2)
+    return retval
+
+
+def _check_sound_files(main_cfg):
+    """TODO
+
+    Parameters
+    ----------
+    main_cfg
+
+    Raises
+    ------
+
+    """
+    logger.debug("Checking sound files...")
+    default_directory = False
+    if main_cfg['sounds_directory']:
+        logger.debug("sounds_directory: {}".format(
+            main_cfg['sounds_directory']))
+    else:
+        default_directory = True
+        logger.info("No sounds_directory defined in config file")
+        dirpath = get_dirpath()
+        logger.info("Setting sounds_directory with default location: "
+                    "{}".format(dirpath))
+        orig_main_cfg = _get_cfg_dict('main')
+        orig_main_cfg['sounds_directory'] = dirpath
+        main_cfg['sounds_directory'] = dirpath
+        dumps_json(get_cfg_filepath('main'), orig_main_cfg, indent=2)
+    sound_types = ['quotes', 'songs', 'sound_effects']
+    for sound_type in sound_types:
+        for sound in main_cfg[sound_type]:
+            filename = sound['filename']
+            if default_directory:
+                filepath = get_filepath(filename)
+            else:
+                filepath = os.path.join(main_cfg['sounds_directory'], filename)
+            if os.path.exists(filepath):
+                logger.debug("File checked: {}".format(filepath))
+            else:
+                raise FileNotFoundError("No such file: {}".format(filepath))
+
+
 def _get_cfg_dict(cfg_type):
     """TODO
 
@@ -206,6 +272,7 @@ def _get_cfg_dict(cfg_type):
         try:
             cfg_dict = load_json(cfg_filepath)
         except FileNotFoundError:
+            # TODO: add logging
             # Config file not found
             # Copy it from the default one
             # TODO: IMPORTANT destination with default?
@@ -213,10 +280,29 @@ def _get_cfg_dict(cfg_type):
             src = get_cfg_filepath(default_cfg_type)
             shutil.copy(src, cfg_filepath)
             cfg_dict = load_json(cfg_filepath)
-    if sys.version_info.major == 3 and sys.version_info.minor <= 7:
-        # TODO: explain. Preserve order when writing dict to JSON
-        cfg_dict = OrderedDict(cfg_dict)
+    cfg_dict = _get_ordered_dict(cfg_dict)
+    if 'sounds_directory' in cfg_dict:
+        # Only for main config file
+        cfg_dict['sounds_directory'] = os.path.expanduser(
+            cfg_dict['sounds_directory'])
     return cfg_dict
+
+
+def _get_ordered_dict(dict_):
+    """TODO
+
+    Parameters
+    ----------
+    dict_
+
+    Returns
+    -------
+
+    """
+    if sys.version_info.major == 3 and sys.version_info.minor <= 6:
+        # TODO: explain. Preserve order when writing dict to JSON
+        dict_ = OrderedDict(dict_)
+    return dict_
 
 
 class ExceptionThread(threading.Thread):
@@ -325,46 +411,6 @@ class SoundWrapper:
         """Stop playback on the specified channel `channel_id`.
         """
         self._channel.stop()
-
-
-def check_sound_files(main_cfg):
-    """TODO
-
-    Parameters
-    ----------
-    main_cfg
-
-    Raises
-    ------
-
-    """
-    default_directory = False
-    if main_cfg['sounds_directory']:
-        logger.debug("sounds_directory: {}".format(
-            main_cfg['sounds_directory']))
-    else:
-        default_directory = True
-        logger.info("No sounds_directory defined in config file")
-        dirpath = get_dirpath()
-        logger.info("Setting sounds_directory with default location: "
-                    "{}".format(dirpath))
-        orig_main_cfg = _get_cfg_dict('main')
-        orig_main_cfg['sounds_directory'] = dirpath
-        main_cfg['sounds_directory'] = dirpath
-        dumps_json(get_cfg_filepath('main'), orig_main_cfg, indent=2)
-    sound_types = ['quotes', 'songs', 'sound_effects']
-    logger.debug("Checking sound files...")
-    for sound_type in sound_types:
-        for sound in main_cfg[sound_type]:
-            filename = sound['filename']
-            if default_directory:
-                filepath = get_filepath(filename)
-            else:
-                filepath = os.path.join(main_cfg['sounds_directory'], filename)
-            if os.path.exists(filepath):
-                logger.debug("File checked: {}".format(filepath))
-            else:
-                raise FileNotFoundError("No such file: {}".format(filepath))
 
 
 def turn_off_led(channel):
@@ -862,6 +908,9 @@ def main():
 
     """
     global logger, GPIO, _VERBOSE
+    # =====================
+    # Default logging setup
+    # =====================
     # Setup the default logger (whose name is __main__ since this file is run
     # as a script) which will be used for printing to the console before all
     # loggers defined in the JSON file will be configured. The printing with
@@ -869,36 +918,36 @@ def main():
     # it, e.g. the verbose option is enabled.
     # IMPORTANT: the config options need to be read before using any logger
     # TODO: default logger not used
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.INFO)
     ch = logging.StreamHandler()
-    ch.setLevel(logging.DEBUG)
+    ch.setLevel(logging.INFO)
     formatter = logging.Formatter("%(levelname)-8s %(message)s")
     ch.setFormatter(formatter)
     logger.addHandler(ch)
 
+    # ============================
+    # Parse command-line arguments
+    # ============================
     parser = setup_argparser()
     args = parser.parse_args()
-
-    # Get main config dict
+    # Get main config dict and check if keys missing
     main_cfg_dict = _get_cfg_dict('main')
-    main_cfg_dict['sounds_directory'] = os.path.expanduser(
-        main_cfg_dict['sounds_directory'])
-
+    check_cfg_retval = _check_user_cfg_dict('main', main_cfg_dict)
     # Override logging configuration with command-line arguments
-    retval = override_config_with_args(main_cfg_dict, parser)
+    override_retval = override_config_with_args(main_cfg_dict, parser)
 
-    # ==============
-    # Logging config
-    # ==============
-    # NOTE: if quiet and verbose are both activated, only quiet will have an
-    # effect
+    # ==============================
+    # Logging setup from config file
+    # ==============================
+    # NOTE: if quiet and verbose are both activated, only quiet will have an effect
     if main_cfg_dict['quiet']:
         # TODO: disable logging completely? even error messages?
         logger.disabled = True
     else:
         # Setup logger
         logging_cfg_dict = _get_cfg_dict('log')
-        # TODO: sanity check on loggers (names based in package...)
+        # NOTE: returned value not used
+        _check_user_cfg_dict('log', logging_cfg_dict)
         if main_cfg_dict['verbose']:
             _VERBOSE = True
             keys = ['handlers', 'loggers']
@@ -913,21 +962,35 @@ def main():
         else:
             logger_name = __name__
         logger = logging.getLogger(logger_name)
-        # Logger now setup
-        logger.info("{} v{}".format(package_name, package_version))
-        logger.debug("Package path: {}".format(package_path[0]))
-        logger.info("Verbose option {}".format(
-            "enabled" if main_cfg_dict['verbose'] else "disabled"))
-        msg1 = "Config options overridden by command-line arguments:\n"
-        nb_items = len(retval.config_opts_overidden)
-        for i, (cfg_name, old_v, new_v) in enumerate(retval.config_opts_overidden):
-            msg1 += "\t {}: {} --> {}".format(cfg_name, old_v, new_v)
-            if i + 1 < nb_items:
-                msg1 += "\n"
-        msg2 = "Command-line arguments not found in JSON config file: " \
-               "{}".format(retval.args_not_found)
-        logger.debug(msg1)
-        logger.debug(msg2)
+
+    # ==================================================
+    # Start logging and process previous returned values
+    # ==================================================
+    logger.info("{} v{}".format(package_name, package_version))
+    logger.debug("Package path: {}".format(package_path[0]))
+    logger.info("Verbose option {}".format(
+        "enabled" if main_cfg_dict['verbose'] else "disabled"))
+    # Process first returned values: checking config file
+    logger.debug("checked user configuration file '{}'...".format(
+        os.path.basename(check_cfg_retval.user_cfg_filepath)))
+    for k in check_cfg_retval.keys_not_found:
+        logger.warning("Key '{}' not found. Added it in the configuration "
+                       "dict with default value.".format(k))
+    if check_cfg_retval.keys_not_found:
+        logger.info("Saved updated configuration dict to file: {}".format(
+            check_cfg_retval.user_cfg_filepath))
+    # Process second returned values: overridden config options
+    msg1 = "Config options overridden by command-line arguments:\n"
+    config_opts_overidden = override_retval.config_opts_overidden
+    nb_items = len(config_opts_overidden)
+    for i, (cfg_name, old_v, new_v) in enumerate(config_opts_overidden):
+        msg1 += "\t {}: {} --> {}".format(cfg_name, old_v, new_v)
+        if i + 1 < nb_items:
+            msg1 += "\n"
+    msg2 = "Command-line arguments not found in JSON config file: " \
+           "{}".format(override_retval.args_not_found)
+    logger.debug(msg1)
+    logger.debug(msg2)
 
     # =======
     # Actions
@@ -935,7 +998,7 @@ def main():
     retcode = 0
     # TODO: enlarge try? even if logger not setup completely
     try:
-        check_sound_files(main_cfg_dict)
+        _check_sound_files(main_cfg_dict)
         if args.edit:
             if args.edit == _MAIN_CFG:
                 args.edit = "main"
@@ -995,8 +1058,6 @@ def main():
             logger.error(err_msg)
         retcode = 1
     finally:
-        # TODO: works on UNIX shell only, not Windows
-        # os.system("tput cnorm")
         if main_cfg_dict['quiet']:
             print()
         return retcode
