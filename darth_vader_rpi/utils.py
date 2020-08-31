@@ -11,7 +11,7 @@ import shlex
 import subprocess
 import sys
 from collections import namedtuple
-from subprocess import PIPE
+# from subprocess import PIPE
 
 from darth_vader_rpi import configs
 
