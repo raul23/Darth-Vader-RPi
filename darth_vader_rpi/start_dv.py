@@ -581,6 +581,7 @@ def activate_dv(main_cfg):
         logger.debug("pygame mixer initialization")
         pygame.mixer.init()
         logger.debug("RPi initialization")
+        logger.debug("")
         # Set the numbering system used to identify the I/O pins on an RPi
         modes = {'BOARD': GPIO.BOARD, 'BCM': GPIO.BCM}
         GPIO.setmode(modes[main_cfg['mode'].upper()])
@@ -609,11 +610,10 @@ def activate_dv(main_cfg):
             channel = pygame.mixer.Channel(ch_dict['channel_id'])
             channel.set_volume(ch_dict['volume'])
 
-        logger.debug("")
         sounds_dir = main_cfg['sounds_directory']
         # Load sounds from cfg
         logger.info('Loading sounds...')
-        logger.debug("")
+        logger.info("")
         for sound_type in ['quotes', 'songs', 'sound_effects']:
             logger.debug('Loading {}'.format(sound_type.replace("_", " ")))
             for sound in main_cfg[sound_type]:
@@ -948,31 +948,34 @@ def main():
     # ==================================================
     # Start logging and process previous returned values
     # ==================================================
-    logger.info("{} v{}".format(package_name, package_version))
+    logger.info("This is {} v{}".format(package_name, package_version))
     logger.debug("Package path: {}".format(package_path[0]))
     logger.info("Verbose option {}".format(
         "enabled" if main_cfg_dict['verbose'] else "disabled"))
     # Process first returned values: checking config file
-    logger.debug("checked user configuration file '{}'...".format(
-        os.path.basename(check_cfg_retval.user_cfg_filepath)))
-    for k in check_cfg_retval.keys_not_found:
-        logger.warning("Key '{}' not found. Added it in the configuration "
-                       "dict with default value.".format(k))
     if check_cfg_retval.keys_not_found:
+        logger.debug("checked user configuration file '{}'...".format(
+            os.path.basename(check_cfg_retval.user_cfg_filepath)))
+        for k in check_cfg_retval.keys_not_found:
+            logger.warning("Key '{}' not found. Added it in the configuration "
+                           "dict with default value.".format(k))
         logger.info("Saved updated configuration dict to file: {}".format(
             check_cfg_retval.user_cfg_filepath))
     # Process second returned values: overridden config options
-    msg1 = "Config options overridden by command-line arguments:\n"
-    config_opts_overidden = override_retval.config_opts_overidden
-    nb_items = len(config_opts_overidden)
-    for i, (cfg_name, old_v, new_v) in enumerate(config_opts_overidden):
-        msg1 += "\t {}: {} --> {}".format(cfg_name, old_v, new_v)
-        if i + 1 < nb_items:
-            msg1 += "\n"
-    msg2 = "Command-line arguments not found in JSON config file: " \
-           "{}".format(override_retval.args_not_found)
-    logger.debug(msg1)
-    logger.debug(msg2)
+    if override_retval.config_opts_overidden:
+        msg = "Config options overridden by command-line arguments:\n"
+        config_opts_overidden = override_retval.config_opts_overidden
+        nb_items = len(config_opts_overidden)
+        for i, (cfg_name, old_v, new_v) in enumerate(config_opts_overidden):
+            msg += "\t {}: {} --> {}".format(cfg_name, old_v, new_v)
+            if i + 1 < nb_items:
+                msg += "\n"
+        logger.debug(msg)
+    # Process third returned values: arguments not found in cfg file
+    if override_retval.args_not_found:
+        msg = "Command-line arguments not found in JSON config file: " \
+              "{}".format(override_retval.args_not_found)
+        logger.debug(msg)
 
     # =======
     # Actions
