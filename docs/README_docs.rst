@@ -1,32 +1,3 @@
-.. default_main_cfg
-.. _configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L1
-.. _default values: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L1
-.. external links
-.. _pygame: https://www.pygame.org/
-.. _pynput: https://pynput.readthedocs.io
-.. _Darth-Vader-RPi documentation: http://darth-vader-rpi.rtfd.io/
-.. _Darth-Vader-RPi GitHub: https://github.com/raul23/Darth-Vader-RPi
-.. TODO: test the following URL
-.. _Darth-Vader-RPi PyPI: https://pypi.org/project/Darth-Vader-RPi/
-.. _"I am your father": https://www.youtube.com/watch?v=xuJEYdOFEP4
-.. _Imperial March song by Jacob Townsend: https://soundcloud.com/jacobtownsend1/imperial-march
-.. _"Nooooo": https://www.youtube.com/watch?v=ZscVhFvD6iE
-.. _RPi.GPIO: https://pypi.org/project/RPi.GPIO/
-.. TODO: SimulRPi points to PyPI or github?
-.. _SimulRPi: https://pypi.org/project/SimulRPi/
-.. _Empire Strikes Back chest box light sequence: https://youtu.be/E2J_xl2MbGU?t=333
-.. internal links
-.. TODO: next reference might not work in GitHub
-.. _closing sound: change_default_settings.html#change-closing-sound-label
-.. _installed: #installation-instructions-label
-.. _start_dv: #script-start-dv
-.. _test the program on your own computer: #simulating-on-your-computer
-.. _Add Darth Vader quotes: change_default_settings.html#add-darth-vader-quotes-label
-.. _Change default settings: change_default_settings.html
-.. _Change keymap: change_default_settings.html#change-keymap-label
-.. _Change slot LEDs sequence: change_default_settings.html#change-slot-leds-sequence-label
-.. _Changelog: changelog.html
-
 ======
 README
 ======
@@ -137,24 +108,65 @@ Dependencies
 * **Python**: 3.5, 3.6, 3.7, 3.8
 * **Packages**
 
-  * ``pygame``>=1.9.6: for playing sounds
+  * ``dv_sounds``>=0.1.0a0: for retrieving the sound files (quotes, songs, and
+    sound effects)
+  * ``pygame``>=1.9.3: for playing sounds
   * ``SimulRPi`` >=0.1.0a0: for partly faking `RPI.GPIO`_ and simulating I/O
     devices connected to an RPi such as LEDs and push buttons in case that you
     don't have access to an RPi. See `SimulRPi`_ for more info about this
     library.
 
+.. important::
+
+   I couldn't install ``pygame`` 1.9.6 (the latest stable release) with Python
+   3.5 and 3.8, on macOS. However, the latest pre-release development version
+   worked well with Python 3.5 and 3.8, on macOS.
+
 .. _installation-instructions-label:
 
 Installation instructions
 =========================
-.. TODO: add installation instructions
+.. TODO: IMPORTANT modify SimulRPi in requirements.txt to point to pypi
+.. TODO: IMPORTANT add path to ../bin when RPi (scripts, warning after installing with pip)
+.. highlight:: none
+
+1. Install the ``darth_vader_rpi`` package with *pip*::
+
+   $ pip install git+https://github.com/raul23/Darth-Vader-RPi#egg=Darth-Vader-RPi
+
+   It will install the dependencies if they are not already found in your system.
+
+2. If you get the warning message from *pip* that the script ``start_dv`` is
+   not defined in your *PATH*::
+
+      WARNING: The script start_dv is installed in '/home/pi/.local/bin' which is not on PATH.
+
+   add this directory to your *PATH* by editing your configuration file (e.g.
+   *.bashrc*). See this `article`_ on how to set *PATH* on Linux.
+
+3. Test your installation by importing ``darth_vader_rpi`` and printing its version::
+
+   $ python -c "import darth_vader_rpi; print(darth_vader_rpi.__version__)"
+
+4. You can also test that the dependencies were installed correctly::
+
+   $ python -c "import dv_sounds, pygame, SimulRPi"
+
+.. important::
+
+   When using *pip*, make sure that it is using the correct Python version.
+   It might be the case that *pip* is using Python 2.7. You can find what Python
+   version *pip* uses with the following::
+
+      $ pip -V
+
+   If *pip* is using the wrong Python version, then try to use *pip3* which uses
+   a Python 3 version.
 
 Usage
 =====
 Script ``start_dv``
 -------------------
-.. TODO: test script on RPi
-
 Once the ``darth_vader_rpi`` package is `installed`_, you should have access to
 the script ``start_dv`` which turns on LEDs and plays sound effects on a
 Raspberry Pi (RPi).
@@ -237,11 +249,48 @@ connected to an RPi:
 Check `Change keymap`_ if you want to change this default key to channel
 mapping.
 
+How to uninstall
+================
+To uninstall **only** the package ``darth_vader_rpi``::
+
+   $ pip uninstall darth_vader_rpi
+
+To uninstall the package ``darth_vader_rpi`` and its dependencies::
+
+   $ pip uninstall darth_vader_rpi simulrpi dv_sounds pygame
+
+You can remove from the previous command-line those dependencies that you don't
+want to uninstall.
+
+.. note::
+
+   When uninstalling the package ``darth_vader_rpi``, you might be informed
+   that the configuration files *logging_cfg.json* and *main_cfg.json* won't be
+   removed by *pip*. You can remove those files manually by noting their paths
+   returned by *pip*. Or you can leave them so your saved settings can be
+   re-used the next time you re-install the package.
+
+   **Example:**
+
+   .. code-block:: console
+      :emphasize-lines: 8, 11
+
+      $ pip uninstall darth-vader-rpi
+      Found existing installation: Darth-Vader-RPi 0.0.1a0
+      Uninstalling Darth-Vader-RPi-0.0.1a0:
+        Would remove:
+          /Users/test/miniconda3/envs/rpi_py37/bin/start_dv
+          /Users/test/miniconda3/envs/rpi_py37/lib/python3.7/site-packages/Darth_Vader_RPi-0.0.1a0.dist-info/*
+          /Users/test/miniconda3/envs/rpi_py37/lib/python3.7/site-packages/darth_vader_rpi/*
+        Would not remove (might be manually added):
+          /Users/test/miniconda3/envs/rpi_py37/lib/python3.7/site-packages/darth_vader_rpi/configs/logging_cfg.json
+          /Users/test/miniconda3/envs/rpi_py37/lib/python3.7/site-packages/darth_vader_rpi/configs/main_cfg.json
+      $ rm -r /Users/test/miniconda3/envs/rpi_py37/lib/python3.7/site-packages/darth_vader_rpi
+
 Resources
 =========
 .. TODO: don't use documentation link for readthedocs
 .. TODO: don't show changelog and todos links for readthedocs
-.. `Darth-Vader-RPi PyPI`_
 
 * `Darth-Vader-RPi documentation`_
 * `Darth-Vader-RPi GitHub`_: source code
@@ -277,3 +326,36 @@ Credits
 - **Slot LEDs sequences:**
 
   - `Empire Strikes Back chest box light sequence`_
+
+.. URLs
+
+.. 0. default_main_cfg
+.. _configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L1
+.. _default values: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L1
+.. 1. external links
+.. _article: https://docs.oracle.com/cd/E19062-01/sun.mgmt.ctr36/819-5418/gaznb/index.html
+.. _pygame: https://www.pygame.org/
+.. _pynput: https://pynput.readthedocs.io
+.. _Darth-Vader-RPi documentation: http://darth-vader-rpi.rtfd.io/
+.. _Darth-Vader-RPi GitHub: https://github.com/raul23/Darth-Vader-RPi
+.. TODO: test the following URL
+.. _Darth-Vader-RPi PyPI: https://pypi.org/project/Darth-Vader-RPi/
+.. _"I am your father": https://www.youtube.com/watch?v=xuJEYdOFEP4
+.. _Imperial March song by Jacob Townsend: https://soundcloud.com/jacobtownsend1/imperial-march
+.. _"Nooooo": https://www.youtube.com/watch?v=ZscVhFvD6iE
+.. _RPi.GPIO: https://pypi.org/project/RPi.GPIO/
+.. TODO: SimulRPi points to PyPI or github?
+.. _SimulRPi: https://pypi.org/project/SimulRPi/
+.. _Empire Strikes Back chest box light sequence: https://youtu.be/E2J_xl2MbGU?t=333
+
+.. 2. Internal links
+.. TODO: next reference might not work in GitHub
+.. _closing sound: change_default_settings.html#change-closing-sound-label
+.. _installed: #installation-instructions-label
+.. _start_dv: #script-start-dv
+.. _test the program on your own computer: #simulating-on-your-computer
+.. _Add Darth Vader quotes: change_default_settings.html#add-darth-vader-quotes-label
+.. _Change default settings: change_default_settings.html
+.. _Change keymap: change_default_settings.html#change-keymap-label
+.. _Change slot LEDs sequence: change_default_settings.html#change-slot-leds-sequence-label
+.. _Changelog: changelog.html
