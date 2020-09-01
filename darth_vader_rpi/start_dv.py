@@ -201,7 +201,7 @@ def _check_user_cfg_dict(cfg_type, user_cfg_dict):
     user_cfg_filepath = get_cfg_filepath(cfg_type)
     retval.user_cfg_filepath = user_cfg_filepath
     default_cfg_filepath = get_cfg_filepath("default_{}".format(cfg_type))
-    default_cfg_dict = _get_ordered_dict(load_json(default_cfg_filepath))
+    default_cfg_dict = load_json(default_cfg_filepath)
     default_keys = set(default_cfg_dict.keys())
     user_keys = set(user_cfg_dict.keys())
     diff_keys = default_keys - user_keys
@@ -272,7 +272,7 @@ def _get_cfg_dict(cfg_type):
         try:
             cfg_dict = load_json(cfg_filepath)
         except FileNotFoundError:
-            # TODO: add logging
+            # TODO: IMPORTANT add logging
             # Config file not found
             # Copy it from the default one
             # TODO: IMPORTANT destination with default?
@@ -280,29 +280,11 @@ def _get_cfg_dict(cfg_type):
             src = get_cfg_filepath(default_cfg_type)
             shutil.copy(src, cfg_filepath)
             cfg_dict = load_json(cfg_filepath)
-    cfg_dict = _get_ordered_dict(cfg_dict)
     if 'sounds_directory' in cfg_dict:
         # Only for main config file
         cfg_dict['sounds_directory'] = os.path.expanduser(
             cfg_dict['sounds_directory'])
     return cfg_dict
-
-
-def _get_ordered_dict(dict_):
-    """TODO
-
-    Parameters
-    ----------
-    dict_
-
-    Returns
-    -------
-
-    """
-    if sys.version_info.major == 3 and sys.version_info.minor <= 6:
-        # TODO: explain. Preserve order when writing dict to JSON
-        dict_ = OrderedDict(dict_)
-    return dict_
 
 
 class ExceptionThread(threading.Thread):
