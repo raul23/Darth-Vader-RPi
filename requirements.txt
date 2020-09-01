@@ -1,6 +1,7 @@
-pygame==2.0.0.dev10; python_version=="3.8"
-pygame>=1.9.3; python_version=="3.7"
-pygame>=1.9.3; python_version=="3.6"
 pygame>=1.9.3; python_version=="3.5"
+pygame>=1.9.3; python_version=="3.6"
+pygame>=1.9.3; python_version=="3.7"
+pygame>=1.9.3; python_version=="3.5"
+pygame==2.0.0.dev10; python_version=="3.8"
 DV-Sounds@git+git://github.com/raul23/DV-Sounds@master
 SimulRPi@git+https://github.com/raul23/SimulRPi.git@master#egg=SimulRPi
