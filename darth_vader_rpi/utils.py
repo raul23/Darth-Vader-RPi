@@ -10,7 +10,7 @@ import os
 import shlex
 import subprocess
 import sys
-from collections import namedtuple
+from collections import namedtuple, OrderedDict
 # from subprocess import PIPE
 
 from darth_vader_rpi import configs
@@ -147,6 +147,8 @@ def get_cfg_filepath(file_type):
 def load_json(filepath, encoding='utf8'):
     """Load JSON data from a file on disk.
 
+    TODO: specify preserve order if py36 and less
+
     Parameters
     ----------
     filepath : str
@@ -169,7 +171,10 @@ def load_json(filepath, encoding='utf8'):
     """
     try:
         with codecs.open(filepath, 'r', encoding) as f:
-            data = json.load(f)
+            if sys.version_info.major == 3 and sys.version_info.minor <= 6:
+                data = json.load(f, object_pairs_hook=OrderedDict)
+            else:
+                data = json.load(f)
     except OSError:
         raise
     else:
