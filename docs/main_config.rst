@@ -166,7 +166,7 @@ GPIO channels for the following I/O devices are defined:
           }
 
    - ``led_symbols``: it is only defined for LED objects. It is a dictionary
-     defining the symbols to be used when the LED is turned ON and OFF. If nof
+     defining the symbols to be used when the LED is turned ON and OFF. If not
      found for a LED object, then the `default LED symbols`_ will be used
 
       .. code-block:: python
