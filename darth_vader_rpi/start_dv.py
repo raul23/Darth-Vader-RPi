@@ -75,10 +75,9 @@ import logging.config
 import os
 import platform
 import shutil
-import sys
 import threading
 import time
-from collections import namedtuple, OrderedDict
+from collections import namedtuple
 from logging import NullHandler
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
@@ -289,7 +288,7 @@ def _get_cfg_dict(cfg_type):
 
 class ExceptionThread(threading.Thread):
     """A subclass from :class:`threading.Thread` that defines threads that can
-    catch errors if their target function raises an exception.
+    catch errors if their target functions raise an exception.
 
     Attributes
     ----------
