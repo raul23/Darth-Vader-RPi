@@ -93,6 +93,7 @@ from darth_vader_rpi.utils import (dumps_json, get_cfg_filepath, load_json,
 logger = logging.getLogger(__name__)
 logger.addHandler(NullHandler())
 
+TEST_THREAD = None
 GPIO = None
 """Its default value is :obj:`None` and will be eventually set to 
 one of the two modules (`RPi.GPIO`_ or `SimulRPi.GPIO`_) depending on the 
@@ -539,8 +540,9 @@ def turn_on_slot_leds_sequence(top_led, middle_led, bottom_led,
     logger.debug(_add_spaces_to_msg("Stopping thread: {}".format(th.name)))
 
 
-def activate_dv(main_cfg):
-    """Activate Darth Vader by turning on LEDs and playing sounds.
+class DarthVader:
+    """Class for activating a Darth Vader figurine by turning on LEDs on his
+    suit and playing sounds, all done via a Raspberry Pi (RPi).
 
     The LEDs illuminate Darth Vader's lightsaber and the three slots in the
     chest control box. 3 push buttons control the following sounds:
@@ -572,151 +574,172 @@ def activate_dv(main_cfg):
         clean up before exiting.
 
     """
-    retcode = 0
-    th_slot_leds = None
-    gpio_channels = {}
-    loaded_sounds = {}
-    try:
-        logger.debug("pygame mixer initialization")
-        pygame.mixer.init()
-        logger.debug("RPi initialization")
-        logger.debug("")
-        # Set the numbering system used to identify the I/O pins on an RPi
-        modes = {'BOARD': GPIO.BOARD, 'BCM': GPIO.BCM}
-        GPIO.setmode(modes[main_cfg['mode'].upper()])
-        GPIO.setwarnings(False)
-        # Setup LEDs and buttons
-        for gpio_ch in main_cfg['gpio_channels']:
-            if gpio_ch['channel_id'].endswith("_led"):
-                # LEDs
-                GPIO.setup(gpio_ch['channel_number'], GPIO.OUT)
-            else:
-                # Buttons
-                GPIO.setup(gpio_ch['channel_number'], GPIO.IN,
-                           pull_up_down=GPIO.PUD_UP)
-            gpio_channels[gpio_ch['channel_id']] = {
-                'channel_number': gpio_ch['channel_number'],
-                'channel_name': gpio_ch['channel_name'],
-                'key': gpio_ch.get('key'),
-                'led_symbol': gpio_ch.get('led_symbols')
-            }
 
-        ### Sound
-        # Create separate channel
-        # Ref.: stackoverflow.com/a/59742418
-        audio_channels = main_cfg['audio_channels']
-        for ch_dict in audio_channels:
-            channel = pygame.mixer.Channel(ch_dict['channel_id'])
-            channel.set_volume(ch_dict['volume'])
+    def __init__(self, main_cfg):
+        self.main_cfg = main_cfg
+        self.th_slot_leds = None
 
-        sounds_dir = main_cfg['sounds_directory']
-        # Load sounds from cfg
-        logger.info('Loading sounds...')
-        logger.info("")
-        for sound_type in ['quotes', 'songs', 'sound_effects']:
-            logger.debug('Loading {}'.format(sound_type.replace("_", " ")))
-            for sound in main_cfg[sound_type]:
-                sound_id = sound['id']
-                sound_name = sound['name']
-                filepath = os.path.join(sounds_dir, sound['filename'])
-                logger.debug('Loading "{}": {}'.format(sound_name, filepath))
-                sw = SoundWrapper(
-                    sound_id=sound_id,
-                    sound_name=sound_name,
-                    sound_filepath=filepath,
-                    channel_id=sound['audio_channel_id'],
-                    mute=sound.get('mute', False))
-                if sound_type == "quotes":
-                    loaded_sounds.setdefault("quotes", {})
-                    loaded_sounds['quotes'].setdefault(sound_id, sw)
-                else:
-                    loaded_sounds.setdefault(sound_id, sw)
-                if sw.sound_id == 'breathing_sound' and not sw.mute:
-                    loops = sound.get('loops', 0)
-                    loaded_sounds[sound_id].play(loops)
+    def activate(self):
+        """TODO
+
+        Returns
+        -------
+
+        """
+        retcode = 0
+        gpio_channels = {}
+        loaded_sounds = {}
+        try:
+            logger.debug("pygame mixer initialization")
+            pygame.mixer.init()
+            logger.debug("RPi initialization")
             logger.debug("")
-        quotes = list(loaded_sounds['quotes'].values())
-        th_slot_leds = ExceptionThread(
-            name="thread_slot_leds",
-            target=turn_on_slot_leds_sequence,
-            args=(gpio_channels['top_led']['channel_number'],
-                  gpio_channels['middle_led']['channel_number'],
-                  gpio_channels['bottom_led']['channel_number'],
-                  main_cfg['slot_leds']['sequence'],
-                  main_cfg['slot_leds']['delay_between_steps'],
-                  main_cfg['slot_leds']['time_per_step']))
-
-        th_slot_leds.start()
-        logger.info("")
-        logger.info(_add_spaces_to_msg("Press buttons"))
-        pressed_lightsaber = False
-        quote_idx = 0
-
-        while True:
-            if not GPIO.input(gpio_channels['lightsaber_button']['channel_number']):
-                # logger.debug("\n\nButton {} pressed...".format(
-                    # lightsaber_button))
-                if pressed_lightsaber:
-                    pressed_lightsaber = False
-                    loaded_sounds['lightsaber_retraction_sound'].play()
-                    time.sleep(0.1)
-                    turn_off_led(22)
+            # Set the numbering system used to identify the I/O pins on an RPi
+            modes = {'BOARD': GPIO.BOARD, 'BCM': GPIO.BCM}
+            GPIO.setmode(modes[self.main_cfg['mode'].upper()])
+            GPIO.setwarnings(False)
+            # Setup LEDs and buttons
+            for gpio_ch in self.main_cfg['gpio_channels']:
+                if gpio_ch['channel_id'].endswith("_led"):
+                    # LEDs
+                    GPIO.setup(gpio_ch['channel_number'], GPIO.OUT)
                 else:
-                    pressed_lightsaber = True
-                    loaded_sounds['lightsaber_drawing_sound'].play()
-                    loaded_sounds['lightsaber_hum_sound'].play(-1)
-                    time.sleep(0.1)
-                    turn_on_led(gpio_channels['lightsaber_led']['channel_number'])
-                time.sleep(0.2)
-            elif not GPIO.input(gpio_channels['song_button']['channel_number']):
-                # logger.debug("\n\nButton {} pressed...".format(song_button))
-                loaded_sounds['imperial_march_song'].play()
-                time.sleep(0.2)
-            elif not GPIO.input(gpio_channels['quotes_button']['channel_number']):
-                """
-                logger.debug("\n\nButton {} pressed...".format(
-                    gpio_channels['quotes_button']['channel_name']))
-                """
-                quote = quotes[quote_idx % len(quotes)]
-                quote_idx += 1
-                quote.play()
-                time.sleep(0.2)
-            elif not th_slot_leds.is_alive():
-                retcode = 1
-                logger.info(_add_spaces_to_msg("Exiting..."))
-                break
-    except Exception as e:
-        retcode = 1
-        if main_cfg['verbose']:
-            logger.exception(_add_spaces_to_msg("Error: {}".format(e)))
-        else:
-            # logger.error(_add_spaces_to_msg(e.__repr__()))
-            # TODO: add next line in a utility function
-            err_msg = "{}: {}".format(str(e.__class__).split("'")[1], e)
-            logger.error(_add_spaces_to_msg(err_msg))
-    except KeyboardInterrupt:
-        logger.info(_add_spaces_to_msg("Exiting..."))
-        closing_sound = loaded_sounds.get('closing_sound')
-        if closing_sound and not closing_sound.mute:
-            closing_sound.play()
-            time.sleep(1)
+                    # Buttons
+                    GPIO.setup(gpio_ch['channel_number'], GPIO.IN,
+                               pull_up_down=GPIO.PUD_UP)
+                gpio_channels[gpio_ch['channel_id']] = {
+                    'channel_number': gpio_ch['channel_number'],
+                    'channel_name': gpio_ch['channel_name'],
+                    'key': gpio_ch.get('key'),
+                    'led_symbol': gpio_ch.get('led_symbols')
+                }
 
-    if hasattr(GPIO, "setprinting"):
-        GPIO.setprinting(False)
-    if gpio_channels:
-        for channel_id, channel_info in gpio_channels.items():
-            if channel_id.endswith("_led"):
-                turn_off_led(channel_info['channel_number'])
-    if th_slot_leds:
-        th_slot_leds.do_run = False
-        th_slot_leds.join()
-        logger.debug(_add_spaces_to_msg("Thread stopped: {}".format(th_slot_leds.name)))
-    for ch in main_cfg['audio_channels']:
-        pygame.mixer.Channel(ch['channel_id']).stop()
-    logger.info(_add_spaces_to_msg("Cleanup..."))
-    GPIO.cleanup()
+            ### Sound
+            # Create separate channel
+            # Ref.: stackoverflow.com/a/59742418
+            audio_channels = self.main_cfg['audio_channels']
+            for ch_dict in audio_channels:
+                channel = pygame.mixer.Channel(ch_dict['channel_id'])
+                channel.set_volume(ch_dict['volume'])
 
-    return retcode
+            sounds_dir = self.main_cfg['sounds_directory']
+            # Load sounds from cfg
+            logger.info('Loading sounds...')
+            logger.info("")
+            for sound_type in ['quotes', 'songs', 'sound_effects']:
+                logger.debug('Loading {}'.format(sound_type.replace("_", " ")))
+                for sound in self.main_cfg[sound_type]:
+                    sound_id = sound['id']
+                    sound_name = sound['name']
+                    filepath = os.path.join(sounds_dir, sound['filename'])
+                    logger.debug('Loading "{}": {}'.format(sound_name, filepath))
+                    sw = SoundWrapper(
+                        sound_id=sound_id,
+                        sound_name=sound_name,
+                        sound_filepath=filepath,
+                        channel_id=sound['audio_channel_id'],
+                        mute=sound.get('mute', False))
+                    if sound_type == "quotes":
+                        loaded_sounds.setdefault("quotes", {})
+                        loaded_sounds['quotes'].setdefault(sound_id, sw)
+                    else:
+                        loaded_sounds.setdefault(sound_id, sw)
+                    if sw.sound_id == 'breathing_sound' and not sw.mute:
+                        loops = sound.get('loops', 0)
+                        loaded_sounds[sound_id].play(loops)
+                logger.debug("")
+            quotes = list(loaded_sounds['quotes'].values())
+
+            self.th_slot_leds = ExceptionThread(
+                name="thread_slot_leds",
+                target=turn_on_slot_leds_sequence,
+                args=(gpio_channels['top_led']['channel_number'],
+                      gpio_channels['middle_led']['channel_number'],
+                      gpio_channels['bottom_led']['channel_number'],
+                      self.main_cfg['slot_leds']['sequence'],
+                      self.main_cfg['slot_leds']['delay_between_steps'],
+                      self.main_cfg['slot_leds']['time_per_step']))
+            self.th_slot_leds.start()
+            logger.info("")
+            logger.info(_add_spaces_to_msg("Press buttons"))
+            pressed_lightsaber = False
+            quote_idx = 0
+
+            while True:
+                if not GPIO.input(gpio_channels['lightsaber_button']['channel_number']):
+                    # logger.debug("\n\nButton {} pressed...".format(
+                        # lightsaber_button))
+                    if pressed_lightsaber:
+                        pressed_lightsaber = False
+                        loaded_sounds['lightsaber_retraction_sound'].play()
+                        time.sleep(0.1)
+                        turn_off_led(22)
+                    else:
+                        pressed_lightsaber = True
+                        loaded_sounds['lightsaber_drawing_sound'].play()
+                        loaded_sounds['lightsaber_hum_sound'].play(-1)
+                        time.sleep(0.1)
+                        turn_on_led(gpio_channels['lightsaber_led']['channel_number'])
+                    time.sleep(0.2)
+                elif not GPIO.input(gpio_channels['song_button']['channel_number']):
+                    # logger.debug("\n\nButton {} pressed...".format(song_button))
+                    loaded_sounds['imperial_march_song'].play()
+                    time.sleep(0.2)
+                elif not GPIO.input(gpio_channels['quotes_button']['channel_number']):
+                    """
+                    logger.debug("\n\nButton {} pressed...".format(
+                        gpio_channels['quotes_button']['channel_name']))
+                    """
+                    quote = quotes[quote_idx % len(quotes)]
+                    quote_idx += 1
+                    quote.play()
+                    time.sleep(0.2)
+                elif not self.th_slot_leds.is_alive():
+                    retcode = 1
+                    logger.info(_add_spaces_to_msg("Exiting..."))
+                    break
+        except Exception as e:
+            retcode = 1
+            if self.main_cfg['verbose']:
+                logger.exception(_add_spaces_to_msg("Error: {}".format(e)))
+            else:
+                # logger.error(_add_spaces_to_msg(e.__repr__()))
+                # TODO: add next line in a utility function
+                err_msg = "{}: {}".format(str(e.__class__).split("'")[1], e)
+                logger.error(_add_spaces_to_msg(err_msg))
+        except KeyboardInterrupt:
+            logger.info(_add_spaces_to_msg("Exiting..."))
+            closing_sound = loaded_sounds.get('closing_sound')
+            if closing_sound and not closing_sound.mute:
+                closing_sound.play()
+                time.sleep(1)
+        finally:
+            self.cleanup(gpio_channels)
+            return retcode
+
+    def cleanup(self, gpio_channels):
+        """TODO
+
+        Parameters
+        ----------
+        gpio_channels
+
+        """
+        if hasattr(GPIO, "setprinting"):
+            GPIO.setprinting(False)
+        if gpio_channels:
+            for channel_id, channel_info in gpio_channels.items():
+                if channel_id.endswith("_led"):
+                    turn_off_led(channel_info['channel_number'])
+        logger.info(_add_spaces_to_msg("Cleanup..."))
+        if self.th_slot_leds:
+            self.th_slot_leds.do_run = False
+            self.th_slot_leds.join()
+            logger.debug(_add_spaces_to_msg("Thread stopped: {}".format(
+                self.th_slot_leds.name)))
+        for ch in self.main_cfg['audio_channels']:
+            pygame.mixer.Channel(ch['channel_id']).stop()
+        GPIO.cleanup()
 
 
 def edit_config(cfg_type, app=None):
@@ -1029,7 +1052,8 @@ def main():
             # TODO: works on UNIX shell only, not Windows
             # ref.: https://bit.ly/3f3A7dc
             # os.system("tput civis")
-            retcode = activate_dv(main_cfg_dict)
+            dv = DarthVader(main_cfg_dict)
+            retcode = dv.activate()
     except Exception as e:
         # TODO: explain this line
         # traceback.print_exc()
@@ -1041,6 +1065,30 @@ def main():
             err_msg = "{}: {}".format(str(e.__class__).split("'")[1], e)
             logger.error(err_msg)
         retcode = 1
+    except KeyboardInterrupt:
+        # Might happen if error in Manager.{on_press(), on_release()} and then
+        # ctrl+c. Not enough time given to stop all threads
+        if dv.th_slot_leds and dv.th_slot_leds.is_alive():
+            dv.th_slot_leds.join()
+            logger.warning("Abrupt exit: the thread '{}' was not cleanly "
+                           "stopped".format(dv.th_slot_leds.name))
+            logger.debug(_add_spaces_to_msg("Thread stopped: {}".format(
+                dv.th_slot_leds.name)))
+            retcode = 1
+        if hasattr(GPIO, 'manager'):
+            # Simulation only
+            if (GPIO.manager.th_listener and
+                GPIO.manager.th_listener.is_alive()) or \
+                    GPIO.manager.th_display_leds.is_alive():
+                logger.warning("Abrupt exit: GPIO threads were not cleanly "
+                               "stopped")
+                GPIO.cleanup()
+                retcode = 1
+        if retcode == 1:
+            logger.warning("CAUSE: threads were not given enough time to "
+                           "be stopped at the moment of the raised exception. "
+                           "However, all threads are now stopped.")
+
     finally:
         if main_cfg_dict['quiet']:
             print()
@@ -1051,6 +1099,6 @@ if __name__ == '__main__':
     retcode = main()
     msg = "Program exited with {}".format(retcode)
     if retcode == 1:
-        logger.error(msg)
+        logger.error(_add_spaces_to_msg(msg))
     else:
-        logger.info(msg)
+        logger.info(_add_spaces_to_msg(msg))
