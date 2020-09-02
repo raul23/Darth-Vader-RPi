@@ -192,10 +192,22 @@ following:
    - 🛑 : LED turned ON
    - ⚪ : LED turned OFF
 
-.. literalinclude:: ../darth_vader_rpi/configs/default_main_cfg.json
-   :language: python
-   :lines: 8-14, 42-47
+.. code-block:: python
    :caption: **Example:** GPIO channels for the lightsaber button and LED
+
+   "gpio_channels": [
+     {
+       "channel_id": "lightsaber_button",
+       "channel_name": "lightsaber_button",
+       "channel_number": 23,
+       "key": "cmd"
+     },
+     {
+       "channel_id": "lightsaber_led",
+       "channel_name": "lightsaber",
+       "channel_number": 22
+     }
+   ]
 
 Thus, in this example, you have a push button connected to the GPIO pin 23
 (based on the BCM mode) and controlling the lightsaber by turning it ON/OFF
