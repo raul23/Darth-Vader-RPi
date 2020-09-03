@@ -93,7 +93,6 @@ from darth_vader_rpi.utils import (dumps_json, get_cfg_filepath, load_json,
 logger = logging.getLogger(__name__)
 logger.addHandler(NullHandler())
 
-TEST_THREAD = None
 GPIO = None
 """Its default value is :obj:`None` and will be eventually set to 
 one of the two modules (`RPi.GPIO`_ or `SimulRPi.GPIO`_) depending on the 
@@ -970,7 +969,7 @@ def main():
     # ==================================================
     # Start logging and process previous returned values
     # ==================================================
-    logger.info("This is {} v{}".format(package_name, package_version))
+    logger.info("Running {} v{}".format(package_name, package_version))
     logger.debug("Package path: {}".format(package_path[0]))
     logger.info("Verbose option {}".format(
         "enabled" if main_cfg_dict['verbose'] else "disabled"))
