@@ -809,7 +809,7 @@ def edit_config(cfg_type, app=None):
         # Get the command to open the file with the user-specified app
         cmd = specific_cmd_dict.get(platform.system(), app) + " " + filepath
         # TODO: explain DEVNULL, suppress stderr since we will display the error
-        # TODO: IMPORTANT you might geta FileNotFoundError again?
+        # TODO: IMPORTANT you might get a FileNotFoundError again?
         result = run_cmd(cmd)  # stderr=subprocess.DEVNULL)
         retcode = result.returncode
     if retcode == 0:
