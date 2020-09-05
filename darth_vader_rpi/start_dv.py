@@ -604,6 +604,8 @@ class DarthVader:
             GPIO.setwarnings(False)
             # Setup LEDs and buttons
             for gpio_ch in self.main_cfg['gpio_channels']:
+                # TODO: IMPORTANT add channel_type in main_cfg so you don't
+                # have to check '_led'
                 if gpio_ch['channel_id'].endswith("_led"):
                     # LEDs
                     GPIO.setup(gpio_ch['channel_number'], GPIO.OUT)
