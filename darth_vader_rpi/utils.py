@@ -13,6 +13,9 @@ import sys
 from collections import namedtuple, OrderedDict
 # from subprocess import PIPE
 
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
+import pygame
+
 from darth_vader_rpi import configs
 
 
@@ -35,6 +38,22 @@ def _add_cfg_filenames():
 
 
 _add_cfg_filenames()
+
+
+# TODO: clear buffer?
+def _add_spaces_to_msg(msg, nb_spaces=60):
+    """TODO
+
+    Parameters
+    ----------
+    msg
+    nb_spaces
+
+    Returns
+    -------
+
+    """
+    return "{}{}".format(msg, " " * nb_spaces)
 
 
 # TODO: fix in genutils new changes
@@ -276,3 +295,71 @@ def run_cmd(cmd, stderr=subprocess.STDOUT):
         raise
     else:
         return result
+
+
+class _SoundWrapper:
+    """Class that wraps around :class:`pygame.mixer.Channel` and
+    :class:`pygame.mixer.Sound`.
+
+    The :meth:`__init__` method takes care of automatically loading the sound
+    file. The sound file can then be played or stopped from the specified
+    channel `channel_id` with the :meth:`play` or :meth:`stop` method,
+    respectively.
+
+    Parameters
+    ----------
+    sound_id : str
+        A unique identifier.
+    sound_name : str
+        Name of the sound file that will be displayed in the terminal.
+    sound_filepath : str
+        Path to the sound file.
+    channel_id : int
+        Channel id associated with an instance of
+        :class:`pygame.mixer.Channel` for controlling playback. It must take an
+        :obj:`int` value starting from 0.
+    mute : bool, optional
+        If set to `True`, the sound will not be played. The default value is
+        `False`.
+
+
+    .. note::
+
+        It is a wrapper with a very minimal interface to
+        :class:`pygame.mixer.Channel` where only two methods :meth:`play` and
+        :meth:`stop` are provided for the sake of the project.
+
+    """
+
+    def __init__(self, sound_id, sound_name, sound_filepath, channel_id,
+                 mute=False):
+        self.sound_id = sound_id
+        self.sound_name = sound_name
+        self.sound_filepath = sound_filepath
+        self.channel_id = channel_id
+        self.mute = mute
+        self._channel = pygame.mixer.Channel(channel_id)
+        # Load sound file
+        self._pygame_sound = pygame.mixer.Sound(self.sound_filepath)
+
+    def play(self, loops=0):
+        """Play a sound on the specified Channel `channel_id`.
+
+        Parameters
+        ----------
+        loops : int
+            Controls how many times the sample will be repeated after being
+            played the first time. The default value (zero) means the sound is
+            not repeated, and so is only played once. If `loops` is set to -1
+            the sound will loop indefinitely (though you can still call
+            :meth:`stop` to stop it).
+
+            **Reference:** :meth:`pygame.mixer.Sound.play`
+
+        """
+        self._channel.play(self._pygame_sound, loops)
+
+    def stop(self):
+        """Stop playback on the specified channel `channel_id`.
+        """
+        self._channel.stop()
