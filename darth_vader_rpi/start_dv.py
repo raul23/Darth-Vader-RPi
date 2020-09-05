@@ -104,7 +104,7 @@ If the `simulation` option (`-s`) is used with the :mod:`start_dv` script, the
 `SimulRPi.GPIO`_ module will be used instead.
 
 """
-_VERBOSE = False
+
 _LOG_CFG = "log_cfg"
 _MAIN_CFG = "cfg"
 """TODO"""
@@ -292,6 +292,8 @@ class ExceptionThread(threading.Thread):
 
     Attributes
     ----------
+    verbose: bool, optional
+        TODO
     exc: :class:`Exception`
         Represent the exception raised by the target function.
 
@@ -301,8 +303,9 @@ class ExceptionThread(threading.Thread):
 
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, verbose=False, *args, **kwargs):
         threading.Thread.__init__(self, *args, **kwargs)
+        self.verbose = verbose
         self.exc = None
 
     def run(self):
@@ -320,10 +323,12 @@ class ExceptionThread(threading.Thread):
             self._target(*self._args, **self._kwargs)
         except Exception as e:
             self.exc = e
-            if _VERBOSE:
+            if self.verbose:
                 logger.exception(_add_spaces_to_msg("Error: {}".format(e)))
             else:
-                logger.error(_add_spaces_to_msg("Error: {}".format(e)))
+                # TODO: add next line in a utility function
+                err_msg = "{}: {}".format(str(e.__class__).split("'")[1], e)
+                logger.error(_add_spaces_to_msg(err_msg))
 
 
 class SoundWrapper:
@@ -649,9 +654,12 @@ class DarthVader:
                 logger.debug("")
             quotes = list(loaded_sounds['quotes'].values())
 
+            # TODO: IMPORTANT remove _VERBOSE, add it as kwarg to thread's args
+            # and try to use kwargs instead of tuple?
             self.th_slot_leds = ExceptionThread(
                 name="thread_slot_leds",
                 target=turn_on_slot_leds_sequence,
+                verbose=self.main_cfg['verbose'],
                 args=(gpio_channels['top_led']['channel_number'],
                       gpio_channels['middle_led']['channel_number'],
                       gpio_channels['bottom_led']['channel_number'],
@@ -910,7 +918,7 @@ def main():
     Only one action at a time can be performed.
 
     """
-    global logger, GPIO, _VERBOSE
+    global logger, GPIO
     # =====================
     # Default logging setup
     # =====================
@@ -952,7 +960,6 @@ def main():
         # NOTE: returned value not used
         _check_user_cfg_dict('log', logging_cfg_dict)
         if main_cfg_dict['verbose']:
-            _VERBOSE = True
             keys = ['handlers', 'loggers']
             for k in keys:
                 for name, val in logging_cfg_dict[k].items():
@@ -1017,31 +1024,9 @@ def main():
                         ", ".join("'{}'".format(i) for i in [_LOG_CFG,
                                                              _MAIN_CFG])))
             retcode = edit_config(args.edit, args.app)
-            """
-            elif args.reset:
-                retcode = reset_config(args.reset)
-            elif args.undo:
-                retcode = undo_config(args.undo)
-            """
         else:
             if main_cfg_dict['simulation']:
                 import SimulRPi.GPIO as GPIO
-                """
-                GPIO.setchannelnames({
-                    10: "led 10",
-                    11: "led 11"
-                })
-                GPIO.setsymbols({
-                    "10": {
-                        "ON": "\\033[1;31;48mO\\033[1;37;0m",
-                        "OFF": "x"
-                    },
-                    "9": {
-                        "ON": "\\033[1;31;48mV\\033[1;37;0m",
-                        "OFF": "x"
-                    }
-                })
-                """
                 GPIO.setchannels(main_cfg_dict['gpio_channels'])
                 GPIO.setdefaultsymbols(main_cfg_dict['default_led_symbols'])
                 GPIO.setprinting(not main_cfg_dict['quiet'])
@@ -1061,6 +1046,7 @@ def main():
         else:
             # logger.error(e.__repr__())
             # TODO: add next line in a utility function
+            # TODO: add spaces?
             err_msg = "{}: {}".format(str(e.__class__).split("'")[1], e)
             logger.error(err_msg)
         retcode = 1
