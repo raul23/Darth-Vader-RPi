@@ -317,7 +317,12 @@ Credits
 
   - `Imperial March song by Jacob Townsend <https://soundcloud.com/jacobtownsend1/imperial-march>`_
     is licensed under a `Creative Commons (CC BY-NC-SA 3.0) License <http://creativecommons.org/licenses/by-nc-sa/3.0/>`_
-  - `Star Wars- The Imperial March (Darth Vader's Theme) <https://www.youtube.com/watch?v=-bzWSJG93P8>`_
+
+    **NOTE:** The original song file was reduced under 1 MB by removing the
+    first 7 seconds (no sound) and the last 2 minutes and 24 seconds.
+
+  - `Star Wars- The Imperial March (Darth Vader's Theme) <https://www.youtube.com/watch?v=-bzWSJG93P8>`_:
+    not used anymore
 - **Sound effects:**
 
   - `Darth Vader breathing sound <https://www.youtube.com/watch?v=d28NrjMPERs>`_
