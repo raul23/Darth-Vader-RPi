@@ -24,6 +24,7 @@ author = 'Raul C.'
 
 # The full version, including alpha/beta/rc tags
 release = __version__
+version =__version__
 
 
 # -- General configuration ---------------------------------------------------
