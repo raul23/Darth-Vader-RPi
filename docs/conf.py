@@ -45,7 +45,7 @@ extensions = [
     'sphinx_rtd_theme'
 ]
 
-autodoc_mock_imports = ['pygame', 'pyutils']
+autodoc_mock_imports = ['pygame']
 
 # This value controls the docstrings inheritance. Default is True.
 # Ref.: https://bit.ly/2ofNvGi
@@ -62,7 +62,8 @@ source_suffix = '.rst'
 intersphinx_mapping = {
     'pygame': ('https://www.pygame.org/docs', None),
     'python': ('https://docs.python.org/3', None),
-    'pyutils': ('https://py-common-utils.readthedocs.io/en/latest', None)
+    'simulrpi': ('https://simulrpi.readthedocs.io/en/latest', None)
+    # 'pyutils': ('https://py-common-utils.readthedocs.io/en/latest', None)
 }
 
 extlinks = {'simulapi': ('https://simulrpi.readthedocs.io/en/latest/'
