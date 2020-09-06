@@ -69,7 +69,6 @@ More information is available at:
 .. _YouTube video: https://youtu.be/E2J_xl2MbGU?t=333
 
 """
-
 import argparse
 import logging.config
 import os
@@ -171,8 +170,10 @@ _SEQ_TYPES_MAP = {'action': _ACTION_MODE, 'calm': _CALM_MODE}
 
 
 # TODO: clear buffer?
-def _add_spaces_to_msg(msg, nb_spaces=60):
-    """TODO
+def add_spaces_to_msg(msg, nb_spaces=60):
+    """Add spaces at the end of a message.
+
+    Since :obj:`SimulRPi.`:mod:`~GPIO`
 
     Parameters
     ----------
@@ -324,11 +325,11 @@ class ExceptionThread(threading.Thread):
         except Exception as e:
             self.exc = e
             if self.verbose:
-                logger.exception(_add_spaces_to_msg("Error: {}".format(e)))
+                logger.exception(add_spaces_to_msg("Error: {}".format(e)))
             else:
                 # TODO: add next line in a utility function
                 err_msg = "{}: {}".format(str(e.__class__).split("'")[1], e)
-                logger.error(_add_spaces_to_msg(err_msg))
+                logger.error(add_spaces_to_msg(err_msg))
 
 
 class SoundWrapper:
@@ -541,7 +542,7 @@ def turn_on_slot_leds_sequence(top_led, middle_led, bottom_led,
             turn_off_led(lcm['middle'])
             turn_off_led(lcm['bottom'])
             time.sleep(delay_between_steps)
-    logger.debug(_add_spaces_to_msg("Stopping thread: {}".format(th.name)))
+    logger.debug(add_spaces_to_msg("Stopping thread: {}".format(th.name)))
 
 
 class DarthVader:
@@ -656,7 +657,6 @@ class DarthVader:
                 logger.debug("")
             quotes = list(loaded_sounds['quotes'].values())
 
-            # TODO: IMPORTANT remove _VERBOSE, add it as kwarg to thread's args
             # and try to use kwargs instead of tuple?
             self.th_slot_leds = ExceptionThread(
                 name="thread_slot_leds",
@@ -670,7 +670,7 @@ class DarthVader:
                       self.main_cfg['slot_leds']['time_per_step']))
             self.th_slot_leds.start()
             logger.info("")
-            logger.info(_add_spaces_to_msg("Press buttons"))
+            logger.info(add_spaces_to_msg("Press buttons"))
             pressed_lightsaber = False
             quote_idx = 0
 
@@ -705,19 +705,19 @@ class DarthVader:
                     time.sleep(0.2)
                 elif not self.th_slot_leds.is_alive():
                     retcode = 1
-                    logger.info(_add_spaces_to_msg("Exiting..."))
+                    logger.info(add_spaces_to_msg("Exiting..."))
                     break
         except Exception as e:
             retcode = 1
             if self.main_cfg['verbose']:
-                logger.exception(_add_spaces_to_msg("Error: {}".format(e)))
+                logger.exception(add_spaces_to_msg("Error: {}".format(e)))
             else:
-                # logger.error(_add_spaces_to_msg(e.__repr__()))
+                # logger.error(add_spaces_to_msg(e.__repr__()))
                 # TODO: add next line in a utility function
                 err_msg = "{}: {}".format(str(e.__class__).split("'")[1], e)
-                logger.error(_add_spaces_to_msg(err_msg))
+                logger.error(add_spaces_to_msg(err_msg))
         except KeyboardInterrupt:
-            logger.info(_add_spaces_to_msg("Exiting..."))
+            logger.info(add_spaces_to_msg("Exiting..."))
             closing_sound = loaded_sounds.get('closing_sound')
             if closing_sound and not closing_sound.mute:
                 closing_sound.play()
@@ -740,11 +740,11 @@ class DarthVader:
             for channel_id, channel_info in gpio_channels.items():
                 if channel_id.endswith("_led"):
                     turn_off_led(channel_info['channel_number'])
-        logger.info(_add_spaces_to_msg("Cleanup..."))
+        logger.info(add_spaces_to_msg("Cleanup..."))
         if self.th_slot_leds:
             self.th_slot_leds.do_run = False
             self.th_slot_leds.join()
-            logger.debug(_add_spaces_to_msg("Thread stopped: {}".format(
+            logger.debug(add_spaces_to_msg("Thread stopped: {}".format(
                 self.th_slot_leds.name)))
         for ch in self.main_cfg['audio_channels']:
             pygame.mixer.Channel(ch['channel_id']).stop()
@@ -1059,7 +1059,7 @@ def main():
             dv.th_slot_leds.join()
             logger.warning("Abrupt exit: the thread '{}' was not cleanly "
                            "stopped".format(dv.th_slot_leds.name))
-            logger.debug(_add_spaces_to_msg("Thread stopped: {}".format(
+            logger.debug(add_spaces_to_msg("Thread stopped: {}".format(
                 dv.th_slot_leds.name)))
             retcode = 1
         if hasattr(GPIO, 'manager'):
@@ -1086,6 +1086,6 @@ if __name__ == '__main__':
     retcode = main()
     msg = "Program exited with {}".format(retcode)
     if retcode == 1:
-        logger.error(_add_spaces_to_msg(msg))
+        logger.error(add_spaces_to_msg(msg))
     else:
-        logger.info(_add_spaces_to_msg(msg))
+        logger.info(add_spaces_to_msg(msg))
