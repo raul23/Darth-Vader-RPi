@@ -2,11 +2,13 @@
 """Script to turn on LEDs and play sound effects on a Raspberry Pi (RPi).
 
 The LEDs illuminate a Darth Vader action figure's lightsaber and the three
-slots in the chest control box. 3 push buttons control the following sounds:
+slots in the chest control box. 3 push buttons control the following sounds
+and LEDs:
 
 1. Some of his famous quotes
 2. The Imperial march theme song
-3. The lightsaber opening and closing sounds and its illumination
+3. The lightsaber opening and closing sounds
+4. The lightsaber illumination (3 LEDs)
 
 His iconic breathing sound plays in the background indefinitely almost as soon
 as the RPi is run with the script.
@@ -31,16 +33,17 @@ the :mod:`start_dv` script:
 
     ``start_dv [-h] [--version] [-q] [-s] [-v] [-e {log,main}] [-a APP]``
 
-Run the script on the RPi with `default values`_ for GPIO channels and other
-settings::
+Run the script on the **RPi** with `default values`_ for GPIO channels and
+other settings::
 
     $ start_dv
 
-Run the script using `SimulRPi.GPIO`_ which simulates `RPi.GPIO`_::
+Run the script on your **computer** using :mod:`SimulRPi.GPIO` which simulates
+``RPi.GPIO``::
 
     $ start_dv -s
 
-Edit the main config file with *TextEdit* (macOS)::
+Edit the main config file with *TextEdit* (e.g. on macOS)::
 
     $ start_dv -e main -a TextEdit
 
@@ -54,19 +57,27 @@ Notes
 -----
 More information is available at:
 
-- `Darth-Vader-RPi GitHub <https://github.com/raul23/Darth-Vader-RPi>`_
-- `SimulRPi GitHub <https://github.com/raul23/SimulRPi>`_
+- `Darth-Vader-RPi GitHub`_
+- `SimulRPi GitHub`_
 
+.. URLs
+
+.. default_main_cfg
 .. _default values: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json
-.. _installed: README_docs.html#installation-instructions
-.. _logging config file: https://bit.ly/2D6exaD
-.. _main config file: https://bit.ly/39x8o3e
-.. _pygame.mixer.Sound.play:
-    https://www.pygame.org/docs/ref/mixer.html#pygame.mixer.Sound.play
-.. _RPi.GPIO:
-    https://pypi.org/project/RPi.GPIO/
+.. _gpio_channels: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L11
+.. _logging config file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_logging_cfg.json
+.. _main config file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json
+
+.. external links
+.. _pygame.mixer.Sound.play: https://www.pygame.org/docs/ref/mixer.html#pygame.mixer.Sound.play
+.. _Darth-Vader-RPi GitHub: https://github.com/raul23/Darth-Vader-RPi
+.. _RPi.GPIO: https://pypi.org/project/RPi.GPIO/
+.. _SimulRPi GitHub: https://github.com/raul23/SimulRPi
 .. _SimulRPi.GPIO: https://pypi.org/project/SimulRPi/
 .. _YouTube video: https://youtu.be/E2J_xl2MbGU?t=333
+
+.. internal links
+.. _installed: README_docs.html#installation-instructions
 
 """
 import argparse
@@ -291,10 +302,18 @@ class ExceptionThread(threading.Thread):
     """A subclass from :class:`threading.Thread` that defines threads that can
     catch errors if their target functions raise an exception.
 
+    Parameters
+    ----------
+    verbose : bool, optional
+        If `True`, print the traceback when there is an exception. Otherwise,
+        print just a one-line error message, e.g. ``KeyError: 'test'``
+    args : tuple, optional
+        Positional arguments given to the thread's target function.
+    kwargs : dict, optional
+        Keyword arguments given to the thread's target function.
+
     Attributes
     ----------
-    verbose: bool, optional
-        TODO
     exc: :class:`Exception`
         Represent the exception raised by the target function.
 
@@ -426,9 +445,8 @@ def turn_on_led(channel):
     GPIO.output(channel, GPIO.HIGH)
 
 
-def turn_on_slot_leds_sequence(top_led, middle_led, bottom_led,
-                               leds_sequence="action", delay_between_steps=0.4,
-                               time_per_step=0.4):
+def turn_on_slot_leds(top_led, middle_led, bottom_led, leds_sequence="action",
+                      delay_between_steps=0.4, time_per_step=0.4):
     """Turn on/off the three slot LEDs in a precise sequence.
 
     These three LEDs are associated with Darth Vader's three slots located on
@@ -498,15 +516,15 @@ def turn_on_slot_leds_sequence(top_led, middle_led, bottom_led,
 
     .. important::
 
-        :meth:`turn_on_slot_leds_sequence` should be run by a thread and
-        eventually stopped from the main thread by setting its ``do_run``
-        attribute to `False` to let the thread exit from its target function.
+        :meth:`turn_on_slot_leds` should be run by a thread and eventually
+        stopped from the main thread by setting its ``do_run`` attribute to
+        `False` to let the thread exit from its target function.
 
         **For example**:
 
         .. code-block:: python
 
-            th = threading.Thread(target=turn_on_slot_leds_sequence,
+            th = threading.Thread(target=turn_on_slot_leds,
                                   args=(leds_channels))
             th.start()
 
@@ -550,17 +568,18 @@ class DarthVader:
     suit and playing sounds, all done via a Raspberry Pi (RPi).
 
     The LEDs illuminate Darth Vader's lightsaber and the three slots in the
-    chest control box. 3 push buttons control the following sounds:
+    chest control box. 3 push buttons control the following sounds and LEDs:
 
     1. Some of his famous quotes
     2. The Imperial march theme song
-    3. The lightsaber opening and closing sounds and its illumination
+    3. The lightsaber opening and closing sounds
+    4. The lightsaber illumination (3 LEDs)
 
     His iconic breathing sound plays in the background indefinitely almost as
     soon as the RPi is run with the script.
 
-    While the function waits for a pressed button, you can exit from this
-    function by pressing :obj:`ctr` + :obj:`c`.
+    The `main config file`_ is used to setup the script :mod:`start_dv`, such
+    as the GPIO pins and the sound files.
 
     Parameters
     ----------
@@ -569,14 +588,13 @@ class DarthVader:
         :mod:`start_dv`, such as the GPIO pins and the sound files. See
         `main config file`_ for a detailed look into its content.
 
-    Returns
-    -------
-    retcode: int
-        If the function is run without any :exc:`Exception`, the return code is
-        0. Otherwise, it is 1.
+    Attributes
+    ----------
+    th_slot_leds : start_dv.ExceptionThread
+        Thread responsible for turning on the three slot LEDs in a precise
+        sequence.
 
-        Also, even if there is an :exc:`Exception`, the function will try to
-        clean up before exiting.
+        Its target function is :meth:`turn_on_slot_leds`.
 
     """
 
@@ -585,10 +603,20 @@ class DarthVader:
         self.th_slot_leds = None
 
     def activate(self):
-        """TODO
+        """Activate a Darth Vader figurine by turning on LEDs on his suit and
+        playing sounds, all done via an RPi.
+
+        While the method waits for a pressed button, you can exit by pressing
+        ``ctr`` + ``c``.
 
         Returns
         -------
+        retcode: int
+            If the method is run without any :exc:`Exception`, the return code is
+            0. Otherwise, it is 1.
+
+            Also, even if there is an :exc:`Exception`, the method will try to
+            clean up before exiting.
 
         """
         retcode = 0
@@ -657,17 +685,25 @@ class DarthVader:
                 logger.debug("")
             quotes = list(loaded_sounds['quotes'].values())
 
-            # and try to use kwargs instead of tuple?
             self.th_slot_leds = ExceptionThread(
                 name="thread_slot_leds",
-                target=turn_on_slot_leds_sequence,
+                target=turn_on_slot_leds,
                 verbose=self.main_cfg['verbose'],
+                kwargs=dict(
+                    top_led=gpio_channels['top_led']['channel_number'],
+                    middle_led=gpio_channels['middle_led']['channel_number'],
+                    bottom_led=gpio_channels['bottom_led']['channel_number'],
+                    leds_sequence=self.main_cfg['slot_leds']['sequence'],
+                    delay_between_steps=self.main_cfg['slot_leds']['delay_between_steps'],
+                    time_per_step=self.main_cfg['slot_leds']['time_per_step']))
+            """
                 args=(gpio_channels['top_led']['channel_number'],
                       gpio_channels['middle_led']['channel_number'],
                       gpio_channels['bottom_led']['channel_number'],
                       self.main_cfg['slot_leds']['sequence'],
                       self.main_cfg['slot_leds']['delay_between_steps'],
                       self.main_cfg['slot_leds']['time_per_step']))
+            """
             self.th_slot_leds.start()
             logger.info("")
             logger.info(add_spaces_to_msg("Press buttons"))
@@ -727,11 +763,34 @@ class DarthVader:
             return retcode
 
     def cleanup(self, gpio_channels):
-        """TODO
+        """Clean up any resources such as threads and GPIO channels.
+
+        The cleanup consists in the following actions:
+
+        * turn off each LED
+        * stop the thread ``th_slot_leds``
+        * stop each audio channel
+        * call ``RPi.GPIO.cleanup()`` which will return all GPIO channels back
+          to inputs with no pull up/down
+
+          * If in simulation mode, :obj:`SimulRPi.GPIO.cleanup` is called to
+            stop the threads among other things
 
         Parameters
         ----------
-        gpio_channels
+        gpio_channels : dict
+            Dictionary mapping channel id (:obj:`str`) to channel attributes
+            (:obj:`dict`). The channel attributes consist in the following:
+
+                * ``channel_number``
+                * ``channel_name``
+                * ``key``
+                * ``led_symbols``
+
+            .. note::
+
+                These channel attributes are those found in the setting
+                `gpio_channels`_ from the main configuration file.
 
         """
         if hasattr(GPIO, "setprinting"):
