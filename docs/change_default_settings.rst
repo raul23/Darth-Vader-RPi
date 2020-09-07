@@ -1,6 +1,6 @@
-=======================
-Change default settings
-=======================
+===========================
+Change the default settings
+===========================
 
 .. contents::
    :depth: 2
@@ -17,7 +17,9 @@ Important tips
 
    $ start_dv -e cfg -a APP_NAME
 
-- To end the script `start_dv`_, press ``ctrl`` + ``c``
+  where *APP_NAME* is the name of a text editor, e.g. TextEditor
+
+- To end the script :mod:`start_dv`, press ``ctrl`` + ``c``
 - When adding audio files, don't use *mp3* as the file format. Instead, use
   *ogg* (compressed) or *wav* (uncompressed). The reason is that *mp3* won't
   work well with pygame's simultaneous playback capability.
@@ -55,8 +57,7 @@ Add your quote object to the list in ``quotes``, like in the following example:
        "name": "There is no escape",
        "filename": "quote_there_is_no_escape.ogg",
        "audio_channel_id": 1
-     }
-   ]
+     },
 
 .. seealso::
 
@@ -115,7 +116,7 @@ What each channel controls:
 
 Change closing sound
 ====================
-When the script ``start_dv`` is exiting after the user presses
+When the script :mod:`start_dv` is exiting after the user presses
 ``ctrl`` + ``c``, a sound is produced. By default, no closing sound is produced
 and it is the `"Nooooo"`_ quote.
 
@@ -132,7 +133,7 @@ object. These are the properties you can modify for this object:
    - ``filename``: it is relative to
      `sounds_directory <main_config.html#sounds-directory-label>`__
    - ``mute``: if *true*, nothing will be played at the end of the script.
-     Otherwise, the closing sound will be played when the script is finishing.
+     Otherwise, the closing sound will be played when the script is terminating.
 
 .. code-block:: python
    :emphasize-lines: 5
@@ -141,17 +142,16 @@ object. These are the properties you can modify for this object:
    "sound_effects": [
      {
        "id": "closing_sound",
-       "name": "Nooooo [Closing]",
+       "name": "Bye [Closing]",
        "filename": "bye.ogg",
        "audio_channel_id": 2,
        "mute": false
-     }
-   ]
+     },
 
 .. note::
 
    By default, the closing sound is not played at the end of the script
-   ``start_dv``. Set its property ``mute`` to *false* in order to play the
+   :mod:`start_dv`. Set its property ``mute`` to *false* in order to play the
    closing sound when the script exits.
 
 .. seealso::
@@ -170,7 +170,8 @@ along with their LED symbols. If ``channel_name`` is not available, then its
 ``channel_number`` is shown.
 
 The ``channel_number`` is the GPIO channel number of a pin used for connecting
-an I/O device (e.g. LED).
+an I/O device (e.g. LED) and is defined based on the numbering system you have
+specified (*BOARD* or *BCM*).
 
 To change a GPIO channel's ``channel_name`` and ``channel_number``, open the
 configuration file with::
@@ -191,7 +192,6 @@ following example.
        "channel_name": "Bottom LED",
        "channel_number": 15
      },
-   ]
 
 .. important::
 
@@ -213,11 +213,29 @@ the setting `gpio_channels`_ in the configuration file which can be opened with:
 
    $ start_dv -e cfg
 
-.. literalinclude:: ../darth_vader_rpi/configs/default_main_cfg.json
-   :language: python
-   :lines: 8-26
-   :emphasize-lines: 6, 12, 18
+.. code-block:: python
+   :emphasize-lines: 3, 9, 15
    :caption: **Default keymap used for the three push buttons**
+
+   "gpio_channels": [
+     {
+       "channel_id": "lightsaber_button",
+       "channel_name": "lightsaber_button",
+       "channel_number": 23,
+       "key": "cmd"
+     },
+     {
+       "channel_id": "song_button",
+       "channel_name": "song_button",
+       "channel_number": 24,
+       "key": "alt"
+     },
+     {
+       "channel_id": "quotes_button",
+       "channel_name": "quotes_button",
+       "channel_number": 25,
+       "key": "alt_r"
+     },
 
 In order to change the default keymap, you will need to change the value for
 ``key`` which is the name of the keyboard key associated with a given push
@@ -228,17 +246,15 @@ The names of keyboard keys that you can use are those specified in the
 `media_play_pause`, `shift`, and `shift_r`.
 
 .. code-block:: python
-   :emphasize-lines: 6
+   :emphasize-lines: 5
    :caption: **Example:** choosing ``shift_r`` for the *Quotes button*
 
-    "gpio_channels": [
-      {
-        "channel_id": "quotes_button",
-        "displa_name": "quotes_button",
-        "channel_number": 25,
-        "key": "shift_r"
-      },
-    ]
+   {
+     "channel_id": "quotes_button",
+     "channel_name": "quotes_button",
+     "channel_number": 25,
+     "key": "shift_r"
+   },
 
 .. note::
 
@@ -258,8 +274,29 @@ The names of keyboard keys that you can use are those specified in the
 
 Change LED symbols
 ==================
-To change the `default symbols`_ used for representing LEDs in the terminal,
-edit the setting `gpio_channels`_ by opening the configuration file::
+You can either:
+
+   1. change the default LED symbols used by **all** output channels, or
+   2. change the LED symbols for **specific** output channels
+
+Case 1: change ``default_led_symbols``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+To change the `default LED symbols`_ used by **all** output channels, edit the
+setting `default_led_symbols`_ by opening the configuration file::
+
+   $ start_dv -e cfg
+
+Add your LED symbols for each output state::
+
+   "default_led_symbols": {
+     "ON": "🔵",
+     "OFF": "⚪ "
+   },
+
+Case 2: change ``gpio_channels``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+To change the LED symbols for **specific** output channels, edit the setting
+`gpio_channels`_ by opening the configuration file::
 
    $ start_dv -e cfg
 
@@ -285,7 +322,7 @@ in ``gpio_channels``.
 .. note::
 
    If you omit ``led_symbols`` as a property for a LED object, the
-   `default symbols`_ will be used instead.
+   `default LED symbols`_ will be used instead.
 
 .. seealso::
 
@@ -317,8 +354,7 @@ filename for each audio file is defined with respect to the directory
        "filename": "quote_nooooo.ogg",
        "audio_channel_id": 2,
        "mute": false
-     }
-   ]
+     },
 
 .. important::
 
@@ -327,7 +363,7 @@ filename for each audio file is defined with respect to the directory
 
 .. seealso::
 
-   - The setting `quotes_directory <main_config.html#quotes-label>`__
+   - The setting `quotes <main_config.html#quotes-label>`__
    - The setting `songs <main_config.html#songs-label>`__
    - The setting `sound_effects <main_config.html#sound-effects-label>`__
    - The setting `sounds_directory <main_config.html#sounds-directory-label>`__
@@ -351,7 +387,8 @@ The custom sequence consists of a list of LED labels {*'top'*, *'middle'*,
 turn ON/OFF.
 
 .. code-block:: python
-   :caption: **Example:** a slot_leds object with the calm sequence
+   :emphasize-lines: 4
+   :caption: **Example:** a ``slot_leds`` object with the **calm** sequence
 
       "slot_leds":{
         "delay_between_steps": 0.5,
@@ -360,7 +397,8 @@ turn ON/OFF.
       },
 
 .. code-block:: python
-   :caption: **Example:** a slot_leds object with a custom sequence
+   :emphasize-lines: 4
+   :caption: **Example:** a ``slot_leds`` object with a **custom** sequence
 
       "slot_leds":{
         "delay_between_steps": 0.5,
@@ -394,7 +432,7 @@ pressing ``ctrl`` + ``c``.
 Mute breathing sound
 ====================
 To mute Darth Vader's breathing sound which plays almost as soon as the
-script ``start_dv`` runs, edit the setting `sound_effects`_ in the
+script :mod:`start_dv` runs, edit the setting `sound_effects`_ in the
 configuration file which can be opened with::
 
    $ start_dv -e cfg
@@ -431,9 +469,9 @@ To run the script as quiet or verbose, open the configuration file with::
 
 And set the setting `quiet`_ or `verbose`_ to *true*.
 
-When running the script as ``verbose``, all messages with log level at least
-*DEBUG* will be displayed and when there is an exception, the traceback will be
-shown.
+When running the script as ``verbose``, the logging level is set to *DEBUG*.
+Thus, all messages will be displayed and when there is an exception, the
+traceback will be shown.
 
 On the other hand, when running the script as ``quiet``, nothing will be
 printed to the terminal, not even error messages. However, you will still be
@@ -451,25 +489,26 @@ able to hear sounds and interact with the push buttons or keyboard.
 
 .. URLs
 
-.. default_main_cfg
+.. 0. default_main_cfg
 .. TODO: check line numbers in URLs
-.. _audio_channels: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L55
-.. _closing_sound: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L155
+.. _audio_channels: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L56
+.. _closing_sound: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L123
 .. _configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L1
-.. _gpio_channels: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L8
+.. _default_led_symbols: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L7
+.. _gpio_channels: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L11
+.. _logging configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_logging_cfg.json
 .. _quiet: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L2
 .. _quotes: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L73
-.. _slot_leds: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L49
-.. _sound_effects: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L127
+.. _slot_leds: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L51
+.. _sound_effects: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L95
 .. _sounds_directory: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L6
-.. _GPIO channels: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L8
+.. _GPIO channels: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L11
 .. _verbose: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L4
 
-.. external links
-.. _logging configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_logging_cfg.json
+.. 1. external links
 .. _"Nooooo": https://www.youtube.com/watch?v=ZscVhFvD6iE
 
-.. internal links
-.. _default symbols: main_config.html#default-led-symbols-label
+.. 2. internal links
+.. _default LED symbols: main_config.html#default-led-symbols-label
 .. _start_dv: README_docs.html#script-start-dv
 .. _The main configuration file: main_config.html

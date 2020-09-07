@@ -1,8 +1,8 @@
 The main configuration file
 ===========================
-The default settings used by the script `start_dv`_ are found in the
-`main configuration file`_. It is referred to as *main* because there is another
-config file you could edit, the `logging configuration file`_.
+The default settings used by the script :mod:`start_dv` are found in the
+`main configuration file`_. It is referred to as *main* because there is
+another config file you could edit, the `logging configuration file`_.
 
 The *main* configuration file can be edited with the following command::
 
@@ -42,10 +42,10 @@ In what follows, you wil find an explanation for each setting found in the
 
 Three audio channels are used for this project:
 
-   - **channel 0**: used for the breathing sound which plays in the background
-     almost as soon as the script ``start_dv`` runs. Its volume is set by
-     default at 0.2 since we don't want to overwhelm the other sounds playing
-     in the other channels
+   - **channel 0**: used for Darth Vader's breathing sound which plays in the
+     background almost as soon as the script :mod:`start_dv` runs. Its volume
+     is set by default at 0.2 since we don't want to overwhelm the other sounds
+     playing in the other audio channels
    - **channel 1**: used for playing the *Imperial March* song and all Darth
      Vader quotes.  Its volume is set by default at 1.0
    - **channel 2**: used for playing the lighsaber sound effects and the closing
@@ -88,11 +88,25 @@ project.
    As per the `pygame
    documentation <https://www.pygame.org/docs/ref/mixer.html#pygame.mixer.Sound.set_volume>`__.
 
-.. _default-led-symbols:
+.. _default-led-symbols-label:
 
 ``default_led_symbols``
 ^^^^^^^^^^^^^^^^^^^^^^^
-Test
+The setting `default_led_symbols`_ in the configuration defines the LED symbols
+used by **all** output channels. A LED symbol is used for each output state
+(*ON* and *OFF*).
+
+By **default**, the symbols used for representing LEDs in the terminal are the
+following::
+
+   "default_led_symbols": {
+     "ON": "🛑",
+     "OFF": "⚪"
+   },
+
+.. seealso::
+
+   `Change LED symbols`_
 
 .. _gpio-channels-label:
 
@@ -143,7 +157,7 @@ GPIO channels for the following I/O devices are defined:
      found for a LED object, then the `default LED symbols`_ will be used
 
       .. code-block:: python
-         :emphasize-lines: 5-7
+         :emphasize-lines: 5-8
          :caption: **Example:** changing the default LED symbols for the
                    lightsaber LED
 
@@ -156,14 +170,6 @@ GPIO channels for the following I/O devices are defined:
               "OFF": "(0)"
             }
           }
-
-.. _default-led-symbols-label:
-
-By **default**, the symbols used for representing LEDs in the terminal are the
-following:
-
-   - 🛑 : LED turned ON
-   - ⚪ : LED turned OFF
 
 .. code-block:: python
    :caption: **Example:** GPIO channels for the lightsaber button and LED
@@ -186,7 +192,7 @@ Thus, in this example, you have a push button connected to the GPIO pin 23
 (based on the BCM mode) and controlling the lightsaber by turning it ON/OFF
 and producing the lightsaber sound effects (drawing, closing, and hum sounds).
 Also, the keyboard key ``cmd`` simulates the lightsaber push button when
-running the script ``start_dv`` on your computer.
+running the script :mod:`start_dv` on your computer.
 
 Finally, the ligthsaber LED is connected to GPIO pin 22 (BCM) and is turned
 ON/OFF when the corresponding push button (or ``cmd`` key) is pressed.
@@ -222,9 +228,9 @@ As per the `RPIO.GPIO documentation`_:
 ``quiet``
 ^^^^^^^^^
 The setting `quiet`_ in the configuration file is a flag (set to *false* by
-default) that allows you to run the script ``start_dv`` without printing anything
-on the terminal, not even the LED symbols when running the simulation nor the
-exceptions are printed.
+default) that allows you to run the script :mod:`start_dv` without printing
+anything on the terminal, not even the LED symbols when running the simulation
+nor the exceptions are printed.
 
 However, you will still be able to hear sounds and interact with the push
 buttons or keyboard.
@@ -276,7 +282,7 @@ following properties:
      explained in `audio_channels <#audio-channels-label>`__
 
 .. code-block:: python
-   :emphasize-lines: 3-6, 8-12
+   :emphasize-lines: 3-6, 9-12
    :caption: **Example:** two Darth Vader quotes
 
     "quotes": [
@@ -311,7 +317,7 @@ following properties:
 ``simulation``
 ^^^^^^^^^^^^^^
 The setting `simulation`_ in the configuration file is a flag (set to *false* by
-default) that allows you to run the script ``start_dv`` on your computer,
+default) that allows you to run the script :mod:`start_dv` on your computer,
 instead of a Raspberry Pi (RPi).
 
 The module `SimulRPi.GPIO`_ is used in order to partly fake `RPi.GPIO`_ and
@@ -326,7 +332,7 @@ This flag can also be set directly through the script's command-line option
 
 .. note::
 
-   `SimulRPi.GPIO`_ makes use of the package `pynput`_ to monitor the keyboard
+   :mod:`SimulRPi.GPIO` makes use of the package `pynput`_ to monitor the keyboard
    for any pressed key.
 
 .. seealso::
@@ -354,7 +360,7 @@ different pattern than if he was angry.
      will keep on repeating until the script exits
 
 .. code-block:: python
-   :caption: **Example:** a slot_leds object with the calm sequence
+   :caption: **Example:** a ``slot_leds`` object with the calm sequence
 
       "slot_leds":{
         "delay_between_steps": 0.5,
@@ -462,7 +468,7 @@ properties:
      explained in `audio_channels <#audio-channels-label>`__
 
 .. code-block:: python
-   :emphasize-lines: 4
+   :emphasize-lines: 4, 6
    :caption: The **Imperial March** song playing in audio channel #1
 
       "songs": [
@@ -492,9 +498,9 @@ properties:
 The setting `sound_effects`_ in the configuration file defines the following
 sounds:
 
-   - **Breathing sound**: almost as soon as the script ``start_dv`` runs, Darth
-     Vader's breathing sound starts playing in the background until the script
-     ends
+   - **Breathing sound**: almost as soon as the script :mod:`start_dv` runs,
+     Darth Vader's breathing sound starts playing in the background until the
+     script ends
    - **Lightsaber drawing sound**: when the lightsaber button is pressed, the
      drawing sound is played first followed by the hum sound which goes on
      until the button is pressed again which will produce the retraction sound
@@ -565,6 +571,10 @@ sounds:
 The setting `sounds_directory`_ in the configuration file defines the directory
 where all the audio files are saved.
 
+By default, ``sounds_directory`` refers to the path where the package
+`dv_sounds`_ is installed. `dv_sounds`_ is used to download the various sounds
+(e.g. sound efffects) needed for the project.
+
 All the audio filenames found in the configuration file are defined relative to
 ``sounds_directory``.
 
@@ -595,11 +605,11 @@ the directory ``sounds_directory``.
 ``verbose``
 ^^^^^^^^^^^
 The setting `verbose`_ in the configuration file is a flag (set to *false* by
-default) that allows you to run the script ``start_dv`` by logging to the
-terminal any message with at least a DEBUG level. Also, when there is an
+default) that allows you to run the script :mod:`start_dv` by logging to the
+terminal all messages (logging level is set to DEBUG). Also, when there is an
 exception, a traceback is printed so you can pinpoint exactly where the error
 occurred in the code which is not the case when running the script without
-``verbose`` (you only get the error message).
+``verbose`` (you only get a one-line error message).
 
 .. code-block:: console
    :caption: **Example:** running the script **without verbose**
@@ -630,21 +640,23 @@ This flag can also be set directly through the script's command-line option
 
 .. default_main_cfg
 .. TODO: check line numbers in URLs
-.. _audio_channels: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L55
-.. _gpio_channels: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L8
+.. _audio_channels: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L56
+.. _default_led_symbols: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L7
+.. _gpio_channels: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L11
+.. _logging configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_logging_cfg.json
+.. _main configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json
 .. _mode: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L5
 .. _quiet: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L2
 .. _quotes: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L73
 .. _simulation: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L3
-.. _slot_leds: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L49
-.. _songs: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L118
-.. _sound_effects: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L127
+.. _slot_leds: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L51
+.. _songs: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L87
+.. _sound_effects: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L95
 .. _sounds_directory: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L6
 .. _verbose: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L4
 
 .. external links
-.. _logging configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_logging_cfg.json
-.. _main configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json
+.. _dv_sounds: https://github.com/raul23/DV-Sounds
 .. _pygame: https://www.pygame.org/docs/
 .. _pynput: https://pynput.readthedocs.io
 .. _"I am your father": https://www.youtube.com/watch?v=xuJEYdOFEP4
