@@ -45,7 +45,7 @@ extensions = [
     'sphinx_rtd_theme'
 ]
 
-autodoc_mock_imports = ['pygame']
+autodoc_mock_imports = ['pygame', 'simulrpi']
 
 # This value controls the docstrings inheritance. Default is True.
 # Ref.: https://bit.ly/2ofNvGi
