@@ -140,28 +140,15 @@ Installation instructions
 .. TODO: IMPORTANT add path to ../bin when RPi (scripts, warning after installing with pip)
 .. highlight:: none
 
-1. Install the ``darth_vader_rpi`` package with *pip*::
+1. Make sure to update pip::
+
+   $ pip install --upgrade pip
+
+2. Install the ``darth_vader_rpi`` package with *pip*::
 
    $ pip install git+https://github.com/raul23/Darth-Vader-RPi#egg=Darth-Vader-RPi
 
    It will install the dependencies if they are not already found in your system.
-
-2. If you get the warning message from *pip* that the script :mod:`start_dv` is
-   not defined in your *PATH*::
-
-      WARNING: The script start_dv is installed in '/home/pi/.local/bin' which is not on PATH.
-
-   add the directory mentioned in the warning to your *PATH* by editing your
-   configuration file (e.g. *.bashrc*). See this `article`_ on how to set
-   *PATH* on Linux.
-
-3. Test your installation by importing ``darth_vader_rpi`` and printing its version::
-
-   $ python -c "import darth_vader_rpi; print(darth_vader_rpi.__version__)"
-
-4. You can also test that the dependencies were installed correctly::
-
-   $ python -c "import dv_sounds, pygame, SimulRPi"
 
 .. important::
 
@@ -173,6 +160,27 @@ Installation instructions
 
    If *pip* is working with the wrong Python version, then try to use *pip3*
    which works with Python 3.
+
+**Test installation**
+
+1. Test your installation by importing ``darth_vader_rpi`` and printing its version::
+
+   $ python -c "import darth_vader_rpi; print(darth_vader_rpi.__version__)"
+
+2. You can also test that the dependencies were installed correctly::
+
+   $ python -c "import dv_sounds, pygame, SimulRPi"
+
+**Warning message**
+
+If you get the warning message from *pip* that the script :mod:`start_dv` is
+not defined in your *PATH*::
+
+      WARNING: The script start_dv is installed in '/home/pi/.local/bin' which is not on PATH.
+
+Add the directory mentioned in the warning to your *PATH* by editing your
+configuration file (e.g. *.bashrc*). See this `article`_ on how to set *PATH*
+on Linux.
 
 Usage
 =====
