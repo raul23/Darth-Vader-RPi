@@ -1,7 +1,13 @@
 """Collection of utilities specifically for the *Darth-Vader-RPi* project.
 
+.. URLs
+
+.. default_main_cfg
 .. _default logging configuration file: https://bit.ly/2D6exaD
 .. _default main configuration file: https://bit.ly/39x8o3e
+
+.. external links
+.. _stackoverflow: https://stackoverflow.com/a/39980744
 
 """
 import codecs
@@ -11,7 +17,6 @@ import shlex
 import subprocess
 import sys
 from collections import namedtuple, OrderedDict
-# from subprocess import PIPE
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
@@ -163,10 +168,13 @@ def get_cfg_filepath(file_type):
     return os.path.join(get_cfg_dirpath(), filename)
 
 
+# TODO: test if include Python 3.6
 def load_json(filepath, encoding='utf8'):
     """Load JSON data from a file on disk.
 
-    TODO: specify preserve order if py36 and less
+    If using Python version betwee 3.0 and 3.6 (inclusive), the data is
+    returned as :obj:`collections.OrderedDict`. Otherwise, the data is
+    returned as :obj:`dict`.
 
     Parameters
     ----------
@@ -178,7 +186,7 @@ def load_json(filepath, encoding='utf8'):
 
     Returns
     -------
-    data
+    data : dict or collections.OrderedDict
         Data loaded from the JSON file.
 
     Raises
@@ -186,6 +194,10 @@ def load_json(filepath, encoding='utf8'):
     OSError
         Raised if any I/O related error occurs while reading the file, e.g. the
         file doesn't exist.
+
+    References
+    ----------
+    `stackoverflow`_: Are dictionaries ordered in Python 3.6+?
 
     """
     try:
@@ -243,7 +255,7 @@ def override_config_with_args(config, parser):
 
 
 # NOTE: taken from pyutils.genutils
-def run_cmd(cmd, stderr=subprocess.STDOUT):
+def run_cmd(cmd):
     """Run a command with arguments.
 
     The command is given as a string but the function will split it in order to
@@ -255,8 +267,6 @@ def run_cmd(cmd, stderr=subprocess.STDOUT):
         Command to be executed, e.g. ::
 
             open -a TextEdit text.txt
-    stderr
-        TODO
 
     Returns
     -------
@@ -272,25 +282,14 @@ def run_cmd(cmd, stderr=subprocess.STDOUT):
 
     """
     try:
-        # TODO: remove following comments
-        # `check_call()` takes as input a list. Thus, the string command must
-        # be split to get the command name and its arguments as items of a list.
-        # NOTE: To suppress stdout or stderr, supply a value of DEVNULL
-        # Ref.: https://bit.ly/35NqiN0
-        """
-        retcode = subprocess.check_call(shlex.split(cmd), stderr=stderr)
-        """
         if sys.version_info.major == 3 and sys.version_info.minor <= 6:
-            # TODO: PIPE not working as arguments
+            # TODO: PIPE not working as arguments and capture_output new in
+            # Python 3.7
             # Ref.: https://stackoverflow.com/a/53209196
             #       https://bit.ly/3lvdGlG
             result = subprocess.run(shlex.split(cmd))
         else:
             result = subprocess.run(shlex.split(cmd), capture_output=True)
-        """
-        except subprocess.CalledProcessError:
-            return e
-        """
     except FileNotFoundError:
         raise
     else:
