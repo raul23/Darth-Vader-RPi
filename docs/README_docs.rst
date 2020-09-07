@@ -34,7 +34,7 @@ playing sounds such as some of his famous quotes.
    If you don't have an RPi, don't worry. You can still `test the program on
    your own computer`_ because the package ``darth_vader_rpi`` uses the library
    `SimulRPi`_ to simulate I/O devices connected to an RPi such as LEDs and
-   push buttons by blinking red dots on the terminal and playing sounds when a
+   push buttons by blinking red dots in the terminal and playing sounds when a
    keyboard key is pressed. Almost like testing with a real RPi!
 
    **Disclaimer:** I also wrote the `SimulRPi`_ library
@@ -49,11 +49,12 @@ Introduction
 The Darth Vader action figure is 11.5 inches tall (which is `this one from
 Hasbro <https://amzn.to/3hIw0ou>`_) and was modified to make it more lifelike
 by illuminating the lightsaber, chest control box, and belt. 3 push buttons
-control the following sounds:
+control the following sounds and LEDs:
 
 #. Some of his famous quotes
 #. The *Imperial march* theme song
-#. The lightsaber drawing and retraction sounds and its illumination
+#. The lightsaber drawing and retraction sounds
+#. The lightbsaber illumination (3 LEDs)
 
 His iconic breathing sound plays in the background indefinitely almost as soon
 as the RPi is run with the script `start_dv`_.
@@ -62,8 +63,8 @@ as the RPi is run with the script `start_dv`_.
 
    <div align="center">
    <a href="https://www.youtube.com/embed/P631S1k1h_0"><img src="https://img.youtube.com/vi/P631S1k1h_0/0.jpg" alt="Darth Vader action figure activated"></a>
-   <p><b>Click on the above image for the full video so you can also hear the
-   different sounds produced by pressing the push buttons</b></p>
+   <p><b>Click on the above image for the full video to see the LEDs turning on
+   and hear the different sounds produced by pressing the push buttons</b></p>
    </div>
 
 Connection diagram
@@ -80,25 +81,24 @@ Here's how the various LEDs and push buttons are connected to the Raspberry Pi:
 
 * The lightsaber is illuminated by 3 LEDs connected in parallel
 * The *Top*, *Middle*, and *Bottom* LEDs illuminate the slots in Darth Vader's
-  chest control box. They blink in a specific sequence as specified in the
-  `configuration file <https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L52>`__.
-  See `Change slot LEDs sequence`_ to know how to change this sequence.
+  chest control box. They blink in a specific sequence
+  `as specified in the configuration file`_.
 * When the *Lightsaber button* is first pressed, it produces the drawing sound,
   illuminates the sword, and a hum sound persists until the *Lightsaber button*
   is turned off. If the button is pressed again, it produces the sound of
   retracting the lightsaber and turns it off.
 
   **NOTE:** the *Lightsaber button* can be pressed while the *Song button* or
-  the *Quotes button* is playing audio since they use different channels.
+  the *Quotes button* is playing audio since they use different audio channels.
 * The *Song button* plays the `Imperial March song by Jacob Townsend`_
 * The *Quotes button* plays famous Darth Vader quotes when pressed. For
   testing purposes, the ``darth_vader_rpi`` package comes with two movie lines:
 
     * `"I am your father"`_
     * `"Nooooo"`_: it is also used for the `closing sound`_ when the script
-      ``start_dv`` exits
+      `start_dv`_ exits
 
-  However, you could add more quotes if you want to. Check `Add Darth Vader quotes`_.
+  However, you could `add more quotes`_ if you want.
 
 Dependencies
 ============
@@ -110,17 +110,27 @@ Dependencies
 
   * ``dv_sounds``>=0.1.0a0: for retrieving the sound files (quotes, songs, and
     sound effects)
+
+    - **Ref:** `dv_sounds`_
   * ``pygame``>=1.9.3: for playing sounds
+
+    - **Ref:** `pygame`_
   * ``SimulRPi`` >=0.1.0a0: for partly faking `RPI.GPIO`_ and simulating I/O
     devices connected to an RPi such as LEDs and push buttons in case that you
-    don't have access to an RPi. See `SimulRPi`_ for more info about this
-    library.
+    don't have access to an RPi.
+
+    - **Ref:** `SimulRPi`_
+
+..
+   TODO: IMPORTANT test again with installing latest pygame on 3.5 and 3.8
+   and check date
 
 .. important::
 
-   I couldn't install ``pygame`` 1.9.6 (the latest stable release) with Python
-   3.5 and 3.8, on macOS. However, the latest pre-release development version
-   worked well with Python 3.5 and 3.8, on macOS.
+   At the time of this writing (2020-08-28), I couldn't install ``pygame``
+   1.9.6 (the latest stable release) with Python 3.5 and 3.8, on macOS.
+   However, the latest pre-release development worked well with Python 3.5 and
+   3.8, on macOS.
 
 .. _installation-instructions-label:
 
@@ -136,13 +146,14 @@ Installation instructions
 
    It will install the dependencies if they are not already found in your system.
 
-2. If you get the warning message from *pip* that the script ``start_dv`` is
+2. If you get the warning message from *pip* that the script :mod:`start_dv` is
    not defined in your *PATH*::
 
       WARNING: The script start_dv is installed in '/home/pi/.local/bin' which is not on PATH.
 
-   add this directory to your *PATH* by editing your configuration file (e.g.
-   *.bashrc*). See this `article`_ on how to set *PATH* on Linux.
+   add the directory mentioned in the warning to your *PATH* by editing your
+   configuration file (e.g. *.bashrc*). See this `article`_ on how to set
+   *PATH* on Linux.
 
 3. Test your installation by importing ``darth_vader_rpi`` and printing its version::
 
@@ -168,15 +179,15 @@ Usage
 Script ``start_dv``
 -------------------
 Once the ``darth_vader_rpi`` package is `installed`_, you should have access to
-the script ``start_dv`` which turns on LEDs and plays sound effects on a
+the script :mod:`start_dv` which turns on LEDs and plays sound effects on a
 Raspberry Pi (RPi).
 
-Run the script on your RPi with `default values`_ for the GPIO channels and other
-settings::
+Run the script on your **RPi** with `default values`_ for the GPIO channels
+and other settings::
 
    $ start_dv
 
-If you want to test the script on your computer (use the flag **-s**)::
+If you want to test the script on your **computer** (use the flag **-s**)::
 
    $ start_dv -s
 
@@ -219,9 +230,9 @@ Edit a configuration file:
 Simulating on your computer
 ---------------------------
 If you don't have access to a Raspberry Pi (RPi) and want to try out the script
-``start_dv``, you can run the script with the flag **-s**. It will make use of
-the library `SimulRPi`_ to simulate LEDs and push buttons connected to an RPi
-by blinking red dots in the terminal and monitoring pressed keyboard keys::
+:mod:`start_dv`, you can run the script with the flag **-s**. It will make use
+of the library `SimulRPi`_ to simulate LEDs and push buttons connected to an
+RPi by blinking red dots in the terminal and monitoring pressed keyboard keys::
 
    $ start_dv -s
 
@@ -229,7 +240,7 @@ by blinking red dots in the terminal and monitoring pressed keyboard keys::
 `Change default settings`_ on how to change these values.
 
 Here is a video of what it looks like in a terminal when running the script
-``start_dv`` on a computer instead of an RPi:
+:mod:`start_dv` on a computer instead of an RPi:
 
 .. raw:: html
 
@@ -242,9 +253,9 @@ Here is a video of what it looks like in a terminal when running the script
 Here's how the keyboard keys are related **by default** to push buttons
 connected to an RPi:
 
-   * ``cmd_left``   -----> lightsaber button
-   * ``alt_left``   -----> song button
-   * ``alt_right``  -----> quotes button
+   * ``cmd_l``   -----> lightsaber button
+   * ``alt_l``   -----> song button
+   * ``alt_r``  -----> quotes button
 
 Check `Change keymap`_ if you want to change this default key to channel
 mapping.
@@ -257,7 +268,7 @@ To uninstall **only** the package ``darth_vader_rpi``::
 
 To uninstall the package ``darth_vader_rpi`` and its dependencies::
 
-   $ pip uninstall darth_vader_rpi simulrpi dv_sounds pygame
+   $ pip uninstall darth_vader_rpi dv_sounds pygame simulrpi
 
 You can remove from the previous command-line those dependencies that you don't
 want to uninstall.
@@ -298,6 +309,8 @@ Resources
 
 References
 ==========
+* `dv_sounds`_: package for downloading the various sounds needed for the
+  project, e.g. sound effects
 * `pygame`_: package used for playing sounds
 * `RPI.GPIO`_: a module to control RPi GPIO channels
 * `SimulRPi`_: package that partly fakes ``RPi.GPIO`` and simulates some I/O
@@ -320,9 +333,6 @@ Credits
 
     **NOTE:** The original song file was reduced under 1 MB by removing the
     first 7 seconds (no sound) and the last 2 minutes and 24 seconds.
-
-  - `Star Wars- The Imperial March (Darth Vader's Theme) <https://www.youtube.com/watch?v=-bzWSJG93P8>`_:
-    not used anymore
 - **Sound effects:**
 
   - `Darth Vader breathing sound <https://www.youtube.com/watch?v=d28NrjMPERs>`_
@@ -335,12 +345,15 @@ Credits
 .. URLs
 
 .. 0. default_main_cfg
+.. _as specified in the configuration file:
+   https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L51
 .. _configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L1
 .. _default values: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L1
 .. 1. external links
 .. _article: https://docs.oracle.com/cd/E19062-01/sun.mgmt.ctr36/819-5418/gaznb/index.html
 .. _pygame: https://www.pygame.org/
 .. _pynput: https://pynput.readthedocs.io
+.. _dv_sounds: https://github.com/raul23/DV-Sounds
 .. _Darth-Vader-RPi documentation: http://darth-vader-rpi.rtfd.io/
 .. _Darth-Vader-RPi GitHub: https://github.com/raul23/Darth-Vader-RPi
 .. TODO: test the following URL
@@ -354,13 +367,11 @@ Credits
 .. _Empire Strikes Back chest box light sequence: https://youtu.be/E2J_xl2MbGU?t=333
 
 .. 2. Internal links
-.. TODO: next reference might not work in GitHub
+.. _add more quotes: change_default_settings.html#add-darth-vader-quotes-label
 .. _closing sound: change_default_settings.html#change-closing-sound-label
 .. _installed: #installation-instructions-label
 .. _start_dv: #script-start-dv
 .. _test the program on your own computer: #simulating-on-your-computer
-.. _Add Darth Vader quotes: change_default_settings.html#add-darth-vader-quotes-label
 .. _Change default settings: change_default_settings.html
 .. _Change keymap: change_default_settings.html#change-keymap-label
-.. _Change slot LEDs sequence: change_default_settings.html#change-slot-leds-sequence-label
 .. _Changelog: changelog.html
