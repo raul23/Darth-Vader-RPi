@@ -233,6 +233,7 @@ def _check_sound_files(main_cfg):
 
     Raises
     ------
+    FileNotFoundError
 
     """
     logger.debug("Checking sound files...")
@@ -974,6 +975,12 @@ def main():
     - activate Darth Vader,
     - edit a configuration file, or
     - reset/undo a configuration file *[SOON]*.
+
+    Raises
+    ------
+    ValueError
+        Raised if an invalid configuration name is given to the
+        command-line argument `edit`.
 
     Notes
     -----
