@@ -795,6 +795,7 @@ class DarthVader:
         """
         if hasattr(GPIO, "setprinting"):
             GPIO.setprinting(False)
+        time.sleep(0.1)
         if gpio_channels:
             for channel_id, channel_info in gpio_channels.items():
                 if channel_id.endswith("_led"):
@@ -1047,7 +1048,7 @@ def main():
             os.path.basename(check_cfg_retval.user_cfg_filepath)))
         for k in check_cfg_retval.keys_not_found:
             logger.warning("Key '{}' not found. Added it in the configuration "
-                           "dict with default value.".format(k))
+                           "dict with default values.".format(k))
         logger.info("Saved updated configuration dict to file: {}".format(
             check_cfg_retval.user_cfg_filepath))
     # Process second returned values: overridden config options
@@ -1114,6 +1115,8 @@ def main():
     except KeyboardInterrupt:
         # Might happen if error in Manager.{on_press(), on_release()} and then
         # ctrl+c. Not enough time given to stop all threads
+        # TODO: dv.check_cleanup()
+        # TODO: GPIO.manager.check_cleanup()
         if dv.th_slot_leds and dv.th_slot_leds.is_alive():
             dv.th_slot_leds.join()
             logger.warning("Abrupt exit: the thread '{}' was not cleanly "
