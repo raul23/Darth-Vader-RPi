@@ -41,8 +41,8 @@ The script ``start_dv -s`` gives this error::
 This error stems from my locale settings which are not set properly. Check
 `Display problems`_ on how to set them.
 
-Once the locale setting is setup correctly, the script ``start_dv -s`` runs
-without errors.
+**Result:** once the locale settings are setup correctly, the script
+``start_dv -s`` runs without errors.
 
 Python 3.6
 """"""""""
