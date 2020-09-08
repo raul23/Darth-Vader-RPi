@@ -39,8 +39,8 @@ The script ``start_dv -s`` gives this error::
    ERROR    UnicodeEncodeError: 'ascii' codec can't encode character '\U0001f6d1' in position 2: ordinal not in range(128)
 
 This error stems from my locale settings which are not set properly and 
-it seems that Python 3.5 doesn't assume the correct locale *utf-8*. Check
-`Display problems`_ on how to set them.
+it seems that Python 3.5 doesn't assume the correct locale *utf-8* by default. 
+Check `Display problems`_ on how to set them.
 
 **Result:** once the locale settings are setup correctly, the script
 ``start_dv -s`` runs without errors.
