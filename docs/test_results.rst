@@ -25,7 +25,7 @@ Version 0.1.0a0
     
       * **IMPORTANT:** Install ``pygame`` first with ``pip install pygame==2.0.0.dev10``
       * ``dv_sounds 0.1.0a0``
-      * ``pynput 1.6.8``
+      * ``pynput 1.7.1``
       * ``SimulRPi 0.1.0a0``
 
   * Python 3.6:
