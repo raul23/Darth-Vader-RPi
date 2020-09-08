@@ -115,9 +115,14 @@ Dependencies
   * ``pygame``>=1.9.3: for playing sounds
 
     - **Ref:** `pygame`_
+  * ``pynput``>=1.6.8: needed by ``SimulRPi`` for monitoring the keyboard when
+    simulating push buttons with keyboard keys, i.e. when running the script
+    `start_dv`_ in simulation mode
+
+    - **Ref:** `pynput`_
   * ``SimulRPi`` >=0.1.0a0: for partly faking `RPI.GPIO`_ and simulating I/O
     devices connected to an RPi such as LEDs and push buttons in case that you
-    don't have access to an RPi.
+    don't have access to an RPi
 
     - **Ref:** `SimulRPi`_
 
@@ -129,8 +134,8 @@ Dependencies
 
    At the time of this writing (2020-08-28), I couldn't install ``pygame``
    1.9.6 (the latest stable release) with Python 3.5 and 3.8, on macOS.
-   However, the latest pre-release development worked well with Python 3.5 and
-   3.8, on macOS.
+   However, the latest pre-release development version (2.0.0.dev10) worked
+   well with Python 3.5 and 3.8, on macOS.
 
 .. _installation-instructions-label:
 
@@ -276,7 +281,7 @@ To uninstall **only** the package ``darth_vader_rpi``::
 
 To uninstall the package ``darth_vader_rpi`` and its dependencies::
 
-   $ pip uninstall darth_vader_rpi dv_sounds pygame simulrpi
+   $ pip uninstall darth_vader_rpi dv_sounds pygame pynput simulrpi
 
 You can remove from the previous command-line those dependencies that you don't
 want to uninstall.
