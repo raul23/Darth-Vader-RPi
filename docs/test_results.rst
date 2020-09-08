@@ -34,9 +34,15 @@ Python 3.5
 * ``pynput 1.7.1``
 * ``SimulRPi 0.1.0a0``
 
-``start_dv -s`` gives this error::
+The script ``start_dv -s`` gives this error::
 
    ERROR    UnicodeEncodeError: 'ascii' codec can't encode character '\U0001f6d1' in position 2: ordinal not in range(128)
+
+This error stems from my locale settings which are not set properly. Check
+`Display problems`_ on how to set them.
+
+Once the locale setting is setup correctly, the script ``start_dv -s`` runs
+without errors.
 
 Python 3.6
 """"""""""
@@ -49,3 +55,7 @@ Python 3.8
 
 SSH from macOS to RPi
 ^^^^^^^^^^^^^^^^^^^^^
+
+.. URLs
+.. external links
+.. _Display problems: https://simulrpi.readthedocs.io/en/latest/display_problems.html#solution-1-change-your-locale-settings
