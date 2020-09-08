@@ -22,9 +22,9 @@ Version 0.1.0a0
   * Python 3.5:
 
     * Dependencies installed:
-
+    
+      * **IMPORTANT:** Install first ``pygame`` with: ``pip install pygame==2.0.0.dev10``
       * ``dv_sounds 0.1.0a0``
-      * ``pygame 2.0.0.dev10``: ``pip install pygame==2.0.0.dev10``
       * ``pynput 1.6.8``
       * ``SimulRPi 0.1.0a0``
 
