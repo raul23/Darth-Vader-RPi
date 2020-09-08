@@ -15,7 +15,7 @@ Version 0.1.0a0
 * Raspberry Pi (Python 3.5):
 
   * with ``RPi.GPIO``:
-  * with :mod:`SimulRPi.GPIO`:
+  * with ``SimulRPi.GPIO``:
 
 * macOS:
 
