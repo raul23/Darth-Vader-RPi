@@ -26,7 +26,7 @@ macOS
 Python 3.5
 """"""""""
 
-* Dependencies installed:
+**Dependencies installed:**
 
   * **IMPORTANT:** Install ``pygame`` first with ``pip install pygame==2.0.0.dev10``
   * ``dv_sounds 0.1.0a0``
@@ -34,7 +34,7 @@ Python 3.5
   * ``pynput 1.7.1``
   * ``SimulRPi 0.1.0a0``
 
-* `start_dv -s` gives this error::
+``start_dv -s`` gives this error::
 
    ERROR    UnicodeEncodeError: 'ascii' codec can't encode character '\U0001f6d1' in position 2: ordinal not in range(128)
 
