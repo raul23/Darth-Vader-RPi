@@ -3,7 +3,7 @@ Test results for ``start_dv``
 =============================
 
 I present how the script ``start_dv`` performed on various platforms and
-environments based on different releases of the package ``darth_vader_rpi`.
+environments based on different releases of the package ``darth_vader_rpi``.
 
 .. contents::
    :depth: 3
@@ -80,8 +80,8 @@ Python 3.8
 
 **Result:** the script ``start_dv -s`` runs without errors.
 
-SSH from macOS to RPi
-^^^^^^^^^^^^^^^^^^^^^
+SSH from macOS to RPi (Python 3.5)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. URLs
 .. external links
