@@ -3,7 +3,7 @@ Test results for ``start_dv``
 =============================
 
 I present how the script ``start_dv`` performed on various platforms and
-environments based on different releases of the library ``Darth-Vader-RPi``.
+environments based on different releases of the package ``darth_vader_rpi`.
 
 .. contents::
    :depth: 3
@@ -47,11 +47,38 @@ This error stems from my locale settings which are not set properly. Check
 Python 3.6
 """"""""""
 
+**Dependencies installed:**
+
+* ``dv_sounds 0.1.0a0``
+* ``pygame 1.9.6``
+* ``pynput 1.7.1``
+* ``SimulRPi 0.1.0a0``
+
+**Result:** the script ``start_dv -s`` runs without errors.
+
 Python 3.7
 """"""""""
 
+**Dependencies installed:**
+
+* ``dv_sounds 0.1.0a0``
+* ``pygame 1.9.6``
+* ``pynput 1.7.1``
+* ``SimulRPi 0.1.0a0``
+
+**Result:** the script ``start_dv -s`` runs without errors.
+
 Python 3.8
 """"""""""
+
+**Dependencies installed:**
+
+* ``dv_sounds 0.1.0a0``
+* ``pygame 2.0.0.dev10``
+* ``pynput 1.7.1``
+* ``SimulRPi 0.1.0a0``
+
+**Result:** the script ``start_dv -s`` runs without errors.
 
 SSH from macOS to RPi
 ^^^^^^^^^^^^^^^^^^^^^
