@@ -18,16 +18,16 @@ Version 0.1.0a0
 
 * macOS:
 
-   * Python 3.5:
+  * Python 3.5:
 
-      * Dependencies installed correctly:
+    * Dependencies installed correctly:
 
-         * ``dv_sounds 0.1.0a0``
-         * ``pygame 2.0.0.dev10``
-         * ``SimulRPi 0.1.0a0``
+      * ``dv_sounds 0.1.0a0``
+      * ``pygame 2.0.0.dev10``
+      * ``SimulRPi 0.1.0a0``
 
-   * Python 3.6:
-   * Python 3.7:
-   * Python 3.8:
+  * Python 3.6:
+  * Python 3.7:
+  * Python 3.8:
 
 * SSH from macOS to RPi:
