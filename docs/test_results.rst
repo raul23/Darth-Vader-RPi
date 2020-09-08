@@ -5,8 +5,7 @@ Test results for ``start_dv``
 I present how the script ``start_dv`` performed on various platforms and
 environments based on different releases of the library ``Darth-Vader-RPi``.
 
-.. 
-   contents::
+.. contents::
    :depth: 3
    :local:
 
