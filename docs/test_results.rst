@@ -16,9 +16,11 @@ Raspberry Pi (Python 3.5)
 
 with ``RPi.GPIO``
 """""""""""""""""
+**TODO**
 
 with ``SimulRPi.GPIO``
 """"""""""""""""""""""
+**TODO**
 
 macOS
 ^^^^^
@@ -83,6 +85,7 @@ Python 3.8
 
 SSH from macOS to RPi (Python 3.5)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**TODO**
 
 .. URLs
 .. external links
