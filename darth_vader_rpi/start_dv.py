@@ -156,6 +156,7 @@ _CALM_MODE = [["middle"],
               ["top"],
               ["middle"],
               ["top"],
+              [],
               ["top"],
               [],
               ["bottom"],
@@ -536,6 +537,7 @@ def turn_on_slot_leds(top_led, middle_led, bottom_led, leds_sequence="action",
             th.join()
 
     """
+    # LED labels to Channel numbers Mapping (LCM)
     lcm = dict((('top', top_led), ('middle', middle_led), ('bottom', bottom_led)))
     if isinstance(leds_sequence, str):
         leds_sequence = leds_sequence.lower()
@@ -549,18 +551,22 @@ def turn_on_slot_leds(top_led, middle_led, bottom_led, leds_sequence="action",
                 ", ".join(_SEQ_TYPES_MAP.keys()), leds_sequence)
     th = threading.currentThread()
     subseq_idx = 0
+    # TODO: use SimulRPi API to get LEDs states
+    leds_states = dict(zip(lcm.keys(), [GPIO.LOW]*len(lcm)))
     while getattr(th, "do_run", True):
         leds_subsequence = leds_sequence[subseq_idx % len(leds_sequence)]
         subseq_idx += 1
-        for channel_label in leds_subsequence:
-            channel = lcm[channel_label]
-            turn_on_led(channel)
-        time.sleep(time_per_step)
-        if leds_subsequence:
-            turn_off_led(lcm['top'])
-            turn_off_led(lcm['middle'])
-            turn_off_led(lcm['bottom'])
-            time.sleep(delay_between_steps)
+        for channel_label, channel in lcm.items():
+            cur_state = leds_states[channel_label]
+            if channel_label in leds_subsequence:
+                if cur_state != GPIO.HIGH:
+                    leds_states[channel_label] = GPIO.HIGH
+                    turn_on_led(channel)
+            else:
+                if cur_state != GPIO.LOW:
+                    leds_states[channel_label] = GPIO.LOW
+                    turn_off_led(channel)
+        time.sleep(time_per_step+delay_between_steps)
     logger.debug(add_spaces_to_msg("Stopping thread: {}".format(th.name)))
 
 
