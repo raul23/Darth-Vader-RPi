@@ -28,8 +28,8 @@ In what follows, you wil find an explanation for each setting found in the
    Some of the settings (`quiet <#quiet-label>`__,
    `simulation <#simulation-label>`__, and `verbose <#verbose-label>`__) in
    the configuration file can be also set through the script's command-line
-   arguments. If the command-line arguments are different from their default
-   values, they will override the settings found in the configuration file.
+   arguments. The command-line arguments override the settings found in the
+   configuration file.
 
 .. seealso::
 
