@@ -7,7 +7,7 @@ and LEDs:
 
 1. Some of his famous quotes
 2. The Imperial march theme song
-3. The lightsaber opening and closing sounds
+3. The lightsaber drawing, hum and retraction sounds
 4. The lightsaber illumination (3 LEDs)
 
 His iconic breathing sound plays in the background indefinitely almost as soon
@@ -17,7 +17,7 @@ The script allows you also to edit the `main config file`_ to setup among other
 things the RPi's GPIO pins connected to LEDs and push buttons.
 
 By default the module `RPi.GPIO`_ is used, but if the simulation option (`-s`)
-is used with the :mod:`start_dv` script, then the module `SimulRPi.GPIO`_ will
+is used with the script :mod:`start_dv`, then the module `SimulRPi.GPIO`_ will
 be used instead which simulates `RPi.GPIO`_ for those that don't have an RPi to
 test on.
 
@@ -28,12 +28,12 @@ Usage
 
 .. highlight:: console
 
-Once the ``darth_vader_rpi`` package is `installed`_, you should have access to
-the :mod:`start_dv` script:
+Once the package ``darth_vader_rpi`` is `installed`_, you should have access to
+the script :mod:`start_dv`:
 
     ``start_dv [-h] [--version] [-q] [-s] [-v] [-e {log,main}] [-a APP]``
 
-Run the script on the **RPi** with `default values`_ for GPIO channels and
+Run the script on the **RPi** with `default values`_ for the  GPIO channels and
 other settings::
 
     $ start_dv
@@ -60,21 +60,29 @@ More information is available at:
 - `Darth-Vader-RPi GitHub`_
 - `SimulRPi GitHub`_
 
+.. note::
+
+    In :mod:`darth_vader` and :mod:`ledutils`, the default value for ``GPIO``
+    is :obj:`None` and will be eventually set to one of the two modules
+    (`RPi.GPIO`_ or `SimulRPi.GPIO`_) depending on the user's settings.
+
+    `RPi.GPIO`_ provides a class to control the GPIO pins on a Raspberry Pi.
+
+    If the `simulation` option (`-s`) is used with the script :mod:`start_dv`,
+    the `SimulRPi.GPIO`_ module will be used instead.
+
 .. URLs
 
 .. default_main_cfg
 .. _default values: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json
-.. _gpio_channels: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L11
 .. _logging config file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_logging_cfg.json
 .. _main config file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json
 
 .. external links
-.. _pygame.mixer.Sound.play: https://www.pygame.org/docs/ref/mixer.html#pygame.mixer.Sound.play
 .. _Darth-Vader-RPi GitHub: https://github.com/raul23/Darth-Vader-RPi
 .. _RPi.GPIO: https://pypi.org/project/RPi.GPIO/
 .. _SimulRPi GitHub: https://github.com/raul23/SimulRPi
 .. _SimulRPi.GPIO: https://pypi.org/project/SimulRPi/
-.. _YouTube video: https://youtu.be/E2J_xl2MbGU?t=333
 
 .. internal links
 .. _installed: README_docs.html#installation-instructions
@@ -85,35 +93,20 @@ import logging.config
 import os
 import platform
 import shutil
-import threading
-import time
 from collections import namedtuple
 from logging import NullHandler
-
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
-import pygame
 
 from dv_sounds.utils import get_dirpath, get_filepath
 from darth_vader_rpi import (__name__ as package_name,
                              __path__ as package_path,
                              __version__ as package_version)
-from darth_vader_rpi.utils import (dumps_json, get_cfg_filepath, load_json,
+from darth_vader_rpi.darth_vader import DarthVader
+from darth_vader_rpi.utils import (add_spaces_to_msg, dumps_json,
+                                   get_cfg_filepath, load_json,
                                    override_config_with_args, run_cmd)
 
 logger = logging.getLogger(__name__)
 logger.addHandler(NullHandler())
-
-GPIO = None
-"""Its default value is :obj:`None` and will be eventually set to 
-one of the two modules (`RPi.GPIO`_ or `SimulRPi.GPIO`_) depending on the 
-user's settings.
-
-`RPi.GPIO`_ provides a class to control the GPIO pins on a Raspberry Pi.
-
-If the `simulation` option (`-s`) is used with the :mod:`start_dv` script, the 
-`SimulRPi.GPIO`_ module will be used instead.
-
-"""
 
 _LOG_CFG = "log_cfg"
 _MAIN_CFG = "cfg"
@@ -133,70 +126,6 @@ The default value is obj:`None` and will be set when performing the tests from
 :obj:`darth_vader_rpi.tests`).
 
 """
-
-_ACTION_MODE = [["top", "middle", "bottom"],
-                ["top", "bottom"],
-                ["top", "middle", "bottom"],
-                ["top"],
-                [],
-                ["top", "middle", "bottom"],
-                ["top"],
-                ["top", "middle", "bottom"],
-                ["middle", "bottom"],
-                [],
-                ["top", "bottom"],
-                ["top", "middle", "bottom"],
-                ["top", "bottom"],
-                [],
-                ["top"],
-                []]
-_CALM_MODE = [["middle"],
-              ["top"],
-              ["middle"],
-              ["top"],
-              ["middle"],
-              ["top"],
-              [],
-              ["top"],
-              [],
-              ["bottom"],
-              []]
-"""Darth Vader's physiological status.
-
-These lists represent the sequence the 3 slot LEDs (on his chest box) should be
-turned on.  Each item in the list represents a step in the sequence. Thus, in
-the case of :attr:`_ACTION_MODE`, all the 3 slot LEDs will be turned on first, 
-followed by the top and bottom LEDs, and so on.
-
-An empty subsequence refers to all LEDs being turned off.
-
-References
-----------
-- Where the sequences were obtained: https://youtu.be/E2J_xl2MbGU?t=333
-
-"""
-
-_SEQ_TYPES_MAP = {'action': _ACTION_MODE, 'calm': _CALM_MODE}
-"""TODO
-"""
-
-
-# TODO: clear buffer?
-def add_spaces_to_msg(msg, nb_spaces=60):
-    """Add spaces at the end of a message.
-
-    Since :obj:`SimulRPi.`:mod:`~GPIO`
-
-    Parameters
-    ----------
-    msg
-    nb_spaces
-
-    Returns
-    -------
-
-    """
-    return "{}{}".format(msg, " " * nb_spaces)
 
 
 def _check_user_cfg_dict(cfg_type, user_cfg_dict):
@@ -300,524 +229,6 @@ def _get_cfg_dict(cfg_type):
     return cfg_dict
 
 
-class ExceptionThread(threading.Thread):
-    """A subclass from :class:`threading.Thread` that defines threads that can
-    catch errors if their target functions raise an exception.
-
-    Parameters
-    ----------
-    verbose : bool, optional
-        If `True`, print the traceback when there is an exception. Otherwise,
-        print just a one-line error message, e.g. ``KeyError: 'test'``
-    args : tuple, optional
-        Positional arguments given to the thread's target function.
-    kwargs : dict, optional
-        Keyword arguments given to the thread's target function.
-
-    Attributes
-    ----------
-    exc: :class:`Exception`
-        Represent the exception raised by the target function.
-
-    References
-    ----------
-    * `stackoverflow <https://stackoverflow.com/a/51270466>`__
-
-    """
-
-    def __init__(self, verbose=False, *args, **kwargs):
-        threading.Thread.__init__(self, *args, **kwargs)
-        self.verbose = verbose
-        self.exc = None
-
-    def run(self):
-        """Method representing the thread’s activity.
-
-        Overridden from the base class :class:`threading.Thread`. This method
-        invokes the callable object passed to the object’s constructor as the
-        target argument, if any, with sequential and keyword arguments taken
-        from the args and kwargs arguments, respectively.
-
-        It also saves and logs any error that the target function might raise.
-
-        """
-        try:
-            self._target(*self._args, **self._kwargs)
-        except Exception as e:
-            self.exc = e
-            if self.verbose:
-                logger.exception(add_spaces_to_msg("Error: {}".format(e)))
-            else:
-                # TODO: add next line in a utility function
-                err_msg = "{}: {}".format(str(e.__class__).split("'")[1], e)
-                logger.error(add_spaces_to_msg(err_msg))
-
-
-class SoundWrapper:
-    """Class that wraps around :class:`pygame.mixer.Channel` and
-    :class:`pygame.mixer.Sound`.
-
-    The :meth:`__init__` method takes care of automatically loading the sound
-    file. The sound file can then be played or stopped from the specified
-    channel `channel_id` with the :meth:`play` or :meth:`stop` method,
-    respectively.
-
-    Parameters
-    ----------
-    sound_id : str
-        A unique identifier.
-    sound_name : str
-        Name of the sound file that will be displayed in the terminal.
-    sound_filepath : str
-        Path to the sound file.
-    channel_id : int
-        Channel id associated with an instance of
-        :class:`pygame.mixer.Channel` for controlling playback. It must take an
-        :obj:`int` value starting from 0.
-    mute : bool, optional
-        If set to `True`, the sound will not be played. The default value is
-        `False`.
-
-
-    .. note::
-
-        It is a wrapper with a very minimal interface to
-        :class:`pygame.mixer.Channel` where only two methods :meth:`play` and
-        :meth:`stop` are provided for the sake of the project.
-
-    """
-
-    def __init__(self, sound_id, sound_name, sound_filepath, channel_id,
-                 mute=False):
-        self.sound_id = sound_id
-        self.sound_name = sound_name
-        self.sound_filepath = sound_filepath
-        self.channel_id = channel_id
-        self.mute = mute
-        self._channel = pygame.mixer.Channel(channel_id)
-        # Load sound file
-        self._pygame_sound = pygame.mixer.Sound(self.sound_filepath)
-
-    def play(self, loops=0):
-        """Play a sound on the specified Channel `channel_id`.
-
-        Parameters
-        ----------
-        loops : int
-            Controls how many times the sample will be repeated after being
-            played the first time. The default value (zero) means the sound is
-            not repeated, and so is only played once. If `loops` is set to -1
-            the sound will loop indefinitely (though you can still call
-            :meth:`stop` to stop it).
-
-            **Reference:** :meth:`pygame.mixer.Sound.play`
-
-        """
-        self._channel.play(self._pygame_sound, loops)
-
-    def stop(self):
-        """Stop playback on the specified channel `channel_id`.
-        """
-        self._channel.stop()
-
-
-def turn_off_led(channel):
-    """Turn off a LED from a given channel.
-
-    Parameters
-    ----------
-    channel : int
-        Channel number associated with a LED which will be turned off.
-
-    """
-    # logger.debug("LED {} off".format(led))
-    GPIO.output(channel, GPIO.LOW)
-
-
-def turn_on_led(channel):
-    """Turn on a LED from a given channel.
-
-    Parameters
-    ----------
-    channel : int
-        Channel number associated with a LED which will be turned on.
-
-    """
-    # logger.debug("LED {} on".format(led))
-    GPIO.output(channel, GPIO.HIGH)
-
-
-def turn_on_slot_leds(top_led, middle_led, bottom_led, leds_sequence="action",
-                      delay_between_steps=0.4, time_per_step=0.4):
-    """Turn on/off the three slot LEDs in a precise sequence.
-
-    These three LEDs are associated with Darth Vader's three slots located on
-    his chest control box. These LEDs are labeled as '`top`', '`middle`', and
-    '`bottom`', respectively.
-
-    The three LEDs are turned on according to a default or custom sequence
-    which repeats itself. The accepted values for ``leds_sequence`` are
-    '`action`' and '`calm`' which represent Darth Vader's physiological state
-    as a sequence of LEDs blinking in a particular order.
-
-    The user can also provide its own ``leds_sequence`` by using a list of LED
-    labels {'`top`', '`midddle`', '`bottom`'} arranged in a sequence specifying
-    the order the slot LEDs should turn on/off, e.g. ``[['top', 'bottom'], [],
-    ['middle'], []]`` will turn on/off the slot LEDs in this order::
-
-        1. top + bottom LEDs turned on
-        2. All LEDs turned off
-        3. middle LED turned on
-        4. All LEDs turned off
-
-    Each step in the sequence will last for ``time_per_step`` seconds.
-
-    There will be a delay of ``delay_between_steps`` seconds between
-    each step in the previous example.
-
-    The default sequences of slot LEDs were obtained from this
-    `YouTube video`_.
-
-    Parameters
-    ----------
-    top_led : int
-        Channel number associated with the `Top` slot LED.
-    middle_led : int
-        Channel number associated with the `Middle` slot LED.
-    bottom_led : int
-        Channel number associated with the `Bottom` slot LED.
-    leds_sequence : str or list, optional
-        Sequence of slot LEDs on Darth Vader's chest box.
-
-        If ``leds_sequence`` is a string, then it takes on one of these values
-        which represent Darth Vader's physiological state: {'action', 'calm'}.
-
-        If ``leds_sequence`` is a list, then it must be a list of slot LED
-        labels {'`top`', '`middle`', '`bottom`'} arranged in a sequence as to
-        specify the order the slot LEDs should turn on/off, e.g.
-        ``[['top', 'bottom'], [], ['middle'], []]`` will turn on/off the slot
-        LEDs in this order::
-
-            1. top + bottom LEDs turn on
-            2. All LEDs turn off
-            3. middle LED turn on
-            4. All LEDs turn off
-
-    delay_between_steps : float, optional
-        Delay in seconds between each step in the sequence. The default value
-        is 0.4 seconds.
-    time_per_step : float, optional
-        Time in seconds each step in the sequence will last. The default value
-        is 0.4 seconds.
-
-        .. important::
-
-            This also affects the time all LEDs will remain turned off if a
-            step in ``leds_sequence`` is an empty list.
-
-
-    .. important::
-
-        :meth:`turn_on_slot_leds` should be run by a thread and eventually
-        stopped from the main thread by setting its ``do_run`` attribute to
-        `False` to let the thread exit from its target function.
-
-        **For example**:
-
-        .. code-block:: python
-
-            th = threading.Thread(target=turn_on_slot_leds,
-                                  args=(leds_channels))
-            th.start()
-
-            # Your other code ...
-
-            # Time to stop thread
-            th.do_run = False
-            th.join()
-
-    """
-    # LED labels to Channel numbers Mapping (LCM)
-    lcm = dict((('top', top_led), ('middle', middle_led), ('bottom', bottom_led)))
-    if isinstance(leds_sequence, str):
-        leds_sequence = leds_sequence.lower()
-        assert leds_sequence in _SEQ_TYPES_MAP.keys(), \
-            "Wrong type of leds_sequence: '{}' (choose from {})".format(
-                leds_sequence, ", ".join(_SEQ_TYPES_MAP.keys()))
-        leds_sequence = _SEQ_TYPES_MAP[leds_sequence]
-    else:
-        assert isinstance(leds_sequence, list), \
-            "leds_sequence should be a string ({}) or a list: '{}'".format(
-                ", ".join(_SEQ_TYPES_MAP.keys()), leds_sequence)
-    th = threading.currentThread()
-    subseq_idx = 0
-    # TODO: use SimulRPi API to get LEDs states
-    leds_states = dict(zip(lcm.keys(), [GPIO.LOW]*len(lcm)))
-    while getattr(th, "do_run", True):
-        leds_subsequence = leds_sequence[subseq_idx % len(leds_sequence)]
-        subseq_idx += 1
-        for channel_label, channel in lcm.items():
-            cur_state = leds_states[channel_label]
-            if channel_label in leds_subsequence:
-                if cur_state != GPIO.HIGH:
-                    leds_states[channel_label] = GPIO.HIGH
-                    turn_on_led(channel)
-            else:
-                if cur_state != GPIO.LOW:
-                    leds_states[channel_label] = GPIO.LOW
-                    turn_off_led(channel)
-        time.sleep(time_per_step+delay_between_steps)
-    logger.debug(add_spaces_to_msg("Stopping thread: {}".format(th.name)))
-
-
-class DarthVader:
-    """Class for activating a Darth Vader figurine by turning on LEDs on his
-    suit and playing sounds, all done via a Raspberry Pi (RPi).
-
-    The LEDs illuminate Darth Vader's lightsaber and the three slots in the
-    chest control box. 3 push buttons control the following sounds and LEDs:
-
-    1. Some of his famous quotes
-    2. The Imperial march theme song
-    3. The lightsaber opening and closing sounds
-    4. The lightsaber illumination (3 LEDs)
-
-    His iconic breathing sound plays in the background indefinitely almost as
-    soon as the RPi is run with the script.
-
-    The `main config file`_ is used to setup the script :mod:`start_dv`, such
-    as the GPIO pins and the sound files.
-
-    Parameters
-    ----------
-    main_cfg : dict
-        Dictionary containing the configuration data to setup the script
-        :mod:`start_dv`, such as the GPIO pins and the sound files. See
-        `main config file`_ for a detailed look into its content.
-
-    Attributes
-    ----------
-    th_slot_leds : start_dv.ExceptionThread
-        Thread responsible for turning on the three slot LEDs in a precise
-        sequence.
-
-        Its target function is :meth:`turn_on_slot_leds`.
-
-    """
-
-    def __init__(self, main_cfg):
-        self.main_cfg = main_cfg
-        self.th_slot_leds = None
-
-    def activate(self):
-        """Activate a Darth Vader figurine by turning on LEDs on his suit and
-        playing sounds, all done via an RPi.
-
-        While the method waits for a pressed button, you can exit by pressing
-        ``ctr`` + ``c``.
-
-        Returns
-        -------
-        retcode: int
-            If the method is run without any :exc:`Exception`, the return code is
-            0. Otherwise, it is 1.
-
-            Also, even if there is an :exc:`Exception`, the method will try to
-            clean up before exiting.
-
-        """
-        retcode = 0
-        gpio_channels = {}
-        loaded_sounds = {}
-        try:
-            logger.debug("pygame mixer initialization")
-            pygame.mixer.init()
-            logger.debug("RPi initialization")
-            logger.debug("")
-            # Set the numbering system used to identify the I/O pins on an RPi
-            modes = {'BOARD': GPIO.BOARD, 'BCM': GPIO.BCM}
-            GPIO.setmode(modes[self.main_cfg['mode'].upper()])
-            GPIO.setwarnings(False)
-            # Setup LEDs and buttons
-            for gpio_ch in self.main_cfg['gpio_channels']:
-                # TODO: IMPORTANT add channel_type in main_cfg so you don't
-                # have to check '_led'
-                if gpio_ch['channel_id'].endswith("_led"):
-                    # LEDs
-                    GPIO.setup(gpio_ch['channel_number'], GPIO.OUT)
-                else:
-                    # Buttons
-                    GPIO.setup(gpio_ch['channel_number'], GPIO.IN,
-                               pull_up_down=GPIO.PUD_UP)
-                gpio_channels[gpio_ch['channel_id']] = {
-                    'channel_number': gpio_ch['channel_number'],
-                    'channel_name': gpio_ch['channel_name'],
-                    'key': gpio_ch.get('key'),
-                    'led_symbol': gpio_ch.get('led_symbols')
-                }
-
-            ### Sound
-            # Create separate channel
-            # Ref.: stackoverflow.com/a/59742418
-            audio_channels = self.main_cfg['audio_channels']
-            for ch_dict in audio_channels:
-                channel = pygame.mixer.Channel(ch_dict['channel_id'])
-                channel.set_volume(ch_dict['volume'])
-
-            sounds_dir = self.main_cfg['sounds_directory']
-            # Load sounds from cfg
-            logger.info('Loading sounds...')
-            logger.info("")
-            for sound_type in ['quotes', 'songs', 'sound_effects']:
-                logger.debug('Loading {}'.format(sound_type.replace("_", " ")))
-                for sound in self.main_cfg[sound_type]:
-                    sound_id = sound['id']
-                    sound_name = sound['name']
-                    filepath = os.path.join(sounds_dir, sound['filename'])
-                    logger.debug('Loading "{}": {}'.format(sound_name, filepath))
-                    sw = SoundWrapper(
-                        sound_id=sound_id,
-                        sound_name=sound_name,
-                        sound_filepath=filepath,
-                        channel_id=sound['audio_channel_id'],
-                        mute=sound.get('mute', False))
-                    if sound_type == "quotes":
-                        loaded_sounds.setdefault("quotes", {})
-                        loaded_sounds['quotes'].setdefault(sound_id, sw)
-                    else:
-                        loaded_sounds.setdefault(sound_id, sw)
-                    if sw.sound_id == 'breathing_sound' and not sw.mute:
-                        loops = sound.get('loops', 0)
-                        loaded_sounds[sound_id].play(loops)
-                logger.debug("")
-            quotes = list(loaded_sounds['quotes'].values())
-
-            self.th_slot_leds = ExceptionThread(
-                name="thread_slot_leds",
-                target=turn_on_slot_leds,
-                verbose=self.main_cfg['verbose'],
-                kwargs=dict(
-                    top_led=gpio_channels['top_led']['channel_number'],
-                    middle_led=gpio_channels['middle_led']['channel_number'],
-                    bottom_led=gpio_channels['bottom_led']['channel_number'],
-                    leds_sequence=self.main_cfg['slot_leds']['sequence'],
-                    delay_between_steps=self.main_cfg['slot_leds']['delay_between_steps'],
-                    time_per_step=self.main_cfg['slot_leds']['time_per_step']))
-            """
-                args=(gpio_channels['top_led']['channel_number'],
-                      gpio_channels['middle_led']['channel_number'],
-                      gpio_channels['bottom_led']['channel_number'],
-                      self.main_cfg['slot_leds']['sequence'],
-                      self.main_cfg['slot_leds']['delay_between_steps'],
-                      self.main_cfg['slot_leds']['time_per_step']))
-            """
-            self.th_slot_leds.start()
-            logger.info("")
-            logger.info(add_spaces_to_msg("Press buttons"))
-            pressed_lightsaber = False
-            quote_idx = 0
-
-            while True:
-                if not GPIO.input(gpio_channels['lightsaber_button']['channel_number']):
-                    # logger.debug("\n\nButton {} pressed...".format(
-                        # lightsaber_button))
-                    if pressed_lightsaber:
-                        pressed_lightsaber = False
-                        loaded_sounds['lightsaber_retraction_sound'].play()
-                        time.sleep(0.1)
-                        turn_off_led(22)
-                    else:
-                        pressed_lightsaber = True
-                        loaded_sounds['lightsaber_drawing_sound'].play()
-                        loaded_sounds['lightsaber_hum_sound'].play(-1)
-                        time.sleep(0.1)
-                        turn_on_led(gpio_channels['lightsaber_led']['channel_number'])
-                    time.sleep(0.2)
-                elif not GPIO.input(gpio_channels['song_button']['channel_number']):
-                    # logger.debug("\n\nButton {} pressed...".format(song_button))
-                    loaded_sounds['imperial_march_song'].play()
-                    time.sleep(0.2)
-                elif not GPIO.input(gpio_channels['quotes_button']['channel_number']):
-                    """
-                    logger.debug("\n\nButton {} pressed...".format(
-                        gpio_channels['quotes_button']['channel_name']))
-                    """
-                    quote = quotes[quote_idx % len(quotes)]
-                    quote_idx += 1
-                    quote.play()
-                    time.sleep(0.2)
-                elif not self.th_slot_leds.is_alive():
-                    retcode = 1
-                    logger.info(add_spaces_to_msg("Exiting..."))
-                    break
-        except Exception as e:
-            retcode = 1
-            if self.main_cfg['verbose']:
-                logger.exception(add_spaces_to_msg("Error: {}".format(e)))
-            else:
-                # logger.error(add_spaces_to_msg(e.__repr__()))
-                # TODO: add next line in a utility function
-                err_msg = "{}: {}".format(str(e.__class__).split("'")[1], e)
-                logger.error(add_spaces_to_msg(err_msg))
-        except KeyboardInterrupt:
-            logger.info(add_spaces_to_msg("Exiting..."))
-            closing_sound = loaded_sounds.get('closing_sound')
-            if closing_sound and not closing_sound.mute:
-                closing_sound.play()
-                time.sleep(1)
-        finally:
-            self.cleanup(gpio_channels)
-            return retcode
-
-    def cleanup(self, gpio_channels):
-        """Clean up any resources such as threads and GPIO channels.
-
-        The cleanup consists in the following actions:
-
-        * turn off each LED
-        * stop the thread ``th_slot_leds``
-        * stop each audio channel
-        * call ``RPi.GPIO.cleanup()`` which will return all GPIO channels back
-          to inputs with no pull up/down
-
-          * If in simulation mode, :obj:`SimulRPi.GPIO.cleanup` is called to
-            stop the threads among other things
-
-        Parameters
-        ----------
-        gpio_channels : dict
-            Dictionary mapping channel id (:obj:`str`) to channel attributes
-            (:obj:`dict`). The channel attributes consist in the following:
-
-                * ``channel_number``
-                * ``channel_name``
-                * ``key``
-                * ``led_symbols``
-
-            .. note::
-
-                These channel attributes are those found in the setting
-                `gpio_channels`_ from the main configuration file.
-
-        """
-        if hasattr(GPIO, "setprinting"):
-            GPIO.setprinting(False)
-        time.sleep(0.1)
-        if gpio_channels:
-            for channel_id, channel_info in gpio_channels.items():
-                if channel_id.endswith("_led"):
-                    turn_off_led(channel_info['channel_number'])
-        logger.info(add_spaces_to_msg("Cleanup..."))
-        if self.th_slot_leds:
-            self.th_slot_leds.do_run = False
-            self.th_slot_leds.join()
-            logger.debug(add_spaces_to_msg("Thread stopped: {}".format(
-                self.th_slot_leds.name)))
-        for ch in self.main_cfg['audio_channels']:
-            pygame.mixer.Channel(ch['channel_id']).stop()
-        GPIO.cleanup()
-
-
 def edit_config(cfg_type, app=None):
     """Edit a configuration file.
 
@@ -903,9 +314,8 @@ def setup_argparser():
 
     The important actions that can be performed with the script are:
 
-    - activate Darth Vader (turn on LEDs and play sound effects),
-    - edit a configuration file or
-    - reset/undo a configuration file *[SOON]*.
+    - activate a Darth Vader figurine (turn on LEDs and play sound effects)
+    - edit a configuration file
 
     Returns
     -------
@@ -978,9 +388,8 @@ def main():
 
     According to the user's choice of action, the script might:
 
-    - activate Darth Vader,
-    - edit a configuration file, or
-    - reset/undo a configuration file *[SOON]*.
+    - activate a Darth Vader figurine (turn on LEDs and play sound effects)
+    - edit a configuration file
 
     Raises
     ------
@@ -1065,11 +474,11 @@ def main():
         logger.info("Saved updated configuration dict to file: {}".format(
             check_cfg_retval.user_cfg_filepath))
     # Process second returned values: overridden config options
-    if override_retval.config_opts_overidden:
+    if override_retval.config_opts_overridden:
         msg = "Config options overridden by command-line arguments:\n"
-        config_opts_overidden = override_retval.config_opts_overidden
-        nb_items = len(config_opts_overidden)
-        for i, (cfg_name, old_v, new_v) in enumerate(config_opts_overidden):
+        config_opts_overridden = override_retval.config_opts_overridden
+        nb_items = len(config_opts_overridden)
+        for i, (cfg_name, old_v, new_v) in enumerate(config_opts_overridden):
             msg += "\t {}: {} --> {}".format(cfg_name, old_v, new_v)
             if i + 1 < nb_items:
                 msg += "\n"
@@ -1087,7 +496,10 @@ def main():
     # TODO: enlarge try? even if logger not setup completely
     try:
         _check_sound_files(main_cfg_dict)
-        if args.edit:
+        if args.app and not args.edit:
+            raise RuntimeError("You need to also specify the edit argument "
+                               "'-e'")
+        elif args.edit:
             if args.edit == _MAIN_CFG:
                 args.edit = "main"
             elif args.edit == _LOG_CFG:
@@ -1108,6 +520,11 @@ def main():
                 logger.debug("Simulation mode enabled")
             else:
                 import RPi.GPIO as GPIO
+            # TODO: find another way
+            from darth_vader_rpi import darth_vader
+            darth_vader.GPIO = GPIO
+            from darth_vader_rpi import ledutils
+            ledutils.GPIO = GPIO
             # TODO: works on UNIX shell only, not Windows
             # ref.: https://bit.ly/3f3A7dc
             # os.system("tput civis")
