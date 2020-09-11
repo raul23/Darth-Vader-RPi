@@ -92,9 +92,9 @@ project.
 
 ``default_led_symbols``
 ^^^^^^^^^^^^^^^^^^^^^^^
-The setting `default_led_symbols`_ in the configuration defines the default LED
-symbols used by **all** output channels. A LED symbol is used for each output
-state (*ON* and *OFF*).
+The setting `default_led_symbols`_ in the configuration file defines the
+default LED symbols used by **all** output channels. A LED symbol is used for
+each output state (*ON* and *OFF*).
 
 By **default**, the symbols used for representing LEDs in the terminal are the
 following::
