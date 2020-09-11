@@ -9,8 +9,8 @@ environments based on different releases of the package ``darth_vader_rpi``.
    :depth: 3
    :local:
 
-Version 0.1.0a0
-===============
+``darth_vader_rpi`` v0.1.0a0
+============================
 Raspberry Pi (Python 3.5)
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -27,7 +27,6 @@ macOS
 
 Python 3.5
 """"""""""
-
 **Dependencies installed:**
 
 * **IMPORTANT:** Install ``pygame`` first with ``pip install pygame==2.0.0.dev10``
@@ -36,7 +35,7 @@ Python 3.5
 * ``pynput 1.7.1``
 * ``SimulRPi 0.1.0a0``
 
-The script ``start_dv -s`` gives this error::
+The command ``start_dv -s`` gives this error::
 
    ERROR    UnicodeEncodeError: 'ascii' codec can't encode character '\U0001f6d1' in position 2: ordinal not in range(128)
 
@@ -44,12 +43,11 @@ This error stems from my locale settings which are not set properly and it
 seems that Python 3.5 doesn't assume the correct locale *utf-8* by default.
 Check `Display problems`_ on how to set the locale settings correctly.
 
-**Result:** once the locale settings are setup correctly, the script
+**Result:** once the locale settings are setup correctly, the command
 ``start_dv -s`` runs without errors.
 
 Python 3.6
 """"""""""
-
 **Dependencies installed:**
 
 * ``dv_sounds 0.1.0a0``
@@ -60,12 +58,11 @@ Python 3.6
 Same ``UnicodeEncodeError`` as in Python 3.5 Set my local settings correctly
 and the script runs fine.
 
-**Result:** once the locale settings are setup correctly, the script
+**Result:** once the locale settings are setup correctly, the command
 ``start_dv -s`` runs without errors.
 
 Python 3.7
 """"""""""
-
 **Dependencies installed:**
 
 * ``dv_sounds 0.1.0a0``
@@ -73,11 +70,10 @@ Python 3.7
 * ``pynput 1.7.1``
 * ``SimulRPi 0.1.0a0``
 
-**Result:** the script ``start_dv -s`` runs without errors.
+**Result:** the command ``start_dv -s`` runs without errors.
 
 Python 3.8
 """"""""""
-
 **Dependencies installed:**
 
 * ``dv_sounds 0.1.0a0``
@@ -85,11 +81,27 @@ Python 3.8
 * ``pynput 1.7.1``
 * ``SimulRPi 0.1.0a0``
 
-**Result:** the script ``start_dv -s`` runs without errors.
+**Result:** the command ``start_dv -s`` runs without errors.
 
 SSH from macOS to RPi (Python 3.5)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-**TODO**
+**Dependencies installed on the RPi (Python 3.5):**
+
+* ``dv_sounds 0.1.0a0``
+* ``pygame 1.9.3``
+* ``pynput 1.7.1``
+* ``SimulRPi 0.1.0a0``
+
+As expected ``pynput`` could not be imported because it doesn't work on a
+headless setup (connecting to an RPi via SSH). However, the blinking of LEDs
+on the Darth Vader figurine or LED symbols in the terminal worked.
+
+**Result 1:** the command ``start_dv -s`` runs without errors, except a warning
+about ``pynput`` not being able to be imported. Blinking of LEDs in the
+terminal.
+
+**Result 2:** the command ``start_dv`` runs without errors. Blinking of LEDs on
+the Darth Vader figurine.
 
 .. URLs
 .. external links
