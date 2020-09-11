@@ -98,10 +98,10 @@ on the Darth Vader figurine or LED symbols in the terminal worked.
 
 **Result 1:** the command ``start_dv -s`` runs without errors, except a warning
 about ``pynput`` not being able to be imported. Blinking of LEDs in the
-terminal.
+terminal works.
 
 **Result 2:** the command ``start_dv`` runs without errors. Blinking of LEDs on
-the Darth Vader figurine.
+the Darth Vader figurine works.
 
 .. URLs
 .. external links
