@@ -38,6 +38,18 @@
 
   "loggers":
   {
+    "darth_vader_rpi.darth_vader":
+    {
+      "level": "INFO",
+      "handlers": ["console"],
+      "propagate": false
+    },
+    "darth_vader_rpi.ledutils":
+    {
+      "level": "INFO",
+      "handlers": ["console"],
+      "propagate": false
+    },
     "darth_vader_rpi.start_dv":
     {
       "level": "INFO",
@@ -49,8 +61,15 @@
       "level": "INFO",
       "handlers": ["console"],
       "propagate": false
+    },
+    "SimulRPi.manager":
+    {
+      "level": "INFO",
+      "handlers": ["console"],
+      "propagate": false
     }
   },
+
   "root":
     {
       "level": "INFO",
