@@ -96,12 +96,12 @@ As expected ``pynput`` could not be imported because it doesn't work on a
 headless setup (connecting to an RPi via SSH). However, the blinking of LEDs
 on the Darth Vader figurine or LED symbols in the terminal worked.
 
-**Result 1:** the command ``start_dv -s`` runs without errors, except a warning
+**Result 1:** the command ``start_dv`` runs without errors. Blinking of LEDs on
+the Darth Vader figurine works.
+
+**Result 2:** the command ``start_dv -s`` runs without errors, except a warning
 about ``pynput`` not being able to be imported. Blinking of LEDs in the
 terminal works.
-
-**Result 2:** the command ``start_dv`` runs without errors. Blinking of LEDs on
-the Darth Vader figurine works.
 
 .. URLs
 .. external links
