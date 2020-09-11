@@ -62,9 +62,10 @@ More information is available at:
 
 .. note::
 
-    In :mod:`darth_vader` and :mod:`ledutils`, the default value for ``GPIO``
-    is :obj:`None` and will be eventually set to one of the two modules
-    (`RPi.GPIO`_ or `SimulRPi.GPIO`_) depending on the user's settings.
+    In :mod:`darth_vader`, :mod:`ledutils`, and :mod:`start_dv`, the default
+    value for ``GPIO`` is :obj:`None` and will be eventually set to one of the
+    two modules (`RPi.GPIO`_ or `SimulRPi.GPIO`_) depending on the user's
+    settings.
 
     `RPi.GPIO`_ provides a class to control the GPIO pins on a Raspberry Pi.
 
@@ -107,6 +108,8 @@ from darth_vader_rpi.utils import (add_spaces_to_msg, dumps_json,
 
 logger = logging.getLogger(__name__)
 logger.addHandler(NullHandler())
+
+GPIO = None
 
 _LOG_CFG = "log_cfg"
 _MAIN_CFG = "cfg"
@@ -532,6 +535,13 @@ def main():
                 logger.debug("Simulation mode enabled")
             else:
                 import RPi.GPIO as GPIO
+            # Make sure the other custom modules use the correct GPIO module
+            # based on whether we are working with the real GPIO or the
+            # simulation one (SimulRPi.GPIO)
+            import darth_vader_rpi.darth_vader as darth_vader
+            darth_vader.GPIO = GPIO
+            import darth_vader_rpi.ledutils as ledutils
+            ledutils.GPIO = GPIO
             # TODO: works on UNIX shell only, not Windows
             # ref.: https://bit.ly/3f3A7dc
             # os.system("tput civis")
