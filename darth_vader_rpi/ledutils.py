@@ -12,7 +12,10 @@ from logging import NullHandler
 from darth_vader_rpi.utils import add_spaces_to_msg
 from darth_vader_rpi.slot_leds_sequences import ACTION, CALM
 
-GPIO = None
+try:
+    import RPi.GPIO as GPIO
+except ImportError:
+    import SimulRPi.GPIO as GPIO
 
 logger = logging.getLogger(__name__)
 logger.addHandler(NullHandler())
