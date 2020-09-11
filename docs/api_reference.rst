@@ -14,6 +14,22 @@ API Reference
    :undoc-members:
    :show-inheritance:
 
+:mod:`darth\_vader\_rpi.darth\_vader`
+=====================================
+
+.. automodule:: darth_vader
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+:mod:`darth\_vader\_rpi.ledutils`
+=================================
+
+.. automodule:: ledutils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 :mod:`darth\_vader\_rpi.utils`
 ==============================
 

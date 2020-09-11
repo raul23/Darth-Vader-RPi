@@ -125,7 +125,7 @@ GPIO channels for the following I/O devices are defined:
    - **Quotes button**: when pressed it plays one of Darth Vader quotes
    - **Slot LEDs**: they consist of three LEDs referred to as *Top*, *Middle*,
      and *Bottom* LEDs and are found on Darth Vader's chest control box
-   - **Lightsaber LED**: when the lightsaber button is pressed, this LED is
+   - **Lightsaber LEDs**: when the lightsaber button is pressed, these LEDs are
      turned ON/OFF
 
 ``gpio_channels`` lists GPIO channel objects with the following properties:
@@ -143,7 +143,7 @@ GPIO channels for the following I/O devices are defined:
 
      .. code-block:: python
          :emphasize-lines: 5
-         :caption: **Example:** changing keymap for the Song push button
+         :caption: **Example:** changing keymap for the Song button
 
           {
             "channel_id": "song_button",
@@ -172,7 +172,7 @@ GPIO channels for the following I/O devices are defined:
           }
 
 .. code-block:: python
-   :caption: **Example:** GPIO channels for the lightsaber button and LED
+   :caption: **Example:** GPIO channels for the lightsaber button and LEDs
 
    "gpio_channels": [
      {
@@ -194,7 +194,7 @@ and producing the lightsaber sound effects (drawing, closing, and hum sounds).
 Also, the keyboard key ``cmd`` simulates the lightsaber push button when
 running the script :mod:`start_dv` on your computer.
 
-Finally, the ligthsaber LED is connected to GPIO pin 22 (BCM) and is turned
+Finally, the ligthsaber LEDs are connected to GPIO pin 22 (BCM) and are turned
 ON/OFF when the corresponding push button (or ``cmd`` key) is pressed.
 
 .. seealso::
@@ -349,7 +349,7 @@ Darth Vader's chest control box.
 The setting `slot_leds`_ in the configuration file defines the sequence the
 slot LEDs should be turned ON/OFF. This sequence corresponds to Darth Vader's
 physiological state, e.g. if he is in a calm mood the slot LEDs will blink in a
-different pattern than if he was angry.
+different pattern than if he was in action.
 
 ``slot_leds`` is an object that takes the following properties:
 
@@ -571,7 +571,7 @@ sounds:
 The setting `sounds_directory`_ in the configuration file defines the directory
 where all the audio files are saved.
 
-By default, ``sounds_directory`` refers to the path where the package
+By default, ``sounds_directory`` points to the path where the package
 `dv_sounds`_ is installed. `dv_sounds`_ is used to download the various sounds
 (e.g. sound efffects) needed for the project.
 
@@ -606,10 +606,11 @@ the directory ``sounds_directory``.
 ^^^^^^^^^^^
 The setting `verbose`_ in the configuration file is a flag (set to *false* by
 default) that allows you to run the script :mod:`start_dv` by logging to the
-terminal all messages (logging level is set to DEBUG). Also, when there is an
-exception, a traceback is printed so you can pinpoint exactly where the error
-occurred in the code which is not the case when running the script without
-``verbose`` (you only get a one-line error message).
+terminal all messages (logging level is set to DEBUG when ``verbose`` is
+*true*). Also, when there is an exception, a traceback is printed so you can
+pinpoint exactly where the error occurred in the code which is not the case
+when running the script without ``verbose`` (you only get a one-line error
+message).
 
 .. code-block:: console
    :caption: **Example:** running the script **without verbose**

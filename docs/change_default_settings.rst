@@ -8,8 +8,8 @@ Change the default settings
 
 Important tips
 ==============
-- This is the command to edit the `configuration file`_ with the **default**
-  text editor::
+- This is the command to edit the `configuration file`_ with a **default**
+  text editor as defined in your system::
 
    $ start_dv -e cfg
 
@@ -118,7 +118,7 @@ Change closing sound
 ====================
 When the script :mod:`start_dv` is exiting after the user presses
 ``ctrl`` + ``c``, a sound is produced. By default, no closing sound is produced
-and it is the `"Nooooo"`_ quote.
+and if it were to play, it would be the `"Nooooo"`_ quote.
 
 To change the default closing sound, edit the setting `sound_effects`_ in the
 configuration file which can be opened with::
@@ -151,7 +151,7 @@ object. These are the properties you can modify for this object:
 .. note::
 
    By default, the closing sound is not played at the end of the script
-   :mod:`start_dv`. Set its property ``mute`` to *false* in order to play the
+   :mod:`start_dv`. Set its property ``mute`` to *true* in order to play the
    closing sound when the script exits.
 
 .. seealso::
@@ -214,7 +214,7 @@ the setting `gpio_channels`_ in the configuration file which can be opened with:
    $ start_dv -e cfg
 
 .. code-block:: python
-   :emphasize-lines: 3, 9, 15
+   :emphasize-lines: 6, 12, 18
    :caption: **Default keymap used for the three push buttons**
 
    "gpio_channels": [
@@ -238,8 +238,8 @@ the setting `gpio_channels`_ in the configuration file which can be opened with:
      },
 
 In order to change the default keymap, you will need to change the value for
-``key`` which is the name of the keyboard key associated with a given push
-button.
+``key`` which refers to the name of the keyboard key associated with a given
+push button.
 
 The names of keyboard keys that you can use are those specified in the
 :simulapi:`SimulRPi's documentation <content-default-keymap-label>`, e.g.
@@ -259,7 +259,7 @@ The names of keyboard keys that you can use are those specified in the
 .. note::
 
    On mac, I recommend using the following keyboard keys because they don't
-   require running the script ``start_dv`` with ``sudo``: *alt*, *alt_r*,
+   require running the script :mod:`start_dv` with ``sudo``: *alt*, *alt_r*,
    *cmd*, *cmd_r*, *ctrl*, *ctrl_r*, *media_play_pause*,
    *media_volume_down*, *media_volume_mute*, *media_volume_up*, *shift*,
    and *shift_r*.
@@ -463,19 +463,21 @@ Set the *breathing_sound* object's ``mute`` to *false*.
 
 Run script as quiet or verbose
 ==============================
-To run the script as quiet or verbose, open the configuration file with::
+To run the script :mod:`start_dv` as quiet or verbose, open the configuration
+file with::
 
    $ start_dv -e cfg
 
 And set the setting `quiet`_ or `verbose`_ to *true*.
 
-When running the script as ``verbose``, the logging level is set to *DEBUG*.
-Thus, all messages will be displayed and when there is an exception, the
-traceback will be shown.
+When running the script :mod:`start_dv` as ``verbose``, the logging level is
+set to *DEBUG*. Thus, all messages will be displayed and when there is an
+exception, the traceback will be shown.
 
-On the other hand, when running the script as ``quiet``, nothing will be
-printed to the terminal, not even error messages. However, you will still be
-able to hear sounds and interact with the push buttons or keyboard.
+On the other hand, when running the script :mod:`start_dv` as ``quiet``,
+nothing will be printed to the terminal, not even error messages. However, you
+will still be able to hear sounds and interact with the push buttons or
+keyboard.
 
 .. important::
 

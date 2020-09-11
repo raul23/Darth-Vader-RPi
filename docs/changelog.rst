@@ -6,7 +6,7 @@ Version 0.1.0a0
 ===============
 .. TODO: IMPORTANT add date
 
-**September 9, 2020**
+**September 11, 2020**
 
 * Initial release
 * Tested the script :mod:`start_dv` on various platforms and environments.

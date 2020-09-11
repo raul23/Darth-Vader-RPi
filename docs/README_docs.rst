@@ -37,7 +37,7 @@ playing sounds such as some of his famous quotes.
    push buttons by blinking red dots in the terminal and playing sounds when a
    keyboard key is pressed. Almost like testing with a real RPi!
 
-   **Disclaimer:** I also wrote the `SimulRPi`_ library
+   **Disclaimer:** I also wrote the library `SimulRPi`_
 
 .. contents:: **Table of contents**
    :depth: 3
@@ -53,7 +53,7 @@ control the following sounds and LEDs:
 
 #. Some of his famous quotes
 #. The *Imperial march* theme song
-#. The lightsaber drawing and retraction sounds
+#. The lightsaber drawing, hum and retraction sounds
 #. The lightbsaber illumination (3 LEDs)
 
 His iconic breathing sound plays in the background indefinitely almost as soon
@@ -92,7 +92,7 @@ Here's how the various LEDs and push buttons are connected to the Raspberry Pi:
   the *Quotes button* is playing audio since they use different audio channels.
 * The *Song button* plays the `Imperial March song by Jacob Townsend`_
 * The *Quotes button* plays famous Darth Vader quotes when pressed. For
-  testing purposes, the ``darth_vader_rpi`` package comes with two movie lines:
+  testing purposes, the package ``darth_vader_rpi`` comes with two movie lines:
 
     * `"I am your father"`_
     * `"Nooooo"`_: it is also used for the `closing sound`_ when the script
@@ -149,7 +149,7 @@ Installation instructions
 
    $ pip install --upgrade pip
 
-2. Install the ``darth_vader_rpi`` package with *pip*::
+2. Install the package ``darth_vader_rpi`` with *pip*::
 
    $ pip install git+https://github.com/raul23/Darth-Vader-RPi#egg=Darth-Vader-RPi
 
@@ -174,7 +174,7 @@ Installation instructions
 
 2. You can also test that the dependencies were installed correctly::
 
-   $ python -c "import dv_sounds, pygame, SimulRPi"
+   $ python -c "import dv_sounds, pygame, pynput, SimulRPi"
 
 **Warning message**
 
@@ -191,7 +191,7 @@ Usage
 =====
 Script ``start_dv``
 -------------------
-Once the ``darth_vader_rpi`` package is `installed`_, you should have access to
+Once the package ``darth_vader_rpi`` is `installed`_, you should have access to
 the script :mod:`start_dv` which turns on LEDs and plays sound effects on a
 Raspberry Pi (RPi).
 
@@ -213,7 +213,8 @@ If you want to test the script on your **computer** (use the flag **-s**)::
 
 .. important::
 
-   In order to stop the script at any moment, press ``ctrl`` + ``c``.
+   In order to stop the script :mod:`start_dv` at any moment, press
+   ``ctrl`` + ``c``.
 
 List of options
 ^^^^^^^^^^^^^^^
@@ -252,6 +253,16 @@ RPi by blinking red dots in the terminal and monitoring pressed keyboard keys::
 **NOTE:** the last command makes use of default values. See
 `Change default settings`_ on how to change these values.
 
+Here's how the keyboard keys are related **by default** to push buttons
+connected to an RPi:
+
+   * ``cmd_l``   -----> lightsaber button
+   * ``alt_l``   -----> song button
+   * ``alt_r``  -----> quotes button
+
+Check `Change keymap`_ if you want to change this default key-to-channel
+mapping.
+
 Here is a video of what it looks like in a terminal when running the script
 :mod:`start_dv` on a computer instead of an RPi:
 
@@ -262,16 +273,6 @@ Here is a video of what it looks like in a terminal when running the script
    alt="LEDs and buttons simulation in a terminal [Darth-Vader-RPi project]"></a>
    <p><b>Click on the above image for the full video</b></p>
    </div>
-
-Here's how the keyboard keys are related **by default** to push buttons
-connected to an RPi:
-
-   * ``cmd_l``   -----> lightsaber button
-   * ``alt_l``   -----> song button
-   * ``alt_r``  -----> quotes button
-
-Check `Change keymap`_ if you want to change this default key to channel
-mapping.
 
 How to uninstall
 ================
@@ -311,25 +312,6 @@ want to uninstall.
           /Users/test/miniconda3/envs/rpi_py37/lib/python3.7/site-packages/darth_vader_rpi/configs/main_cfg.json
       $ rm -r /Users/test/miniconda3/envs/rpi_py37/lib/python3.7/site-packages/darth_vader_rpi
 
-Resources
-=========
-.. TODO: don't use documentation link for readthedocs
-.. TODO: don't show changelog and todos links for readthedocs
-
-* `Darth-Vader-RPi documentation`_
-* `Darth-Vader-RPi GitHub`_: source code
-* `Changelog`_
-
-References
-==========
-* `dv_sounds`_: package for downloading the various sounds needed for the
-  project, e.g. sound effects
-* `pygame`_: package used for playing sounds
-* `RPI.GPIO`_: a module to control RPi GPIO channels
-* `SimulRPi`_: package that partly fakes ``RPi.GPIO`` and simulates some I/O
-  devices on a Raspberry Pi. It makes use of the library `pynput`_ for
-  monitoring the keyboard for any pressed key.
-
 Credits
 =======
 .. TODO: specify not used anymore for music
@@ -355,6 +337,25 @@ Credits
 
   - `Empire Strikes Back chest box light sequence`_
 
+Resources
+=========
+.. TODO: don't use documentation link for readthedocs
+.. TODO: don't show changelog and todos links for readthedocs
+
+* `Darth-Vader-RPi documentation`_
+* `Darth-Vader-RPi GitHub`_: source code
+* `Darth-Vader-RPi Changelog`_
+
+References
+==========
+* `dv_sounds`_: a package for downloading the various sounds needed for the
+  project, e.g. sound effects
+* `pygame`_: a package used for playing sounds
+* `RPI.GPIO`_: a module to control RPi GPIO channels
+* `SimulRPi`_: a package that partly fakes ``RPi.GPIO`` and simulates some I/O
+  devices on a Raspberry Pi. It makes use of the library `pynput`_ for
+  monitoring the keyboard for any pressed key.
+
 .. URLs
 
 .. 0. default_main_cfg
@@ -369,13 +370,10 @@ Credits
 .. _dv_sounds: https://github.com/raul23/DV-Sounds
 .. _Darth-Vader-RPi documentation: http://darth-vader-rpi.rtfd.io/
 .. _Darth-Vader-RPi GitHub: https://github.com/raul23/Darth-Vader-RPi
-.. TODO: test the following URL
-.. _Darth-Vader-RPi PyPI: https://pypi.org/project/Darth-Vader-RPi/
 .. _"I am your father": https://www.youtube.com/watch?v=xuJEYdOFEP4
 .. _Imperial March song by Jacob Townsend: https://soundcloud.com/jacobtownsend1/imperial-march
 .. _"Nooooo": https://www.youtube.com/watch?v=ZscVhFvD6iE
 .. _RPi.GPIO: https://pypi.org/project/RPi.GPIO/
-.. TODO: SimulRPi points to PyPI or github?
 .. _SimulRPi: https://pypi.org/project/SimulRPi/
 .. _Empire Strikes Back chest box light sequence: https://youtu.be/E2J_xl2MbGU?t=333
 
@@ -387,4 +385,4 @@ Credits
 .. _test the program on your own computer: #simulating-on-your-computer
 .. _Change default settings: change_default_settings.html
 .. _Change keymap: change_default_settings.html#change-keymap-label
-.. _Changelog: changelog.html
+.. _Darth-Vader-RPi Changelog: changelog.html
