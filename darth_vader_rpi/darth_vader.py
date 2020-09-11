@@ -31,7 +31,10 @@ import pygame
 from darth_vader_rpi.utils import add_spaces_to_msg, SoundWrapper
 from darth_vader_rpi.ledutils import turn_on_led, turn_off_led, turn_on_slot_leds
 
-GPIO = None
+try:
+    import RPi.GPIO as GPIO
+except ImportError:
+    import SimulRPi.GPIO as GPIO
 
 logger = logging.getLogger(__name__)
 logger.addHandler(NullHandler())
