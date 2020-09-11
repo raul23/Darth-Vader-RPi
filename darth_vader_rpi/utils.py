@@ -1,13 +1,15 @@
-"""Collection of utilities specifically for the *Darth-Vader-RPi* project.
+"""Collection of utilities for the *Darth-Vader-RPi* project.
 
 .. URLs
 
 .. default_main_cfg
-.. _default logging configuration file: https://bit.ly/2D6exaD
-.. _default main configuration file: https://bit.ly/39x8o3e
+.. _default logging configuration file:
+   https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_logging_cfg.json
+.. _default main configuration file:
+   https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json
 
 .. external links
-.. _stackoverflow: https://stackoverflow.com/a/39980744
+.. _Are dictionaries ordered in Python 3.6+? (stackoverflow): https://stackoverflow.com/a/39980744
 
 """
 import codecs
@@ -46,16 +48,20 @@ _add_cfg_filenames()
 
 
 # TODO: clear buffer?
-def _add_spaces_to_msg(msg, nb_spaces=60):
-    """TODO
+def add_spaces_to_msg(msg, nb_spaces=60):
+    """Add spaces at the end of a message.
 
     Parameters
     ----------
-    msg
-    nb_spaces
+    msg : str
+        Message to be updated with spaces at the end.
+    nb_spaces : int
+        Number of spaces to add at the end of the message.
 
     Returns
     -------
+    message : str
+        The updated message with spaces added at the end.
 
     """
     return "{}{}".format(msg, " " * nb_spaces)
@@ -77,12 +83,12 @@ def dumps_json(filepath, data, encoding='utf8', ensure_ascii=False,
         Data to be written to the JSON file.
     encoding : str, optional
         Encoding to be used for opening the JSON file in write mode (the
-        default value is 'utf8').
+        default value is '*utf8*').
     ensure_ascii : bool, optional
-        If ``ensure_ascii`` is False, then the return value can contain
+        If ``ensure_ascii`` is *False*, then the return value can contain
         non-ASCII characters if they appear in strings contained in ``data``.
         Otherwise, all such characters are escaped in JSON strings. See the
-        :meth:`json.dumps` docstring description (the default value is False).
+        ``json.dumps`` docstring description (the default value is *False*).
     indent : int or None, optional
         If ``indent`` is a non-negative integer, then JSON array elements and
         object members will be pretty-printed with that indent level. An indent
@@ -90,15 +96,15 @@ def dumps_json(filepath, data, encoding='utf8', ensure_ascii=False,
         representation. See the :meth:`json.dumps` docstring description. (the
         default value is :obj:`None`).
     sort_keys : bool, optional
-        If `sort_keys` is true, then the output of dictionaries will be sorted
-        by key. See the :meth:`json.dumps` docstring description. (the default
-        value is False).
+        If ``sort_keys`` is *True*, then the output of dictionaries will be
+        sorted by key. See the ``json.dumps`` docstring description. (the
+        default value is *False*).
 
     Raises
     ------
     OSError
-        Raised if any I/O related occurs while writing the data to disk, e.g.
-        the file doesn't exist.
+        Raised if any I/O related error occurs while writing the data to disk,
+        e.g. the file doesn't exist.
 
     """
     try:
@@ -124,22 +130,22 @@ def get_cfg_dirpath():
 
 
 def get_cfg_filepath(file_type):
-    """Get the path to a config file used by the :mod:`start_dv` script.
+    """Get the path to a config file used by the script :mod:`start_dv`.
 
-    The config file can either be the:
+    ``file_type`` accepts the following values:
 
     - **default_log**: refers to the `default logging configuration file`_ used
       to setup the logging for all custom modules.
     - **default_main**: refers to the `default main configuration file`_ used to
-      setup the :mod:`start_dv` script.
+      setup the script :mod:`start_dv`.
     - **log**: refers to the user-defined logging configuration file which is
       used to setup the logging for all custom modules.
     - **main**: refers to the user-defined main configuration file used to
-      setup the :mod:`start_dv` script.
+      setup the script :mod:`start_dv`.
 
     Parameters
     ----------
-    file_type : str, {'default_log', 'default_main', 'log', 'main'}
+    file_type : str, {'*default_log*', '*default_main*', '*log*', '*main*'}
         The type of config file for which we want the path.
 
     Returns
@@ -151,8 +157,8 @@ def get_cfg_filepath(file_type):
     ------
     AssertionError
         Raised if the wrong type of config file is given to the function. Only
-        {'default_log', 'default_main', 'log', 'main'} are accepted for
-        `file_type`.
+        {'*default_log*', '*default_main*', '*log*', '*main*'} are accepted for
+        ``file_type``.
 
     """
     # TODO: explain
@@ -182,7 +188,7 @@ def load_json(filepath, encoding='utf8'):
         Path to the JSON file which will be read.
     encoding : str, optional
         Encoding to be used for opening the JSON file in read mode (the default
-        value is 'utf8').
+        value is '*utf8*').
 
     Returns
     -------
@@ -197,7 +203,7 @@ def load_json(filepath, encoding='utf8'):
 
     References
     ----------
-    `stackoverflow`_: Are dictionaries ordered in Python 3.6+?
+    `Are dictionaries ordered in Python 3.6+? (stackoverflow)`_
 
     """
     try:
@@ -218,6 +224,7 @@ def override_config_with_args(config, parser):
     Parameters
     ----------
     config : dict
+        Dictionary containing configuration options.
     parser : argparse.ArgumentParser
         Argument parser.
 
@@ -226,19 +233,19 @@ def override_config_with_args(config, parser):
     retval : :obj:`collections.namedtuple`
         Contains two lists:
 
-        1. `args_not_found`: stores command-line arguments not found in the
-        JSON file
+        1. `args_not_found`: saves command-line arguments not found in the
+        config dictionary
 
-        2. `config_opts_overidden`: stores config options overriden by
+        2. `config_opts_overridden`: saves config options overridden by
         command-line arguments as a three-tuple (option name, old value,
         new value)
 
     """
     args = parser.parse_args().__dict__
     parser_actions = parser.__dict__['_actions']
-    retval = namedtuple("retval", "args_not_found config_opts_overidden")
+    retval = namedtuple("retval", "args_not_found config_opts_overridden")
     retval.args_not_found = []
-    retval.config_opts_overidden = []
+    retval.config_opts_overridden = []
     for action in parser_actions:
         opt_name = action.dest
         old_val = config.get(opt_name)
@@ -250,16 +257,17 @@ def override_config_with_args(config, parser):
                 continue
             if new_val != action.default and new_val != old_val:
                 config[opt_name] = new_val
-                retval.config_opts_overidden.append((opt_name, old_val, new_val))
+                retval.config_opts_overridden.append((opt_name, old_val, new_val))
     return retval
 
 
 # NOTE: taken from pyutils.genutils
 def run_cmd(cmd):
-    """Run a command with arguments.
+    """Run a shell command with arguments.
 
-    The command is given as a string but the function will split it in order to
-    get a list having the name of the command and its arguments as items.
+    The shell command is given as a string but the function will split it in
+    order to get a list having the name of the command and its arguments as
+    items.
 
     Parameters
     ----------
@@ -271,7 +279,7 @@ def run_cmd(cmd):
     Returns
     -------
     retcode: int
-        Return code which is 0 if the command was successfully completed.
+        Returns code which is 0 if the command was successfully completed.
         Otherwise, the return code is non-zero.
 
     Raises
@@ -296,13 +304,13 @@ def run_cmd(cmd):
         return result
 
 
-class _SoundWrapper:
+class SoundWrapper:
     """Class that wraps around :class:`pygame.mixer.Channel` and
     :class:`pygame.mixer.Sound`.
 
-    The :meth:`__init__` method takes care of automatically loading the sound
+    The ``__init__`` method takes care of automatically loading the sound
     file. The sound file can then be played or stopped from the specified
-    channel `channel_id` with the :meth:`play` or :meth:`stop` method,
+    channel ``channel_id`` with the :meth:`play` or :meth:`stop` method,
     respectively.
 
     Parameters
@@ -342,14 +350,14 @@ class _SoundWrapper:
         self._pygame_sound = pygame.mixer.Sound(self.sound_filepath)
 
     def play(self, loops=0):
-        """Play a sound on the specified Channel `channel_id`.
+        """Play a sound on the specified Channel ``channel_id``.
 
         Parameters
         ----------
         loops : int
             Controls how many times the sample will be repeated after being
             played the first time. The default value (zero) means the sound is
-            not repeated, and so is only played once. If `loops` is set to -1
+            not repeated, and so is only played once. If ``loops`` is set to -1
             the sound will loop indefinitely (though you can still call
             :meth:`stop` to stop it).
 
@@ -359,6 +367,6 @@ class _SoundWrapper:
         self._channel.play(self._pygame_sound, loops)
 
     def stop(self):
-        """Stop playback on the specified channel `channel_id`.
+        """Stop playback on the specified channel ``channel_id``.
         """
         self._channel.stop()
