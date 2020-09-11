@@ -92,9 +92,9 @@ project.
 
 ``default_led_symbols``
 ^^^^^^^^^^^^^^^^^^^^^^^
-The setting `default_led_symbols`_ in the configuration defines the LED symbols
-used by **all** output channels. A LED symbol is used for each output state
-(*ON* and *OFF*).
+The setting `default_led_symbols`_ in the configuration defines the default LED
+symbols used by **all** output channels. A LED symbol is used for each output
+state (*ON* and *OFF*).
 
 By **default**, the symbols used for representing LEDs in the terminal are the
 following::
@@ -171,6 +171,8 @@ GPIO channels for the following I/O devices are defined:
             }
           }
 
+Let's take a look at twho GPIO channels found in the configuration file:
+
 .. code-block:: python
    :caption: **Example:** GPIO channels for the lightsaber button and LEDs
 
@@ -189,8 +191,8 @@ GPIO channels for the following I/O devices are defined:
    ]
 
 Thus, in this example, you have a push button connected to the GPIO pin 23
-(based on the BCM mode) and controlling the lightsaber by turning it ON/OFF
-and producing the lightsaber sound effects (drawing, closing, and hum sounds).
+(based on the BCM mode), controlling the lightsaber by turning it ON/OFF and
+producing the lightsaber sound effects (drawing, retraction, and hum sounds).
 Also, the keyboard key ``cmd`` simulates the lightsaber push button when
 running the script :mod:`start_dv` on your computer.
 
