@@ -19,11 +19,11 @@ Version 0.1.0a0
 
     * The script :mod:`start_dv` runs without errors on Python 3.6-3.8
 
-    * On Python 3.5, I had to fix my locale settings to ``LANG="en_US.UTF-8"``
-      to make the script :mod:`start_dv` works. Thus, it was not an error with
-      the script but with how my system environment was setup. Python 3.5
-      doesn't assume an **UTF-8** based local settings like the other more
-      recent Python versions.
+    * On Python 3.5-6, I had to fix my locale settings to
+      ``LANG="en_US.UTF-8"`` to make the script :mod:`start_dv` works. Thus, it
+      was not an error with the script but with how my system environment was
+      setup. Python 3.5-6 don't assume an **UTF-8** based local settings like
+      the other more recent Python versions.
 
   * SSH from macOS to RPi: **TODO**
 

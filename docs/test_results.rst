@@ -57,7 +57,11 @@ Python 3.6
 * ``pynput 1.7.1``
 * ``SimulRPi 0.1.0a0``
 
-**Result:** the script ``start_dv -s`` runs without errors.
+Same ``UnicodeEncodeError`` as in Python 3.5 Set my local settings correctly
+and the script runs fine.
+
+**Result:** once the locale settings are setup correctly, the script
+``start_dv -s`` runs without errors.
 
 Python 3.7
 """"""""""
