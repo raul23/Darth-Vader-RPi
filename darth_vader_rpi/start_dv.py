@@ -143,6 +143,7 @@ def _check_user_cfg_dict(cfg_type, user_cfg_dict):
     retval.user_cfg_filepath = user_cfg_filepath
     default_cfg_filepath = get_cfg_filepath("default_{}".format(cfg_type))
     default_cfg_dict = load_json(default_cfg_filepath)
+    diff_keys = None
     for dicts_ in [(default_cfg_dict, user_cfg_dict),
                    (default_cfg_dict.get('loggers'), user_cfg_dict.get('loggers'))]:
         if not dicts_[0]:
@@ -474,7 +475,7 @@ def main():
             or check_log_cfg_retval.keys_not_found:
         for retval in [check_main_cfg_retval, check_log_cfg_retval]:
             if retval.keys_not_found:
-                logger.debug(
+                logger.info(
                     "checked configuration file '{}': {} keys missing".format(
                         os.path.basename(retval.user_cfg_filepath),
                         len(retval.keys_not_found)))
@@ -483,8 +484,7 @@ def main():
                                    "configuration dict with default "
                                    "values.".format(i+1, k))
                 logger.info("Saved updated configuration dict to file: "
-                            "{}".format(
-                    retval.user_cfg_filepath))
+                            "{}".format(retval.user_cfg_filepath))
     # Process second returned values: overridden config options
     if override_retval.config_opts_overridden:
         msg = "Config options overridden by command-line arguments:\n"
@@ -532,13 +532,6 @@ def main():
                 logger.debug("Simulation mode enabled")
             else:
                 import RPi.GPIO as GPIO
-            # TODO: find another way
-            """
-            from darth_vader_rpi import darth_vader
-            darth_vader.GPIO = GPIO
-            from darth_vader_rpi import ledutils
-            ledutils.GPIO = GPIO
-            """
             # TODO: works on UNIX shell only, not Windows
             # ref.: https://bit.ly/3f3A7dc
             # os.system("tput civis")
