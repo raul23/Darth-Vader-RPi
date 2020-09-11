@@ -143,12 +143,16 @@ def _check_user_cfg_dict(cfg_type, user_cfg_dict):
     retval.user_cfg_filepath = user_cfg_filepath
     default_cfg_filepath = get_cfg_filepath("default_{}".format(cfg_type))
     default_cfg_dict = load_json(default_cfg_filepath)
-    default_keys = set(default_cfg_dict.keys())
-    user_keys = set(user_cfg_dict.keys())
-    diff_keys = default_keys - user_keys
-    for k in diff_keys:
-        retval.keys_not_found.append(k)
-        user_cfg_dict.setdefault(k, default_cfg_dict[k])
+    for dicts_ in [(default_cfg_dict, user_cfg_dict),
+                   (default_cfg_dict.get('loggers'), user_cfg_dict.get('loggers'))]:
+        if not dicts_[0]:
+            break
+        default_keys = set(dicts_[0].keys())
+        user_keys = set(dicts_[1].keys())
+        diff_keys = default_keys - user_keys
+        for k in diff_keys:
+            retval.keys_not_found.append(k)
+            dicts_[1].setdefault(k, dicts_[0][k])
     if diff_keys:
         dumps_json(filepath=user_cfg_filepath, data=user_cfg_dict, indent=2)
     return retval
@@ -427,7 +431,7 @@ def main():
     args = parser.parse_args()
     # Get main config dict and check if keys missing
     main_cfg_dict = _get_cfg_dict('main')
-    check_cfg_retval = _check_user_cfg_dict('main', main_cfg_dict)
+    check_main_cfg_retval = _check_user_cfg_dict('main', main_cfg_dict)
     # Override logging configuration with command-line arguments
     override_retval = override_config_with_args(main_cfg_dict, parser)
 
@@ -435,6 +439,7 @@ def main():
     # Logging setup from config file
     # ==============================
     # NOTE: if quiet and verbose are both activated, only quiet will have an effect
+    check_log_cfg_retval = None
     if main_cfg_dict['quiet']:
         # TODO: disable logging completely? even error messages?
         logger.disabled = True
@@ -442,7 +447,7 @@ def main():
         # Setup logger
         logging_cfg_dict = _get_cfg_dict('log')
         # NOTE: returned value not used
-        _check_user_cfg_dict('log', logging_cfg_dict)
+        check_log_cfg_retval = _check_user_cfg_dict('log', logging_cfg_dict)
         if main_cfg_dict['verbose']:
             keys = ['handlers', 'loggers']
             for k in keys:
@@ -464,15 +469,22 @@ def main():
     logger.debug("Package path: {}".format(package_path[0]))
     logger.info("Verbose option {}".format(
         "enabled" if main_cfg_dict['verbose'] else "disabled"))
-    # Process first returned values: checking config file
-    if check_cfg_retval.keys_not_found:
-        logger.debug("checked user configuration file '{}'...".format(
-            os.path.basename(check_cfg_retval.user_cfg_filepath)))
-        for k in check_cfg_retval.keys_not_found:
-            logger.warning("Key '{}' not found. Added it in the configuration "
-                           "dict with default values.".format(k))
-        logger.info("Saved updated configuration dict to file: {}".format(
-            check_cfg_retval.user_cfg_filepath))
+    # Process first returned values: checking config files
+    if check_main_cfg_retval.keys_not_found \
+            or check_log_cfg_retval.keys_not_found:
+        for retval in [check_main_cfg_retval, check_log_cfg_retval]:
+            if retval.keys_not_found:
+                logger.debug(
+                    "checked configuration file '{}': {} keys missing".format(
+                        os.path.basename(retval.user_cfg_filepath),
+                        len(retval.keys_not_found)))
+                for i, k in enumerate(retval.keys_not_found):
+                    logger.warning("{}) Key '{}' not found. Added it in the "
+                                   "configuration dict with default "
+                                   "values.".format(i+1, k))
+                logger.info("Saved updated configuration dict to file: "
+                            "{}".format(
+                    retval.user_cfg_filepath))
     # Process second returned values: overridden config options
     if override_retval.config_opts_overridden:
         msg = "Config options overridden by command-line arguments:\n"
@@ -521,10 +533,12 @@ def main():
             else:
                 import RPi.GPIO as GPIO
             # TODO: find another way
+            """
             from darth_vader_rpi import darth_vader
             darth_vader.GPIO = GPIO
             from darth_vader_rpi import ledutils
             ledutils.GPIO = GPIO
+            """
             # TODO: works on UNIX shell only, not Windows
             # ref.: https://bit.ly/3f3A7dc
             # os.system("tput civis")
