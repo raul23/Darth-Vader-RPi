@@ -171,7 +171,7 @@ GPIO channels for the following I/O devices are defined:
             }
           }
 
-Let's take a look at twho GPIO channels found in the configuration file:
+Let's take a look at two GPIO channels found in the configuration file:
 
 .. code-block:: python
    :caption: **Example:** GPIO channels for the lightsaber button and LEDs
