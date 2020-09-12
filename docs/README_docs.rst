@@ -355,34 +355,3 @@ References
 * `SimulRPi`_: a package that partly fakes ``RPi.GPIO`` and simulates some I/O
   devices on a Raspberry Pi. It makes use of the library `pynput`_ for
   monitoring the keyboard for any pressed key.
-
-.. URLs
-
-.. 0. default_main_cfg
-.. _as specified in the configuration file:
-   https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L51
-.. _configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L1
-.. _default values: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L1
-.. 1. external links
-.. _article: https://docs.oracle.com/cd/E19062-01/sun.mgmt.ctr36/819-5418/gaznb/index.html
-.. _pygame: https://www.pygame.org/
-.. _pynput: https://pynput.readthedocs.io
-.. _dv_sounds: https://github.com/raul23/DV-Sounds
-.. _Darth-Vader-RPi documentation: http://darth-vader-rpi.rtfd.io/
-.. _Darth-Vader-RPi GitHub: https://github.com/raul23/Darth-Vader-RPi
-.. _"I am your father": https://www.youtube.com/watch?v=xuJEYdOFEP4
-.. _Imperial March song by Jacob Townsend: https://soundcloud.com/jacobtownsend1/imperial-march
-.. _"Nooooo": https://www.youtube.com/watch?v=ZscVhFvD6iE
-.. _RPi.GPIO: https://pypi.org/project/RPi.GPIO/
-.. _SimulRPi: https://pypi.org/project/SimulRPi/
-.. _Empire Strikes Back chest box light sequence: https://youtu.be/E2J_xl2MbGU?t=333
-
-.. 2. Internal links
-.. _add more quotes: change_default_settings.html#add-darth-vader-quotes-label
-.. _closing sound: change_default_settings.html#change-closing-sound-label
-.. _installed: #installation-instructions-label
-.. _start_dv: #script-start-dv
-.. _test the program on your own computer: #simulating-on-your-computer
-.. _Change default settings: change_default_settings.html
-.. _Change keymap: change_default_settings.html#change-keymap-label
-.. _Darth-Vader-RPi Changelog: changelog.html

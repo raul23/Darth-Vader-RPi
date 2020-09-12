@@ -38,7 +38,3 @@ Version 0.1.0a0
 
     For more detailed information about these tests, check
     `Test results for start_dv`_
-
-.. URLs
-.. external_links
-.. _Test results for start_dv: https://github.com/raul23/Darth-Vader-RPi/blob/master/docs/test_results.rst

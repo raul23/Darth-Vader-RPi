@@ -257,7 +257,7 @@ This flag can also be set directly through the script's command-line option
 
 .. seealso::
 
-   `Script's list of options <README_docs.html#list-of-options>`__
+   `Script's list of options`_
 
 .. _quotes-label:
 
@@ -339,7 +339,7 @@ This flag can also be set directly through the script's command-line option
 
 .. seealso::
 
-   `Script's list of options <README_docs.html#list-of-options>`__
+   `Script's list of options`_
 
 .. _slot-leds-label:
 
@@ -637,43 +637,4 @@ This flag can also be set directly through the script's command-line option
 
 .. seealso::
 
-   `Script's list of options <README_docs.html#list-of-options>`__
-
-.. URLs
-
-.. default_main_cfg
-.. TODO: check line numbers in URLs
-.. _audio_channels: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L56
-.. _default_led_symbols: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L7
-.. _gpio_channels: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L11
-.. _logging configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_logging_cfg.json
-.. _main configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json
-.. _mode: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L5
-.. _quiet: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L2
-.. _quotes: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L73
-.. _simulation: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L3
-.. _slot_leds: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L51
-.. _songs: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L87
-.. _sound_effects: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L95
-.. _sounds_directory: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L6
-.. _verbose: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L4
-
-.. external links
-.. _dv_sounds: https://github.com/raul23/DV-Sounds
-.. _pygame: https://www.pygame.org/docs/
-.. _pynput: https://pynput.readthedocs.io
-.. _"I am your father": https://www.youtube.com/watch?v=xuJEYdOFEP4
-.. _Imperial March song by Jacob Townsend: https://soundcloud.com/jacobtownsend1/imperial-march
-.. _"Nooooo": https://www.youtube.com/watch?v=ZscVhFvD6iE
-.. _RPi.GPIO: https://pypi.org/project/RPi.GPIO/
-.. _RPIO.GPIO documentation: https://sourceforge.net/p/raspberry-gpio-python/wiki/BasicUsage/
-.. _SimulRPi.GPIO: https://pypi.org/project/SimulRPi/
-.. _Empire Strikes Back chest box light sequence: https://youtu.be/E2J_xl2MbGU?t=333
-
-.. internal links
-.. _default LED symbols: #default-led-symbols-label
-.. _start_dv: README_docs.html#script-start-dv
-.. _Add Darth Vader quotes: change_default_settings.html#add-darth-vader-quotes
-.. _Change GPIO channel name and number: change_default_settings.html#change-gpio-channel-name-and-number
-.. _Change keymap: change_default_settings.html#change-keymap-label
-.. _Change LED symbols: change_default_settings.html#change-led-symbols-label
+   `Script's list of options`_
