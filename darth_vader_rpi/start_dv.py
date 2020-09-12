@@ -72,22 +72,6 @@ More information is available at:
     If the `simulation` option (`-s`) is used with the script :mod:`start_dv`,
     the `SimulRPi.GPIO`_ module will be used instead.
 
-.. URLs
-
-.. default_main_cfg
-.. _default values: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json
-.. _logging config file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_logging_cfg.json
-.. _main config file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json
-
-.. external links
-.. _Darth-Vader-RPi GitHub: https://github.com/raul23/Darth-Vader-RPi
-.. _RPi.GPIO: https://pypi.org/project/RPi.GPIO/
-.. _SimulRPi GitHub: https://github.com/raul23/SimulRPi
-.. _SimulRPi.GPIO: https://pypi.org/project/SimulRPi/
-
-.. internal links
-.. _installed: README_docs.html#installation-instructions
-
 """
 import argparse
 import logging.config

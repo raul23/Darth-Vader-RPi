@@ -1,8 +1,4 @@
 """Collection of LEDs-related utilities for the *Darth-Vader-RPi* project.
-
-.. URLs
-.. external links
-.. _YouTube video: https://youtu.be/E2J_xl2MbGU?t=333
 """
 import logging
 import threading

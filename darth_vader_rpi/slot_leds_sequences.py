@@ -3,6 +3,11 @@
 These slot LEDs are located on Darth Vader's chest control box and they light
 up following a default or custom sequence.
 
+References
+----------
+The default sequences of slot LEDs (ACTION and CALM) were obtained from this
+`YouTube video`_.
+
 """
 
 ACTION = [["top", "middle", "bottom"],

@@ -1,16 +1,4 @@
 """Collection of utilities for the *Darth-Vader-RPi* project.
-
-.. URLs
-
-.. default_main_cfg
-.. _default logging configuration file:
-   https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_logging_cfg.json
-.. _default main configuration file:
-   https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json
-
-.. external links
-.. _Are dictionaries ordered in Python 3.6+? (stackoverflow): https://stackoverflow.com/a/39980744
-
 """
 import codecs
 import json
