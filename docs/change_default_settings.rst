@@ -521,7 +521,7 @@ keyboard.
 .. _verbose: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L4
 
 .. 1. external links
-.. _Display problems: https://simulrpi.readthedocs.io/en/latest/display_problems.html#ascii-characters-can-t-be-displayed
+.. _Display problems: https://simulrpi.readthedocs.io/en/latest/display_problems.html#non-ascii-characters-can-t-be-displayed
 .. _"Nooooo": https://www.youtube.com/watch?v=ZscVhFvD6iE
 
 .. 2. internal links
