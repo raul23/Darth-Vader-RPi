@@ -324,6 +324,19 @@ in ``gpio_channels``.
    If you omit ``led_symbols`` as a property for a LED object, the
    `default LED symbols`_ will be used instead.
 
+.. important::
+
+   If you are having problems displaying the default LED symbols when running
+   the script :mod:`start_dv`, such as this error:
+
+   .. code-block:: console
+
+      ERROR    UnicodeEncodeError: 'ascii' codec can't encode character '\U0001f6d1' in position 2: ordinal not in range(128)
+
+   Then, you are might have your locale settings set incorrectly. Check
+   `Display problems`_ for more info about how to change them properly or
+   other solutions.
+
 .. seealso::
 
    - The setting `gpio_channels <main_config.html#gpio-channels-label>`__
@@ -508,6 +521,7 @@ keyboard.
 .. _verbose: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L4
 
 .. 1. external links
+.. _Display problems: https://simulrpi.readthedocs.io/en/latest/display_problems.html#ascii-characters-can-t-be-displayed
 .. _"Nooooo": https://www.youtube.com/watch?v=ZscVhFvD6iE
 
 .. 2. internal links

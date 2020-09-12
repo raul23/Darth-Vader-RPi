@@ -93,14 +93,15 @@ SSH from macOS to RPi (Python 3.5)
 * ``SimulRPi 0.1.0a0``
 
 As expected ``pynput`` could not be imported because it doesn't work on a
-headless setup (connecting to an RPi via SSH). However, the blinking of LEDs
-on the Darth Vader figurine or LED symbols in the terminal worked.
+headless setup (connecting to an RPi via SSH). However, the blinking of slot
+LEDs on the Darth Vader figurine or in the terminal works.
 
-**Result 1:** the command ``start_dv`` runs without errors. Blinking of LEDs on
-the Darth Vader figurine works.
+**Result 1:** the command ``start_dv`` runs without errors. Blinking of slot
+LEDs on the Darth Vader figurine works and the push button turns on and off the
+lightsaber.
 
 **Result 2:** the command ``start_dv -s`` runs without errors, except a warning
-about ``pynput`` not being able to be imported. Blinking of LEDs in the
+about ``pynput`` not being able to be imported. Blinking of slot LEDs in the
 terminal works.
 
 .. URLs

@@ -6,7 +6,7 @@ Version 0.1.0a0
 ===============
 .. TODO: IMPORTANT add date
 
-**September 11, 2020**
+**September 12, 2020**
 
 * Initial release
 * Tested the script :mod:`start_dv` on various platforms and environments.
@@ -17,15 +17,22 @@ Version 0.1.0a0
 
   * macOS:
 
-    * The script :mod:`start_dv` runs without errors on Python 3.6-3.8
+    * The command ``start_dv -s`` runs without errors on Python 3.7 and 3.8
 
-    * On Python 3.5-6, I had to fix my locale settings to
-      ``LANG="en_US.UTF-8"`` to make the script :mod:`start_dv` works. Thus, it
+    * On Python 3.5 and 3.6, I had to set my locale settings to
+      ``LANG="en_US.UTF-8"`` to make the command ``start_dv -s`` work. Thus, it
       was not an error with the script but with how my system environment was
-      setup. Python 3.5-6 don't assume an **UTF-8** based local settings like
-      the other more recent Python versions.
+      setup. Python 3.5 and 3.6 don't assume an **UTF-8** based local settings
+      like the other more recent Python versions.
 
-  * SSH from macOS to RPi: **TODO**
+  * SSH from macOS to RPi (Python 3.5):
+
+    * Running the command ``start_dv`` runs without errors.
+
+    * Running the command ``start_dv -s` with produces a warning about
+      ``pynput`` not being able to be imported (as expected) but the rest of
+      the code that doesn't depend on keyboard keys being detected works, i.e.
+      blinking of LED symbols in the terminal.
 
   .. note::
 
