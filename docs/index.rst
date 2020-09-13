@@ -7,10 +7,10 @@ Darth-Vader-RPi's documentation
    <br> 🚧 &nbsp;&nbsp;&nbsp;<b>Work-In-Progress</b>
    </p>
 
-**Darth-Vader-RPi** is a Python-based Raspberry Pi project about activating a Darth Vader
-action figure by turning on LEDs on his suit and lightsaber, and by playing
-sounds such as some of his famous quotes. See the `README <README_docs.html>`_ for
-more info about the project.
+**Darth-Vader-RPi** (|version|) is a Python-based Raspberry Pi project about
+activating a Darth Vader action figure by turning on LEDs on his suit and
+lightsaber, and by playing sounds such as some of his famous quotes. See the
+`README <README_docs.html>`_ for more info about the project.
 
 .. raw:: html
 
