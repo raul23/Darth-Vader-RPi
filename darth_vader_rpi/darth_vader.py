@@ -12,7 +12,25 @@ control box. 3 push buttons control the following sounds and LEDs:
 His iconic breathing sound plays in the background indefinitely almost as soon
 as the RPi is run with the script.
 
-.. URLs are to be found in ../docs/api_reference.rst
+.. URLs
+.. default cfg files
+.. _default logging configuration file: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_logging_cfg.json
+.. _default main configuration file: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json
+.. _default values: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L1
+.. _logging config file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_logging_cfg.json
+.. _main config file: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json
+.. _gpio_channels: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L11
+
+.. external links
+.. _Are dictionaries ordered in Python 3.6+? (stackoverflow): https://stackoverflow.com/a/39980744
+.. _Darth-Vader-RPi GitHub: https://github.com/raul23/Darth-Vader-RPi
+.. _RPi.GPIO: https://pypi.org/project/RPi.GPIO/
+.. _SimulRPi GitHub: https://github.com/raul23/SimulRPi
+.. _SimulRPi.GPIO: https://pypi.org/project/SimulRPi/
+.. _YouTube video: https://youtu.be/E2J_xl2MbGU?t=333
+
+.. internal links
+.. _installed: README_docs.html#installation-instructions-label
 
 """
 import logging
