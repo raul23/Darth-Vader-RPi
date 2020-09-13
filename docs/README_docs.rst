@@ -15,19 +15,9 @@ README
    :target: https://travis-ci.org/raul23/Darth-Vader-RPi
    :alt: Build Status
 
-**Darth-Vader-RPi** is a Python-based Raspberry Pi (RPi) project about activating a Darth
-Vader action figure by turning on LEDs on his suit and lightsaber, and by 
-playing sounds such as some of his famous quotes.
-
-..
-   raw:: html
-
-   <div align="center">
-   <a href="https://www.youtube.com/embed/P631S1k1h_0">
-   <img src="https://raw.githubusercontent.com/raul23/images/master/Darth-Vader-RPi/darth_vader_lightsaber_2x_speed_smaller_version.gif"/>
-   </a>
-   <p><b>Turning on/off the lightsaber</b></p>
-   </div>
+**Darth-Vader-RPi** (|version|) is a Python-based Raspberry Pi (RPi) project about
+activating a Darth Vader action figure by turning on LEDs on his suit and
+lightsaber, and by playing sounds such as some of his famous quotes.
 
 .. important::
 
@@ -46,11 +36,10 @@ playing sounds such as some of his famous quotes.
 
 Introduction
 ============
-
 The Darth Vader action figure is 11.5 inches tall (which is
-`this one from Hasbro <https://amzn.to/3hIw0ou>`_) and was modified to make it
-more lifelike by illuminating the lightsaber, chest control box, and belt. 3
-push buttons control the following sounds and LEDs:
+`this one from Hasbro`_) and was modified to make it more lifelike by
+illuminating the lightsaber, chest control box, and belt. 3 push buttons
+control the following sounds and LEDs:
 
 #. Some of his famous quotes
 #. The *Imperial march* theme song
@@ -78,8 +67,6 @@ Here's how the various LEDs and push buttons are connected to the Raspberry Pi:
    <img src="https://raw.githubusercontent.com/raul23/images/master/Darth-Vader-RPi/schematics.png"/>
    </div>
 
-.. TODO: check line number in URL
-
 * The lightsaber is illuminated by 3 LEDs connected in parallel
 * The *Top*, *Middle*, and *Bottom* LEDs illuminate the slots in Darth Vader's
   chest control box. They blink in a specific sequence
@@ -103,8 +90,6 @@ Here's how the various LEDs and push buttons are connected to the Raspberry Pi:
 
 Dependencies
 ============
-.. TODO: check version for SimulRPi
-
 * **Platforms:** macOS, Linux
 * **Python**: 3.5, 3.6, 3.7, 3.8
 * **Packages**
@@ -127,10 +112,6 @@ Dependencies
 
     - **Ref:** `SimulRPi`_
 
-..
-   TODO: IMPORTANT test again with installing latest pygame on 3.5 and 3.8
-   and check date
-
 .. important::
 
    At the time of this writing (2020-08-28), I couldn't install ``pygame``
@@ -143,7 +124,6 @@ Dependencies
 Installation instructions
 =========================
 .. TODO: IMPORTANT modify SimulRPi in requirements.txt to point to pypi
-.. TODO: IMPORTANT add path to ../bin when RPi (scripts, warning after installing with pip)
 .. highlight:: none
 
 1. Make sure to update pip::
@@ -315,37 +295,30 @@ want to uninstall.
 
 Credits
 =======
-.. TODO: specify not used anymore for music
-.. TODO: specify that you trim the 4 (?) seconds of the start of the Imperial March song
-
 - **Darth Vader quotes:**
 
   - `"I am your father"`_
   - `"Nooooo"`_
 - **Music:**
 
-  - `Imperial March song by Jacob Townsend <https://soundcloud.com/jacobtownsend1/imperial-march>`_
-    is licensed under a `Creative Commons (CC BY-NC-SA 3.0) License <http://creativecommons.org/licenses/by-nc-sa/3.0/>`_
+  - `Imperial March song by Jacob Townsend`_ is licensed under a
+    `Creative Commons (CC BY-NC-SA 3.0) License`_
 
     **NOTE:** The original song file was reduced under 1 MB by removing the
     first 7 seconds (no sound) and the last 2 minutes and 24 seconds.
 - **Sound effects:**
 
-  - `Darth Vader breathing sound <https://www.youtube.com/watch?v=d28NrjMPERs>`_
-  - `Darth Vader's lightsaber sound effect <https://www.youtube.com/watch?v=bord-573NWY>`_
-  - `Darth Vader's lightsaber retraction sound effect <https://www.youtube.com/watch?v=m6buyGJF46k>`_
+  - `Darth Vader breathing sound`_
+  - `Darth Vader's lightsaber sound effect`_
+  - `Darth Vader's lightsaber retraction sound effect`_
 - **Slot LEDs sequences:**
 
   - `Empire Strikes Back chest box light sequence`_
 
 Resources
 =========
-.. TODO: don't use documentation link for readthedocs
-.. TODO: don't show changelog and todos links for readthedocs
-
-* `Darth-Vader-RPi documentation`_
 * `Darth-Vader-RPi GitHub`_: source code
-* `Darth-Vader-RPi Changelog`_
+
 
 References
 ==========
@@ -361,22 +334,27 @@ References
 
 .. 0. default_main_cfg
 .. _as specified in the configuration file:
-   https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L51
-.. _configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L1
-.. _default values: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_main_cfg.json#L1
-.. 1. external links
+   https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L51
+.. _configuration file: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L1
+.. _default values: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L1
+
+.. 1. External links
 .. _article: https://docs.oracle.com/cd/E19062-01/sun.mgmt.ctr36/819-5418/gaznb/index.html
+.. _dv_sounds: https://github.com/raul23/DV-Sounds
 .. _pygame: https://www.pygame.org/
 .. _pynput: https://pynput.readthedocs.io
-.. _dv_sounds: https://github.com/raul23/DV-Sounds
-.. _Darth-Vader-RPi documentation: http://darth-vader-rpi.rtfd.io/
+.. _this one from Hasbro: https://amzn.to/3hIw0ou
 .. _Darth-Vader-RPi GitHub: https://github.com/raul23/Darth-Vader-RPi
 .. _"I am your father": https://www.youtube.com/watch?v=xuJEYdOFEP4
+.. _Creative Commons (CC BY-NC-SA 3.0) License: http://creativecommons.org/licenses/by-nc-sa/3.0/
+.. _Darth Vader breathing sound: https://www.youtube.com/watch?v=d28NrjMPERs
+.. _Darth Vader's lightsaber retraction sound effect: https://www.youtube.com/watch?v=m6buyGJF46k
+.. _Darth Vader's lightsaber sound effect: https://www.youtube.com/watch?v=bord-573NWY
+.. _Empire Strikes Back chest box light sequence: https://youtu.be/E2J_xl2MbGU?t=333
 .. _Imperial March song by Jacob Townsend: https://soundcloud.com/jacobtownsend1/imperial-march
 .. _"Nooooo": https://www.youtube.com/watch?v=ZscVhFvD6iE
 .. _RPi.GPIO: https://pypi.org/project/RPi.GPIO/
 .. _SimulRPi: https://pypi.org/project/SimulRPi/
-.. _Empire Strikes Back chest box light sequence: https://youtu.be/E2J_xl2MbGU?t=333
 
 .. 2. Internal links
 .. _add more quotes: change_default_settings.html#add-darth-vader-quotes-label
