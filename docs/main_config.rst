@@ -85,8 +85,7 @@ project.
    - If value < 0.0, the volume will not be changed
    - If value > 1.0, the volume will be set to 1.0
 
-   As per the `pygame
-   documentation <https://www.pygame.org/docs/ref/mixer.html#pygame.mixer.Sound.set_volume>`__.
+   As per the `pygame documentation`_.
 
 .. _default-led-symbols-label:
 
@@ -311,8 +310,8 @@ following properties:
 
    - The setting `audio_channels <#audio-channels-label>`__
    - `Add Darth Vader quotes`_
-   - `Change channel volume <change_default_settings.html#change-channel-volume-label>`__
-   - `Change paths to audio files <change_default_settings.html#change-paths-to-audio-files-label>`__
+   - `Change channel volume`_
+   - `Change paths to audio files`_
 
 .. _simulation-label:
 
@@ -358,8 +357,8 @@ different pattern than if he was in action.
    - ``delay_between_steps``: delay in seconds between each step in the sequence
    - ``time_per_step``: time in seconds each step will last
    - ``sequence``: the type of the sequence which can be either *"action"*,
-     *"calm"* or a `custom sequence <#custom-sequence-label>`__. The sequence
-     will keep on repeating until the script exits
+     *"calm"* or a `custom sequence`_. The sequence will keep on repeating
+     until the script exits
 
 .. code-block:: python
    :caption: **Example:** a ``slot_leds`` object with the calm sequence
@@ -447,7 +446,7 @@ And the whole sequence will keep on repeating until the script exits.
 
 .. seealso::
 
-   `Change slot LEDs sequence <change_default_settings.html#change-slot-leds-sequence-label>`__
+   `Change slot LEDs sequence`_
 
 .. _songs-label:
 
@@ -490,8 +489,8 @@ properties:
 .. seealso::
 
    - The setting `audio_channels <#audio-channels-label>`__
-   - `Change channel volume <change_default_settings.html#change-channel-volume-label>`__
-   - `Change paths to audio files <change_default_settings.html#change-paths-to-audio-files-label>`__
+   - `Change channel volume`_
+   - `Change paths to audio files`_
 
 .. _sound-effects-label:
 
@@ -562,9 +561,9 @@ sounds:
 .. seealso::
 
    - The setting `audio_channels <#audio-channels-label>`__
-   - `Change closing sound <change_default_settings.html#change-closing-sound-label>`__
-   - `Change paths to audio files <change_default_settings.html#change-paths-to-audio-files-label>`__
-   - `Mute breathing sound <change_default_settings.html#mute-breathing-sound-label>`__
+   - `Change closing sound`_
+   - `Change paths to audio files`_
+   - `Mute breathing sound`_
 
 .. _sounds_directory-label:
 
@@ -600,7 +599,7 @@ the directory ``sounds_directory``.
 
 .. seealso::
 
-   `Change paths to audio files <change_default_settings.html#change-paths-to-audio-files-label>`__
+   `Change paths to audio files`_
 
 .. _verbose-label:
 
@@ -638,3 +637,49 @@ This flag can also be set directly through the script's command-line option
 .. seealso::
 
    `Script's list of options`_
+
+.. URLs
+
+.. default_main_cfg
+.. _audio_channels: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L56
+.. _default_led_symbols: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L7
+.. _gpio_channels: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L11
+.. _logging configuration file: https://github.com/raul23/Darth-Vader-RPi/blob/master/darth_vader_rpi/configs/default_logging_cfg.json
+.. _main configuration file: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json
+.. _mode: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L5
+.. _quiet: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L2
+.. _quotes: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L73
+.. _simulation: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L3
+.. _slot_leds: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L51
+.. _songs: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L87
+.. _sound_effects: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L95
+.. _sounds_directory: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L6
+.. _verbose: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L4
+
+.. external links
+.. _dv_sounds: https://github.com/raul23/DV-Sounds
+.. _pygame: https://www.pygame.org/docs/
+.. _pygame documentation: https://www.pygame.org/docs/ref/mixer.html#pygame.mixer.Sound.set_volume
+.. _pynput: https://pynput.readthedocs.io
+.. _"I am your father": https://www.youtube.com/watch?v=xuJEYdOFEP4
+.. _Imperial March song by Jacob Townsend: https://soundcloud.com/jacobtownsend1/imperial-march
+.. _"Nooooo": https://www.youtube.com/watch?v=ZscVhFvD6iE
+.. _RPi.GPIO: https://pypi.org/project/RPi.GPIO/
+.. _RPIO.GPIO documentation: https://sourceforge.net/p/raspberry-gpio-python/wiki/BasicUsage/
+.. _SimulRPi.GPIO: https://pypi.org/project/SimulRPi/
+.. _Empire Strikes Back chest box light sequence: https://youtu.be/E2J_xl2MbGU?t=333
+
+.. internal links
+.. _custom sequence: #custom-sequence-label
+.. _default LED symbols: #default-led-symbols-label
+.. _start_dv: README_docs.html#script-start-dv
+.. _Add Darth Vader quotes: change_default_settings.html#add-darth-vader-quotes
+.. _Change channel volume: change_default_settings.html#change-channel-volume-label
+.. _Change closing sound: change_default_settings.html#change-closing-sound-label
+.. _Change GPIO channel name and number: change_default_settings.html#change-gpio-channel-name-and-number
+.. _Change keymap: change_default_settings.html#change-keymap-label
+.. _Change paths to audio files: change_default_settings.html#change-paths-to-audio-files-label
+.. _Change slot LEDs sequence: change_default_settings.html#change-slot-leds-sequence-label
+.. _Change LED symbols: change_default_settings.html#change-led-symbols-label
+.. _Mute breathing sound: change_default_settings.html#mute-breathing-sound-label
+.. _Script's list of options: README_docs.html#list-of-options

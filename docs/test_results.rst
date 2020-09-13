@@ -41,7 +41,7 @@ The command ``start_dv -s`` gives this error::
 
 This error stems from my locale settings which are not set properly and it
 seems that Python 3.5 doesn't assume the correct locale *utf-8* by default.
-Check `Display problems (locale)`_ on how to set the locale settings correctly.
+Check `Display problems`_ on how to set the locale settings correctly.
 
 **Result:** once the locale settings are setup correctly, the command
 ``start_dv -s`` runs without errors.
@@ -103,3 +103,7 @@ lightsaber.
 **Result 2:** the command ``start_dv -s`` runs without errors, except a warning
 about ``pynput`` not being able to be imported. Blinking of slot LEDs in the
 terminal works.
+
+.. URLs
+.. external links
+.. _Display problems: https://simulrpi.readthedocs.io/en/latest/display_problems.html#solution-1-change-your-locale-settings

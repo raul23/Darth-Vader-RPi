@@ -51,3 +51,10 @@ Indices and tables
 
 * :ref:`genindex`
 * :ref:`modindex`
+
+.. URLs
+.. external links
+.. _SimulRPi: https://simulrpi.readthedocs.io/en/latest/
+
+.. internal links
+.. _README: README_docs.html

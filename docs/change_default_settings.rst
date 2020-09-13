@@ -24,7 +24,7 @@ Important tips
   *ogg* (compressed) or *wav* (uncompressed). The reason is that *mp3* won't
   work well with pygame's simultaneous playback capability.
 
-  **Reference:** `stackoverflow <https://stackoverflow.com/a/59742418>`__
+  **Reference:** `stackoverflow`_
 
 .. _add-darth-vader-quotes-label:
 
@@ -63,8 +63,8 @@ Add your quote object to the list in ``quotes``, like in the following example:
 
    - The setting `audio_channels <main_config.html#audio-channels-label>`__
    - The setting `quotes <main_config.html#quotes-label>`__
-   - `Change channel volume <#change-channel-volume-label>`__
-   - `Change paths to audio files <#change-paths-to-audio-files-label>`__
+   - `Change channel volume`_
+   - `Change paths to audio files`_
 
 .. _change-channel-volume-label:
 
@@ -105,8 +105,8 @@ What each channel controls:
 
 .. note::
 
-   Volume takes values in the range 0.0 to 1.0 (inclusive). As per the `pygame
-   documentation <https://www.pygame.org/docs/ref/mixer.html#pygame.mixer.Sound.set_volume>`__.
+   Volume takes values in the range 0.0 to 1.0 (inclusive). As per the
+   `pygame documentation`_.
 
 .. seealso::
 
@@ -158,8 +158,8 @@ object. These are the properties you can modify for this object:
 
    - The setting `audio_channels <main_config.html#audio-channels-label>`__
    - The setting `sound_effects <main_config.html#sound-effects-label>`__
-   - `Change channel volume <#change-channel-volume-label>`__
-   - `Change paths to audio files <#change-paths-to-audio-files-label>`__
+   - `Change channel volume`_
+   - `Change paths to audio files`_
 
 .. _change-gpio-channel-name-and-number-label:
 
@@ -340,7 +340,7 @@ in ``gpio_channels``.
 .. seealso::
 
    - The setting `gpio_channels <main_config.html#gpio-channels-label>`__
-   - `Change slot LEDs sequence <#change-slot-leds-sequence-label>`__
+   - `Change slot LEDs sequence`_
 
 .. _change-paths-to-audio-files-label:
 
@@ -470,7 +470,7 @@ Set the *breathing_sound* object's ``mute`` to *false*.
 .. seealso::
 
    - The setting `sound_effects <main_config.html#sound-effects-label>`__
-   - `Change channel volume <#change-channel-volume-label>`__
+   - `Change channel volume`_
 
 .. _run-script-as-quiet-or-verbose-label:
 
@@ -501,3 +501,31 @@ keyboard.
 
    - The setting `quiet <main_config.html#quiet-label>`__
    - The setting `verbose <main_config.html#verbose-label>`__
+
+.. URls
+
+.. default cfg files
+.. _audio_channels: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L56
+.. _closing_sound: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L123
+.. _configuration file: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L1
+.. _default_led_symbols: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L7
+.. _gpio_channels: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L11
+.. _quiet: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L2
+.. _quotes: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L73
+.. _slot_leds: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L51
+.. _sound_effects: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L95
+.. _sounds_directory: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L6
+.. _verbose: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L4
+.. _GPIO channels: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L11
+
+.. external links
+.. _pygame documentation: https://www.pygame.org/docs/ref/mixer.html#pygame.mixer.Sound.set_volume
+.. _stackoverflow: https://stackoverflow.com/a/59742418
+.. _Display problems: https://simulrpi.readthedocs.io/en/latest/display_problems.html#non-ascii-characters-can-t-be-displayed
+.. _"Nooooo": https://www.youtube.com/watch?v=ZscVhFvD6iE
+
+.. internal links
+.. _default LED symbols: main_config.html#default-led-symbols-label
+.. _Change channel volume: #change-channel-volume-label
+.. _Change paths to audio files: #change-paths-to-audio-files-label
+.. _Change slot LEDs sequence: #change-slot-leds-sequence-label
