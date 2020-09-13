@@ -83,7 +83,8 @@ Here's how the various LEDs and push buttons are connected to the Raspberry Pi:
   testing purposes, the package ``darth_vader_rpi`` comes with two movie lines:
 
   * `"I am your father"`_
-  * `"Nooooo"`_: it is also used for the `closing sound`_ when the script ``start_dv`` exits
+  * `"Nooooo"`_: it is also used for the `closing sound`_ when the script
+    ``start_dv`` exits
 
   However, you could `add more quotes`_ if you want.
 
@@ -111,7 +112,7 @@ Dependencies
 
     - **Ref:** `SimulRPi`_
 
-.. important::
+`:star:`
 
    At the time of this writing (2020-08-28), I couldn't install ``pygame``
    1.9.6 (the latest stable release) with Python 3.5 and 3.8, on macOS.
@@ -201,24 +202,24 @@ List of options
 To display the script's list of options and their descriptions:
 ``$ start_dv -h``
 
-  --version             show program's version number and exit
-  -q, --quiet           Enable quiet mode, i.e. nothing will be printed.
-                        (default: False)
-  -s, --simulation      Enable simulation mode, i.e. ``SimulRPi.GPIO`` will be
-                        used for simulating ``RPi.GPIO``. (default: False)
-  -v, --verbose         Print various debugging information, e.g. print
-                        traceback when there is an exception. (default: False)
+--version            show program's version number and exit
+-q, --quiet          Enable quiet mode, i.e. nothing will be printed.
+                     (default: False)
+-s, --simulation     Enable simulation mode, i.e. ``SimulRPi.GPIO`` will be
+                     used for simulating ``RPi.GPIO``. (default: False)
+-v, --verbose        Print various debugging information, e.g. print
+                     traceback when there is an exception. (default: False)
 
 Edit a configuration file:
 
-  -e cfg_name, --edit cfg_name   Edit a configuration file. Provide **log_cfg**
-                                 for the logging config file or **cfg** for the
-                                 main config file. (default: None)
+-e cfg_name, --edit cfg_name   Edit a configuration file. Provide **log_cfg**
+                               for the logging config file or **cfg** for the
+                               main config file. (default: None)
 
-  -a APP, --app-name APP   Name of the application to use for editing the file.
-                           If no name is given, then the default application for
-                           opening this type of file will be used. (default:
-                           None)
+-a APP, --app-name APP   Name of the application to use for editing the file.
+                         If no name is given, then the default application for
+                         opening this type of file will be used. (default:
+                         None)
 
 
 Simulating on your computer
@@ -236,9 +237,9 @@ RPi by blinking red dots in the terminal and monitoring pressed keyboard keys::
 Here's how the keyboard keys are related **by default** to push buttons
 connected to an RPi:
 
-   * ``cmd_l``   -----> lightsaber button
-   * ``alt_l``   -----> song button
-   * ``alt_r``  -----> quotes button
+* ``cmd_l``   -----> lightsaber button
+* ``alt_l``   -----> song button
+* ``alt_r``  -----> quotes button
 
 Check `Change keymap`_ if you want to change this default key-to-channel
 mapping.
@@ -278,7 +279,6 @@ want to uninstall.
    **Example:**
 
    .. code-block:: console
-      :emphasize-lines: 8, 11
 
       $ pip uninstall darth-vader-rpi
       Found existing installation: Darth-Vader-RPi 0.0.1a0
