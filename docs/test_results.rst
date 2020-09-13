@@ -2,7 +2,7 @@
 Test results for ``start_dv``
 =============================
 
-I present how the script ``start_dv`` performed on various platforms and
+We will present how the script ``start_dv`` performed on various platforms and
 environments based on different releases of the package ``darth_vader_rpi``.
 
 .. contents::
