@@ -662,12 +662,12 @@ This flag can also be set directly through the script's command-line option
 .. _pygame documentation: https://www.pygame.org/docs/ref/mixer.html#pygame.mixer.Sound.set_volume
 .. _pynput: https://pynput.readthedocs.io
 .. _"I am your father": https://www.youtube.com/watch?v=xuJEYdOFEP4
-.. _Imperial March song by Jacob Townsend: https://soundcloud.com/jacobtownsend1/imperial-march
 .. _"Nooooo": https://www.youtube.com/watch?v=ZscVhFvD6iE
+.. _Empire Strikes Back chest box light sequence: https://youtu.be/E2J_xl2MbGU?t=333
+.. _Imperial March song by Jacob Townsend: https://soundcloud.com/jacobtownsend1/imperial-march
 .. _RPi.GPIO: https://pypi.org/project/RPi.GPIO/
 .. _RPIO.GPIO documentation: https://sourceforge.net/p/raspberry-gpio-python/wiki/BasicUsage/
 .. _SimulRPi.GPIO: https://pypi.org/project/SimulRPi/
-.. _Empire Strikes Back chest box light sequence: https://youtu.be/E2J_xl2MbGU?t=333
 
 .. internal links
 .. _custom sequence: #custom-sequence-label

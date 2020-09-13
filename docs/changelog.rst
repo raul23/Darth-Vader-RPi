@@ -42,4 +42,4 @@ Version 0.1.0a0
 
 .. URLs
 .. external links
-.. _Test results for start_dv: https://github.com/raul23/Darth-Vader-RPi/blob/master/docs/test_results.rst
+.. _Test results for start_dv: https://github.com/raul23/Darth-Vader-RPi/blob/master/docs/test_results.rst#darth-vader-rpi-v0-1-0a0

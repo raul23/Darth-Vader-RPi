@@ -504,7 +504,7 @@ keyboard.
 
 .. URls
 
-.. default cfg files
+.. 0. default cfg files
 .. _audio_channels: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L56
 .. _closing_sound: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L123
 .. _configuration file: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L1
@@ -518,13 +518,15 @@ keyboard.
 .. _verbose: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L4
 .. _GPIO channels: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L11
 
-.. external links
+.. 1. External links (simulrpi.readthedocs.io)
+.. _Display problems: https://simulrpi.readthedocs.io/en/latest/display_problems.html#non-ascii-characters-can-t-be-displayed
+
+.. 2. External links (others)
+.. _"Nooooo": https://www.youtube.com/watch?v=ZscVhFvD6iE
 .. _pygame documentation: https://www.pygame.org/docs/ref/mixer.html#pygame.mixer.Sound.set_volume
 .. _stackoverflow: https://stackoverflow.com/a/59742418
-.. _Display problems: https://simulrpi.readthedocs.io/en/latest/display_problems.html#non-ascii-characters-can-t-be-displayed
-.. _"Nooooo": https://www.youtube.com/watch?v=ZscVhFvD6iE
 
-.. internal links
+.. 3. Internal links
 .. _default LED symbols: main_config.html#default-led-symbols-label
 .. _Change channel volume: #change-channel-volume-label
 .. _Change paths to audio files: #change-paths-to-audio-files-label
