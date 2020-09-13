@@ -81,7 +81,6 @@ Here's how the various LEDs and push buttons are connected to the Raspberry Pi:
 * The *Song button* plays the `Imperial March song by Jacob Townsend`_
 * The *Quotes button* plays famous Darth Vader quotes when pressed. For
   testing purposes, the package ``darth_vader_rpi`` comes with two movie lines:
-
     * `"I am your father"`_
     * `"Nooooo"`_: it is also used for the `closing sound`_ when the script
       ``start_dv`` exits
