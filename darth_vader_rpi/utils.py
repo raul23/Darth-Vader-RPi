@@ -13,7 +13,6 @@ import pygame
 
 from darth_vader_rpi import configs
 
-
 # TODO: explain
 _CFG_EXT = "json"
 _LOG_CFG_FILENAME = 'logging_cfg'
