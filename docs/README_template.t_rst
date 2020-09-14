@@ -364,11 +364,11 @@ want to uninstall.
 </host>
 
       $ pip uninstall darth-vader-rpi
-      Found existing installation: Darth-Vader-RPi 0.0.1a0
-      Uninstalling Darth-Vader-RPi-0.0.1a0:
+      Found existing installation: Darth-Vader-RPi 0.1.0a0
+      Uninstalling Darth-Vader-RPi-0.1.0a0:
         Would remove:
           /Users/test/miniconda3/envs/rpi_py37/bin/start_dv
-          /Users/test/miniconda3/envs/rpi_py37/lib/python3.7/site-packages/Darth_Vader_RPi-0.0.1a0.dist-info/*
+          /Users/test/miniconda3/envs/rpi_py37/lib/python3.7/site-packages/Darth_Vader_RPi-0.1.0a0.dist-info/*
           /Users/test/miniconda3/envs/rpi_py37/lib/python3.7/site-packages/darth_vader_rpi/*
         Would not remove (might be manually added):
           /Users/test/miniconda3/envs/rpi_py37/lib/python3.7/site-packages/darth_vader_rpi/configs/logging_cfg.json
