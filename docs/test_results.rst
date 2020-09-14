@@ -44,7 +44,7 @@ The ``$ start_dv -s`` command gives this error::
 
    ERROR    UnicodeEncodeError: 'ascii' codec can't encode character '\U0001f6d1' in position 2: ordinal not in range(128)
 
-This error stems from my locale settings which are not set properly and it
+This error stems from the locale settings which are not set properly and it
 seems that Python 3.5 doesn't assume the correct *utf-8* encoding by default.
 Check `Display problems`_ on how to set the locale settings correctly.
 
@@ -60,7 +60,7 @@ Python 3.6
 * ``pynput 1.7.1``
 * ``SimulRPi 0.1.0a0``
 
-Same ``UnicodeEncodeError`` as in Python 3.5 Set my local settings correctly
+Same ``UnicodeEncodeError`` as in Python 3.5 Set the local settings correctly
 and the script runs fine.
 
 **Result:** once the locale settings are setup correctly, the
@@ -102,10 +102,12 @@ with ``RPi.GPIO``
 * ``pynput 1.7.1``
 * ``RPi.GPIO``
 
-**Result:** the ``$ start_dv`` command runs without errors. Blinking of slot
-LEDs on the Darth Vader figurine works. When pressed, the push buttons produce
-the different sounds (lightsaber sounds, Darth Vader's theme song and quotes)
-and turns on and off the lightsaber.
+**Result:** the ``$ start_dv`` command runs without errors.
+
+* Blinking of slot LEDs on the Darth Vader figurine works.
+* When pressed, the push buttons produce the different sounds (lightsaber
+  sounds, Darth Vader's theme song and quotes) and turns on and off the
+  lightsaber.
 
 with ``SimulRPi.GPIO``
 """"""""""""""""""""""
@@ -118,12 +120,17 @@ with ``SimulRPi.GPIO``
 * ``pynput 1.7.1``
 * ``SimulRPi 0.1.0a0``
 
-I had to
+Couldn't display the default non-ASCII LED symbols even though the two
+solutions in `Display problems`_ were tried. Finally, ASCII LED symbols were
+used by setting ``default_led_symbols`` to ``"default_ascii"`` in the main
+configuration file as explained in the same article
+`Display problems <https://simulrpi.readthedocs.io/en/latest/display_problems.html#use-ascii-based-led-symbols>`__
 
-**Result:** the ``$ start_dv -s`` command runs without errors. Blinking of slot
-LEDs and illumination of the lightsaber in the terminal works. When pressed,
-the valid keyboard keys produce the different sounds (lightsaber sounds, Darth
-Vader's theme song and quotes).
+**Result:** the ``$ start_dv -s`` command runs without errors.
+
+* Blinking of slot LEDs and illumination of the lightsaber in the terminal works.
+* When pressed, the valid keyboard keys produce the different sounds:
+  lightsaber sounds, Darth Vader's theme song and quotes.
 
 SSH from macOS to RPi (Python 3.5)
 """"""""""""""""""""""""""""""""""
@@ -147,7 +154,7 @@ LEDs on the Darth Vader figurine or in the terminal works.
 
 **Result 2:** the ``$ start_dv -s`` command runs without errors
 
-* Warning about ``pynput`` not being able to be imported.
+* Warning about ``pynput`` not being able to be imported (expected)
 * Blinking of slot LEDs in the terminal works.
 
 .. URLs
