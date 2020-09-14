@@ -30,7 +30,7 @@ to uninstall all modules if you want the ``SimulRPi`` version from github.
 Use ``pip3`` when working with RPi
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 When doing tests on the RPi's Debian OS, use ``pip3`` because ``pip`` points to
-Python 2.7
+Python 2.7.13
 
 ``darth_vader_rpi`` v0.1.0a0
 ============================
@@ -72,8 +72,8 @@ Python 3.6
 * ``pynput 1.7.1``
 * ``SimulRPi 0.1.0a0``
 
-Same ``UnicodeEncodeError`` as in Python 3.5 Set the local settings correctly
-and the script runs fine.
+Same ``UnicodeEncodeError`` as in Python 3.5 Thus, set the local settings
+correctly and the script runs fine.
 
 **Result:** once the locale settings are setup correctly, the
 ``$ start_dv -s`` command runs without errors.
@@ -100,14 +100,14 @@ Python 3.8
 
 **Result:** the ``$ start_dv -s`` command runs without errors.
 
-Raspberry Pi (Python 3.5)
-^^^^^^^^^^^^^^^^^^^^^^^^^
+Raspberry Pi (Python 3.5.3)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 with ``RPi.GPIO``
 """""""""""""""""
 **IMPORTANT:** Use ``pip3`` since ``pip`` points to Python 2.7
 
-**Dependencies installed on the RPi (Python 3.5):**
+**Dependencies installed on the RPi (Python 3.5.3):**
 
 * ``dv_sounds 0.1.0a0``
 * ``pygame 1.9.3`` (already installed with the OS and **don't uninstall it!**)
@@ -123,9 +123,9 @@ with ``RPi.GPIO``
 
 with ``SimulRPi.GPIO``
 """"""""""""""""""""""
-**IMPORTANT:** Use ``pip3`` since ``pip`` points to Python 2.7
+**IMPORTANT:** Use ``pip3`` since ``pip`` points to Python 2.7.13
 
-**Dependencies installed on the RPi (Python 3.5):**
+**Dependencies installed on the RPi (Python 3.5.3):**
 
 * ``dv_sounds 0.1.0a0``
 * ``pygame 1.9.3`` (already installed with the OS and **don't uninstall it!**)
@@ -144,11 +144,11 @@ configuration file as explained in the same article
 * When pressed, the valid keyboard keys produce the different sounds:
   lightsaber sounds, Darth Vader's theme song and quotes.
 
-SSH from macOS to RPi (Python 3.5)
-""""""""""""""""""""""""""""""""""
-**IMPORTANT:** Use ``pip3`` since ``pip`` points to Python 2.7
+SSH from macOS to RPi (Python 3.5.3)
+""""""""""""""""""""""""""""""""""""
+**IMPORTANT:** Use ``pip3`` since ``pip`` points to Python 2.7.13
 
-**Dependencies installed on the RPi (Python 3.5):**
+**Dependencies installed on the RPi (Python 3.5.3):**
 
 * ``dv_sounds 0.1.0a0``
 * ``pygame 1.9.3`` (already installed with the OS and **don't uninstall it!**)
