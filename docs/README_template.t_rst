@@ -411,7 +411,7 @@ Resources
 References
 ==========
 * `dv_sounds`_: a package for downloading the various sounds needed for the
-  project, e.g. sound effects
+  project, e.g. ligthsaber sound effects
 * `pygame`_: a package used for playing sounds
 * `RPI.GPIO`_: a module to control RPi GPIO channels
 * `SimulRPi`_: a package that partly fakes ``RPi.GPIO`` and simulates some I/O
