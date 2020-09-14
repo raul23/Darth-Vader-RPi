@@ -181,7 +181,7 @@ and other settings::
 
    $ start_dv
 
-If you want to test the script on your **computer** (use the flag **-s**)::
+If you want to test the script on your **computer** (use the **-s** flag)::
 
    $ start_dv -s
 
