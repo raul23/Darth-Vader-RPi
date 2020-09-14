@@ -22,7 +22,7 @@ lightsaber, and by playing sounds such as some of his famous quotes.
 .. important::
 
    If you don't have an RPi, don't worry. You can still
-   `test the program on your own computer`_ because the package
+   `test the script on your own computer`_ because the package
    ``darth_vader_rpi`` uses the library `SimulRPi`_ to simulate I/O devices
    connected to an RPi such as LEDs and push buttons by blinking red dots in
    the terminal and playing sounds when a keyboard key is pressed. Almost like
@@ -361,7 +361,7 @@ References
 .. _closing sound: change_default_settings.html#change-closing-sound-label
 .. _installed: #installation-instructions-label
 .. _start_dv: #script-start-dv
-.. _test the program on your own computer: #simulating-on-your-computer
+.. _test the script on your own computer: #simulating-on-your-computer
 .. _Change default settings: change_default_settings.html
 .. _Change keymap: change_default_settings.html#change-keymap-label
 .. _Darth-Vader-RPi Changelog: changelog.html
