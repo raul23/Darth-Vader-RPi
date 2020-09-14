@@ -4,6 +4,13 @@ Test results for ``start_dv``
 We will present how the script ``start_dv`` performed on various platforms and
 environments based on different releases of the package ``darth_vader_rpi``.
 
+**IMPORTANT:** when uninstalling only ``SimulRPi`` with ``pip uninstall simulrpi`` and 
+then installing it with 
+``pip install git+https://github.com/raul23/Darth-Vader-RPi#egg=Darth-Vader-RPi``, you 
+will get ``SimulRPi`` from PyPI instead of the bleeding-edge version from github. Thus,
+you might an old version of ``SimulRPi`` if you haven't yet published the latest version
+to PyPI.
+
 .. contents::
    :depth: 3
    :local:
