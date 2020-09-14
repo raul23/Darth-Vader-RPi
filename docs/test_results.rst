@@ -105,4 +105,4 @@ terminal works.
 
 .. URLs
 .. external links
-.. _Display problems: https://simulrpi.readthedocs.io/en/latest/display_problems.html#solution-1-change-your-locale-settings
+.. _Display problems: https://simulrpi.readthedocs.io/en/latest/display_problems.html#solution-1-change-your-locale-settings-best-solution
