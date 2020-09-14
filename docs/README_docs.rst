@@ -199,8 +199,9 @@ If you want to test the script on your **computer** (use the **-s** flag)::
 
 List of options
 ^^^^^^^^^^^^^^^
-To display the script's list of options and their descriptions:
-``$ start_dv -h``
+To display the script's list of options and their descriptions::
+
+   $ start_dv -h
 
 --version            show program's version number and exit
 -q, --quiet          Enable quiet mode, i.e. nothing will be printed.
