@@ -33,7 +33,7 @@ lightsaber, and by playing sounds such as some of his famous quotes.
 
    If you don't have an RPi, don't worry. You can still
 <host name="github">
-   test the program on your own computer because the
+   test the script on your own computer because the
 </host>
 <host name="readthedocs">
    `test the script on your own computer`_ because the

@@ -22,7 +22,7 @@ lightsaber, and by playing sounds such as some of his famous quotes.
 `:star:`
 
    If you don't have an RPi, don't worry. You can still
-   test the program on your own computer because the
+   test the script on your own computer because the
    ``darth_vader_rpi`` package uses the `SimulRPi`_ library to simulate I/O
    devices connected to an RPi such as LEDs and push buttons by blinking red
    dots in the terminal and playing sounds when a keyboard key is pressed.
