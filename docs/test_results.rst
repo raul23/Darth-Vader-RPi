@@ -12,9 +12,9 @@ And then installing it with::
    
    $ pip install git+https://github.com/raul23/Darth-Vader-RPi#egg=Darth-Vader-RPi
 
-You will get ``SimulRPi`` from PyPI instead of the bleeding-edge version from github. Thus,
-you might get an old version of ``SimulRPi`` if you haven't yet published the latest version
-to PyPI.
+You will get ``SimulRPi`` from PyPI instead of the bleeding-edge version from
+github. Thus, you might get an old version of ``SimulRPi`` if you haven't yet
+published the latest version to PyPI.
 
 .. contents:: **Contents**
    :depth: 3
@@ -22,16 +22,6 @@ to PyPI.
 
 ``darth_vader_rpi`` v0.1.0a0
 ============================
-Raspberry Pi (Python 3.5)
-^^^^^^^^^^^^^^^^^^^^^^^^^
-
-with ``RPi.GPIO``
-"""""""""""""""""
-**TODO**
-
-with ``SimulRPi.GPIO``
-""""""""""""""""""""""
-**TODO**
 
 macOS
 ^^^^^
@@ -98,8 +88,45 @@ Python 3.8
 
 **Result:** the ``$ start_dv -s`` command runs without errors.
 
+Raspberry Pi (Python 3.5)
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+with ``RPi.GPIO``
+"""""""""""""""""
+**IMPORTANT:** Use ``pip3`` since ``pip`` points to Python 2.7
+
+**Dependencies installed on the RPi (Python 3.5):**
+
+* ``dv_sounds 0.1.0a0``
+* ``pygame 1.9.3`` (already installed with the OS and **don't uninstall it!**)
+* ``pynput 1.7.1``
+* ``RPi.GPIO``
+
+**Result:** the ``$ start_dv`` command runs without errors. Blinking of slot
+LEDs on the Darth Vader figurine works. When pressed, the push buttons produce
+the different sounds (lightsaber sounds, Darth Vader's theme song and quotes)
+and turns on and off the lightsaber.
+
+with ``SimulRPi.GPIO``
+""""""""""""""""""""""
+**IMPORTANT:** Use ``pip3`` since ``pip`` points to Python 2.7
+
+**Dependencies installed on the RPi (Python 3.5):**
+
+* ``dv_sounds 0.1.0a0``
+* ``pygame 1.9.3`` (already installed with the OS and **don't uninstall it!**)
+* ``pynput 1.7.1``
+* ``SimulRPi 0.1.0a0``
+
+I had to
+
+**Result:** the ``$ start_dv -s`` command runs without errors. Blinking of slot
+LEDs and illumination of the lightsaber in the terminal works. When pressed,
+the valid keyboard keys produce the different sounds (lightsaber sounds, Darth
+Vader's theme song and quotes).
+
 SSH from macOS to RPi (Python 3.5)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+""""""""""""""""""""""""""""""""""
 **IMPORTANT:** Use ``pip3`` since ``pip`` points to Python 2.7
 
 **Dependencies installed on the RPi (Python 3.5):**
@@ -117,9 +144,9 @@ LEDs on the Darth Vader figurine or in the terminal works.
 LEDs on the Darth Vader figurine works and the push button turns on and off the
 lightsaber.
 
-**Result 2:** the ``$ start_dv -s`` command runs without errors, except a warning
-about ``pynput`` not being able to be imported. Blinking of slot LEDs in the
-terminal works.
+**Result 2:** the ``$ start_dv -s`` command runs without errors, except a
+warning about ``pynput`` not being able to be imported. Blinking of slot LEDs
+in the terminal works.
 
 .. URLs
 .. external links
