@@ -21,9 +21,11 @@ And then installing it with::
    $ pip install git+https://github.com/raul23/Darth-Vader-RPi#egg=Darth-Vader-RPi
 
 You will get ``SimulRPi`` from PyPI instead of the bleeding-edge version from
-github. Thus, you might get an old version of ``SimulRPi`` if you haven't yet
+github even though ``requirements.txt`` points to ``SimulRPi`` from github.
+
+Thus, you might get an old version of ``SimulRPi`` if you haven't yet
 published the latest version to PyPI. In the latter case, it is then preferable
-to uninstall all modules.
+to uninstall all modules if you want the ``SimulRPi`` version from github.
 
 ``darth_vader_rpi`` v0.1.0a0
 ============================
