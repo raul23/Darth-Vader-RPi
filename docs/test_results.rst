@@ -1,8 +1,8 @@
 =============================
 Test results for ``start_dv``
 =============================
-We will present how the script ``start_dv`` performed on various platforms and
-environments based on different releases of the package ``darth_vader_rpi``.
+We will present how the ``start_dv`` script performed on various platforms and
+environments based on different releases of the ``darth_vader_rpi`` package.
 
 **IMPORTANT:** when uninstalling only ``SimulRPi`` with:: 
 
@@ -50,16 +50,16 @@ Python 3.5
 * ``pynput 1.7.1``
 * ``SimulRPi 0.1.0a0``
 
-The command ``start_dv -s`` gives this error::
+The ``$ start_dv -s`` command gives this error::
 
    ERROR    UnicodeEncodeError: 'ascii' codec can't encode character '\U0001f6d1' in position 2: ordinal not in range(128)
 
 This error stems from my locale settings which are not set properly and it
-seems that Python 3.5 doesn't assume the correct locale *utf-8* by default.
+seems that Python 3.5 doesn't assume the correct *utf-8* encoding by default.
 Check `Display problems`_ on how to set the locale settings correctly.
 
-**Result:** once the locale settings are setup correctly, the command
-``start_dv -s`` runs without errors.
+**Result:** once the locale settings are setup correctly, the
+``$ start_dv -s`` command runs without errors.
 
 Python 3.6
 """"""""""
@@ -73,8 +73,8 @@ Python 3.6
 Same ``UnicodeEncodeError`` as in Python 3.5 Set my local settings correctly
 and the script runs fine.
 
-**Result:** once the locale settings are setup correctly, the command
-``start_dv -s`` runs without errors.
+**Result:** once the locale settings are setup correctly, the
+``$ start_dv -s`` command runs without errors.
 
 Python 3.7
 """"""""""
@@ -85,7 +85,7 @@ Python 3.7
 * ``pynput 1.7.1``
 * ``SimulRPi 0.1.0a0``
 
-**Result:** the command ``start_dv -s`` runs without errors.
+**Result:** the ``start_dv -s`` command runs without errors.
 
 Python 3.8
 """"""""""
@@ -96,7 +96,7 @@ Python 3.8
 * ``pynput 1.7.1``
 * ``SimulRPi 0.1.0a0``
 
-**Result:** the command ``start_dv -s`` runs without errors.
+**Result:** the ``$ start_dv -s`` command runs without errors.
 
 SSH from macOS to RPi (Python 3.5)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -113,11 +113,11 @@ As expected ``pynput`` could not be imported because it doesn't work on a
 headless setup (connecting to an RPi via SSH). However, the blinking of slot
 LEDs on the Darth Vader figurine or in the terminal works.
 
-**Result 1:** the command ``start_dv`` runs without errors. Blinking of slot
+**Result 1:** the ``$ start_dv`` command runs without errors. Blinking of slot
 LEDs on the Darth Vader figurine works and the push button turns on and off the
 lightsaber.
 
-**Result 2:** the command ``start_dv -s`` runs without errors, except a warning
+**Result 2:** the ``$ start_dv -s`` command runs without errors, except a warning
 about ``pynput`` not being able to be imported. Blinking of slot LEDs in the
 terminal works.
 
