@@ -13,7 +13,7 @@ And then installing it with::
    $ pip install git+https://github.com/raul23/Darth-Vader-RPi#egg=Darth-Vader-RPi
 
 You will get ``SimulRPi`` from PyPI instead of the bleeding-edge version from github. Thus,
-you might an old version of ``SimulRPi`` if you haven't yet published the latest version
+you might get an old version of ``SimulRPi`` if you haven't yet published the latest version
 to PyPI.
 
 .. contents::
