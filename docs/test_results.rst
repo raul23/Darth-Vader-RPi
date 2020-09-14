@@ -111,7 +111,7 @@ with ``RPi.GPIO``
 * ``dv_sounds 0.1.0a0``
 * ``pygame 1.9.3`` (already installed with the OS and **don't uninstall it!**)
 * ``pynput 1.7.1``
-* ``RPi.GPIO``
+* ``RPi.GPIO 0.6.3``
 
 **Result:** the ``$ start_dv`` command runs without errors.
 
@@ -152,6 +152,7 @@ SSH from macOS to RPi (Python 3.5.3)
 * ``dv_sounds 0.1.0a0``
 * ``pygame 1.9.3`` (already installed with the OS and **don't uninstall it!**)
 * ``pynput 1.7.1``
+* ``RPi.GPIO 0.6.3``
 * ``SimulRPi 0.1.0a0``
 
 As expected ``pynput`` could not be imported because it doesn't work on a
