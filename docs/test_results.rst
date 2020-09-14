@@ -56,7 +56,7 @@ The ``$ start_dv -s`` command gives this error::
    ERROR    UnicodeEncodeError: 'ascii' codec can't encode character '\U0001f6d1' in position 2: ordinal not in range(128)
 
 This error stems from the locale settings which are not set properly and it
-seems that Python 3.5 doesn't assume the correct *utf-8* encoding by default.
+seems that Python 3.5 doesn't assume the correct **utf-8** encoding by default.
 Check `Display problems`_ on how to set the locale settings correctly.
 
 **Result:** once the locale settings are setup correctly, the
