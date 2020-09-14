@@ -99,7 +99,7 @@ SSH from macOS to RPi (Python 3.5)
 **Dependencies installed on the RPi (Python 3.5):**
 
 * ``dv_sounds 0.1.0a0``
-* ``pygame 1.9.3``
+* ``pygame 1.9.3`` (already installed with the OS and **don't uninstall it!**)
 * ``pynput 1.7.1``
 * ``SimulRPi 0.1.0a0``
 
