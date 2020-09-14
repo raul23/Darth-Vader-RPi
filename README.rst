@@ -166,7 +166,7 @@ not defined in your *PATH*::
 
 Add the directory mentioned in the warning to your *PATH* by editing your
 configuration file (e.g. *.bashrc*). See this `article`_ on how to set *PATH*
-on Linux.
+on Linux and macOS.
 
 Usage
 =====
