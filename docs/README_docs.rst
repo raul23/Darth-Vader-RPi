@@ -47,7 +47,7 @@ control the following sounds and LEDs:
 #. The lightbsaber illumination (3 LEDs)
 
 His iconic breathing sound plays in the background indefinitely almost as soon
-as the RPi is run with the script `start_dv`_.
+as the RPi is run with the `start_dv`_ script.
 
 .. raw:: html
 
@@ -83,8 +83,8 @@ Here's how the various LEDs and push buttons are connected to the Raspberry Pi:
   testing purposes, the ``darth_vader_rpi`` package comes with two movie lines:
 
   * `"I am your father"`_
-  * `"Nooooo"`_: it is also used for the `closing sound`_ when the script
-    `start_dv`_ exits
+  * `"Nooooo"`_: it is also used for the `closing sound`_ when the
+    `start_dv`_ script exits
 
   However, you could `add more quotes`_ if you want.
 
@@ -102,8 +102,8 @@ Dependencies
 
     - **Ref:** `pygame`_
   * ``pynput``>=1.6.8: needed by ``SimulRPi`` for monitoring the keyboard when
-    simulating push buttons with keyboard keys, i.e. when running the script
-    `start_dv`_ in simulation mode
+    simulating push buttons with keyboard keys, i.e. when running the
+    `start_dv`_ script in simulation mode
 
     - **Ref:** `pynput`_
   * ``SimulRPi`` >=0.1.0a0: for partly faking `RPI.GPIO`_ and simulating I/O
@@ -159,7 +159,7 @@ Installation instructions
 
 **Warning message**
 
-If you get the warning message from *pip* that the script :mod:`start_dv` is
+If you get the warning message from *pip* that the :mod:`start_dv` script is
 not defined in your *PATH*::
 
       WARNING: The script start_dv is installed in '/home/pi/.local/bin' which is not on PATH.
@@ -173,7 +173,7 @@ Usage
 Script ``start_dv``
 -------------------
 Once the ``darth_vader_rpi`` package is `installed`_, you should have access to
-the script :mod:`start_dv` which turns on LEDs and plays sound effects on a
+the :mod:`start_dv` script which turns on LEDs and plays sound effects on a
 Raspberry Pi (RPi).
 
 Run the script on your **RPi** with `default values`_ for the GPIO channels
@@ -194,7 +194,7 @@ If you want to test the script on your **computer** (use the flag **-s**)::
 
 .. important::
 
-   In order to stop the script :mod:`start_dv` at any moment, press
+   In order to stop the :mod:`start_dv` script at any moment, press
    ``ctrl`` + ``c``.
 
 List of options
@@ -224,8 +224,8 @@ Edit a configuration file:
 
 Simulating on your computer
 ---------------------------
-If you don't have access to a Raspberry Pi (RPi) and want to try out the script
-:mod:`start_dv`, you can run the script with the flag **-s**. It will make use
+If you don't have access to a Raspberry Pi (RPi) and want to try out the
+:mod:`start_dv` script, you can run it with the **-s** flag. It will make use
 of the `SimulRPi`_ library to simulate LEDs and push buttons connected to an
 RPi by blinking red dots in the terminal and monitoring pressed keyboard keys::
 
@@ -244,8 +244,8 @@ connected to an RPi:
 Check `Change keymap`_ if you want to change this default key-to-channel
 mapping.
 
-Here is a video of what it looks like in a terminal when running the script
-:mod:`start_dv` on a computer instead of an RPi:
+Here is a video of what it looks like in a terminal when running the
+:mod:`start_dv` script on a computer instead of an RPi:
 
 .. raw:: html
 
