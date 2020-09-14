@@ -40,9 +40,10 @@ Python 3.5
 """"""""""
 **IMPORTANT:** Install ``pygame`` first with:: 
 
-   $ ``pip install pygame==2.0.0.dev10``
+   $ pip install pygame==2.0.0.dev10
 
 **Dependencies installed:**
+
 * ``pygame 2.0.0.dev10``
 * ``dv_sounds 0.1.0a0``
 * ``pygame 2.0.0.dev10``
@@ -99,6 +100,8 @@ Python 3.8
 
 SSH from macOS to RPi (Python 3.5)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**IMPORTANT:** Use ``pip3`` since ``pip`` points to Python 2.7
+
 **Dependencies installed on the RPi (Python 3.5):**
 
 * ``dv_sounds 0.1.0a0``
