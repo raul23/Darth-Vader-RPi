@@ -124,7 +124,7 @@ Couldn't display the default non-ASCII LED symbols even though the two
 solutions in `Display problems`_ were tried. Finally, ASCII LED symbols were
 used by setting ``default_led_symbols`` to ``"default_ascii"`` in the main
 configuration file as explained in the same article
-`Display problems <https://simulrpi.readthedocs.io/en/latest/display_problems.html#use-ascii-based-led-symbols>`__
+`Display problems (Use ASCII-based LED symbols)`_.
 
 **Result:** the ``$ start_dv -s`` command runs without errors.
 
@@ -160,3 +160,4 @@ LEDs on the Darth Vader figurine or in the terminal works.
 .. URLs
 .. external links
 .. _Display problems: https://simulrpi.readthedocs.io/en/latest/display_problems.html#non-ascii-characters-can-t-be-displayed
+.. _Display problems (Use ASCII-based LED symbols): https://simulrpi.readthedocs.io/en/latest/display_problems.html#use-ascii-based-led-symbols
