@@ -38,9 +38,12 @@ macOS
 
 Python 3.5
 """"""""""
-**Dependencies installed:**
+**IMPORTANT:** Install ``pygame`` first with:: 
 
-* **IMPORTANT:** Install ``pygame`` first with ``pip install pygame==2.0.0.dev10``
+   $ ``pip install pygame==2.0.0.dev10``
+
+**Dependencies installed:**
+* ``pygame 2.0.0.dev10``
 * ``dv_sounds 0.1.0a0``
 * ``pygame 2.0.0.dev10``
 * ``pynput 1.7.1``
