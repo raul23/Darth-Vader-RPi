@@ -139,13 +139,13 @@ Installation instructions
 `:warning:`
 
    Make sure that *pip* is working with the correct Python version. It might be
-   the case that *pip* is using Python 2.7. You can find what Python version
+   the case that *pip* is using Python 2.x You can find what Python version
    *pip* uses with the following::
 
       $ pip -V
 
    If *pip* is working with the wrong Python version, then try to use *pip3*
-   which works with Python 3.
+   which works with Python 3.x
 
 **Test installation**
 
