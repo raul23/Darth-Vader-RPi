@@ -43,7 +43,8 @@ def add_spaces_to_msg(msg, nb_spaces=60):
     msg : str
         Message to be updated with spaces at the end.
     nb_spaces : int
-        Number of spaces to add at the end of the message.
+        Number of spaces to add at the end of the message. The default value is
+        60.
 
     Returns
     -------

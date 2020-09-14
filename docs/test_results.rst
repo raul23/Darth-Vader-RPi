@@ -51,7 +51,7 @@ Python 3.5
 * ``pynput 1.7.1``
 * ``SimulRPi 0.1.0a0``
 
-The ``$ start_dv -s`` command gives this error::
+The ``start_dv -s`` command gives this error::
 
    ERROR    UnicodeEncodeError: 'ascii' codec can't encode character '\U0001f6d1' in position 2: ordinal not in range(128)
 
@@ -60,7 +60,7 @@ seems that Python 3.5 doesn't assume the correct **utf-8** encoding by default.
 Check `Display problems`_ on how to set the locale settings correctly.
 
 **Result:** once the locale settings are setup correctly, the
-``$ start_dv -s`` command runs without errors.
+``start_dv -s`` command runs without errors.
 
 Python 3.6
 """"""""""
@@ -75,7 +75,7 @@ Same ``UnicodeEncodeError`` as in Python 3.5 Thus, set the local settings
 correctly and the script runs fine.
 
 **Result:** once the locale settings are setup correctly, the
-``$ start_dv -s`` command runs without errors.
+``start_dv -s`` command runs without errors.
 
 Python 3.7
 """"""""""
@@ -86,7 +86,7 @@ Python 3.7
 * ``pynput 1.7.1``
 * ``SimulRPi 0.1.0a0``
 
-**Result:** the ``$ start_dv -s`` command runs without errors.
+**Result:** the ``start_dv -s`` command runs without errors.
 
 Python 3.8
 """"""""""
@@ -97,7 +97,7 @@ Python 3.8
 * ``pynput 1.7.1``
 * ``SimulRPi 0.1.0a0``
 
-**Result:** the ``$ start_dv -s`` command runs without errors.
+**Result:** the ``start_dv -s`` command runs without errors.
 
 Raspberry Pi (Python 3.5.3)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -113,7 +113,7 @@ with ``RPi.GPIO``
 * ``pynput 1.7.1``
 * ``RPi.GPIO 0.6.3``
 
-**Result:** the ``$ start_dv`` command runs without errors.
+**Result:** the ``start_dv`` command runs without errors.
 
 * Blinking of slot LEDs on the Darth Vader figurine works.
 * When pressed, the push buttons produce the different sounds (lightsaber
@@ -137,7 +137,7 @@ used by setting ``default_led_symbols`` to ``"default_ascii"`` in the main
 configuration file as explained in the same article
 `Display problems (Use ASCII-based LED symbols)`_.
 
-**Result:** the ``$ start_dv -s`` command runs without errors.
+**Result:** the ``start_dv -s`` command runs without errors.
 
 * Blinking of slot LEDs and illumination of the lightsaber in the terminal works.
 * When pressed, the valid keyboard keys produce the different sounds:
@@ -159,12 +159,12 @@ As expected ``pynput`` could not be imported because it doesn't work on a
 headless setup (connecting to an RPi via SSH). However, the blinking of slot
 LEDs on the Darth Vader figurine or in the terminal works.
 
-**Result 1:** the ``$ start_dv`` command runs without errors.
+**Result 1:** the ``start_dv`` command runs without errors.
 
 * Blinking of slot LEDs on the Darth Vader figurine works.
 * The push button turns on and off the lightsaber.
 
-**Result 2:** the ``$ start_dv -s`` command runs without errors
+**Result 2:** the ``start_dv -s`` command runs without errors
 
 * Warning about ``pynput`` not being able to be imported (expected)
 * Blinking of slot LEDs in the terminal works.

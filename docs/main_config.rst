@@ -1,6 +1,6 @@
 The main configuration file
 ===========================
-The default settings used by the script :mod:`start_dv` are found in the
+The default settings used by the :mod:`start_dv` script are found in the
 `main configuration file`_. It is referred to as *main* because there is
 another config file you could edit, the `logging configuration file`_.
 
@@ -43,7 +43,7 @@ In what follows, you wil find an explanation for each setting found in the
 Three audio channels are used for this project:
 
    - **channel 0**: used for Darth Vader's breathing sound which plays in the
-     background almost as soon as the script :mod:`start_dv` runs. Its volume
+     background almost as soon as the :mod:`start_dv` script runs. Its volume
      is set by default at 0.2 since we don't want to overwhelm the other sounds
      playing in the other audio channels
    - **channel 1**: used for playing the *Imperial March* song and all Darth
@@ -127,6 +127,11 @@ GPIO channels for the following I/O devices are defined:
    - **Lightsaber LEDs**: when the lightsaber button is pressed, these LEDs are
      turned ON/OFF
 
+     **NOTE:** on the Darth Vader's figurine, three LEDs are used to turn on the
+     lightsaber as explained in the `Connection diagram`_. However, when
+     simulating the Raspberry Pi with ``SimulRPi``, only one LED is shown in
+     the terminal
+
 ``gpio_channels`` lists GPIO channel objects with the following properties:
 
    - ``channel_id``: this property should **not be modified** because it is
@@ -158,7 +163,7 @@ GPIO channels for the following I/O devices are defined:
       .. code-block:: python
          :emphasize-lines: 5-8
          :caption: **Example:** changing the default LED symbols for the
-                   lightsaber LED
+                   lightsaber LEDs
 
           {
             "channel_id": "lightsaber_led",
@@ -193,7 +198,7 @@ Thus, in this example, you have a push button connected to the GPIO pin 23
 (based on the BCM mode), controlling the lightsaber by turning it ON/OFF and
 producing the lightsaber sound effects (drawing, retraction, and hum sounds).
 Also, the keyboard key ``cmd`` simulates the lightsaber push button when
-running the script :mod:`start_dv` on your computer.
+running the :mod:`start_dv` script on your computer.
 
 Finally, the ligthsaber LEDs are connected to GPIO pin 22 (BCM) and are turned
 ON/OFF when the corresponding push button (or ``cmd`` key) is pressed.
@@ -229,7 +234,7 @@ As per the `RPIO.GPIO documentation`_:
 ``quiet``
 ^^^^^^^^^
 The setting `quiet`_ in the configuration file is a flag (set to *false* by
-default) that allows you to run the script :mod:`start_dv` without printing
+default) that allows you to run the :mod:`start_dv` script without printing
 anything on the terminal, not even the LED symbols when running the simulation
 nor the exceptions are printed.
 
@@ -249,8 +254,8 @@ buttons or keyboard.
      "mode": "BCM"
    }
 
-This flag can also be set directly through the script's command-line option
-*-q*::
+This flag can also be set directly through the script's *-q* command-line
+option::
 
    $ start_dv -q
 
@@ -318,22 +323,22 @@ following properties:
 ``simulation``
 ^^^^^^^^^^^^^^
 The setting `simulation`_ in the configuration file is a flag (set to *false* by
-default) that allows you to run the script :mod:`start_dv` on your computer,
+default) that allows you to run the :mod:`start_dv` script on your computer,
 instead of a Raspberry Pi (RPi).
 
-The module `SimulRPi.GPIO`_ is used in order to partly fake `RPi.GPIO`_ and
+The `SimulRPi.GPIO`_ module is used in order to partly fake `RPi.GPIO`_ and
 simulate I/O devices connected to an RPi such as LEDs and push buttons by
 displaying LED symbols in the terminal and monitoring the keyboard for any
 pressed key.
 
-This flag can also be set directly through the script's command-line option
-*-s*::
+This flag can also be set directly through the script's *-s* command-line
+option::
 
    $ start_dv -s
 
 .. note::
 
-   :mod:`SimulRPi.GPIO` makes use of the package `pynput`_ to monitor the keyboard
+   :mod:`SimulRPi.GPIO` makes use of the `pynput`_ package to monitor the keyboard
    for any pressed key.
 
 .. seealso::
@@ -499,7 +504,7 @@ properties:
 The setting `sound_effects`_ in the configuration file defines the following
 sounds:
 
-   - **Breathing sound**: almost as soon as the script :mod:`start_dv` runs,
+   - **Breathing sound**: almost as soon as the :mod:`start_dv` script runs,
      Darth Vader's breathing sound starts playing in the background until the
      script ends
    - **Lightsaber drawing sound**: when the lightsaber button is pressed, the
@@ -572,8 +577,8 @@ sounds:
 The setting `sounds_directory`_ in the configuration file defines the directory
 where all the audio files are saved.
 
-By default, ``sounds_directory`` points to the path where the package
-`dv_sounds`_ is installed. `dv_sounds`_ is used to download the various sounds
+By default, ``sounds_directory`` points to the path where the `dv_sounds`_
+package is installed. `dv_sounds`_ is used to download the various sounds
 (e.g. sound efffects) needed for the project.
 
 All the audio filenames found in the configuration file are defined relative to
@@ -606,7 +611,7 @@ the directory ``sounds_directory``.
 ``verbose``
 ^^^^^^^^^^^
 The setting `verbose`_ in the configuration file is a flag (set to *false* by
-default) that allows you to run the script :mod:`start_dv` by logging to the
+default) that allows you to run the :mod:`start_dv` script by logging to the
 terminal all messages (logging level is set to DEBUG when ``verbose`` is
 *true*). Also, when there is an exception, a traceback is printed so you can
 pinpoint exactly where the error occurred in the code which is not the case
@@ -629,8 +634,8 @@ message).
    AttributeError: 'Namespace' object has no attribute 'edits'
    ERROR    Program exited with 1
 
-This flag can also be set directly through the script's command-line option
-*-v*::
+This flag can also be set directly through the script's *-v* command-line
+option::
 
    $ start_dv -v
 
@@ -681,5 +686,6 @@ This flag can also be set directly through the script's command-line option
 .. _Change paths to audio files: change_default_settings.html#change-paths-to-audio-files-label
 .. _Change slot LEDs sequence: change_default_settings.html#change-slot-leds-sequence-label
 .. _Change LED symbols: change_default_settings.html#change-led-symbols-label
+.. _Connection diagram: README_docs.html#connection-diagram
 .. _Mute breathing sound: change_default_settings.html#mute-breathing-sound-label
 .. _Script's list of options: README_docs.html#list-of-options

@@ -47,7 +47,8 @@ def turn_on_led(channel):
 
 def turn_on_slot_leds(top_led, middle_led, bottom_led, leds_sequence="action",
                       delay_between_steps=0.5, time_per_step=0.5):
-    """Turn on/off the three slot LEDs in a precise sequence.
+    """A thread's **target function** that turn on/off the three slot LEDs in a
+    precise sequence.
 
     These three LEDs are associated with Darth Vader's three slots located on
     his chest control box. These LEDs are labeled as '`top`', '`middle`', and

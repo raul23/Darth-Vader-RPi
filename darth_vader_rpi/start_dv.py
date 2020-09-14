@@ -16,8 +16,8 @@ as the RPi is run with the script.
 The script allows you also to edit the `main config file`_ to setup among other
 things the RPi's GPIO pins connected to LEDs and push buttons.
 
-By default the module `RPi.GPIO`_ is used, but if the simulation option (`-s`)
-is used with the script :mod:`start_dv`, then the module `SimulRPi.GPIO`_ will
+By default the `RPi.GPIO`_ module is used, but if the simulation option (`-s`)
+is used with the :mod:`start_dv` script, then the `SimulRPi.GPIO`_ module will
 be used instead which simulates `RPi.GPIO`_ for those that don't have an RPi to
 test on.
 
@@ -28,8 +28,8 @@ Usage
 
 .. highlight:: console
 
-Once the package ``darth_vader_rpi`` is `installed`_, you should have access to
-the script :mod:`start_dv`:
+Once the ``darth_vader_rpi`` package is `installed`_, you should have access to
+the :mod:`start_dv` script:
 
     ``start_dv [-h] [--version] [-q] [-s] [-v] [-e {log,main}] [-a APP]``
 
@@ -69,7 +69,7 @@ More information is available at:
 
     `RPi.GPIO`_ provides a class to control the GPIO pins on a Raspberry Pi.
 
-    If the `simulation` option (`-s`) is used with the script :mod:`start_dv`,
+    If the `simulation` option (`-s`) is used with the :mod:`start_dv` script,
     the `SimulRPi.GPIO`_ module will be used instead.
 
 """

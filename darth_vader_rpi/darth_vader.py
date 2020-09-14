@@ -92,7 +92,8 @@ class ExceptionThread(threading.Thread):
         target argument, if any, with sequential and keyword arguments taken
         from the args and kwargs arguments, respectively.
 
-        It also saves and logs any error that the target function might raise.
+        **It also saves and logs any error that the target function might
+        raise.**
 
         """
         try:
@@ -111,14 +112,14 @@ class DarthVader:
     """Class for activating a Darth Vader figurine by turning on LEDs on his
     suit and playing sounds, all done via a Raspberry Pi (RPi).
 
-    The `main config file`_ is used to setup the script :mod:`start_dv`, such
+    The `main config file`_ is used to setup the :mod:`start_dv` script, such
     as the GPIO pins and the sound files.
 
     Parameters
     ----------
     main_cfg : dict
-        Dictionary containing the configuration data to setup the script
-        :mod:`start_dv`, such as the GPIO pins and the sound files. See
+        Dictionary containing the configuration data to setup the
+        :mod:`start_dv` script, such as the GPIO pins and the sound files. See
         `main config file`_ for a detailed look into its content.
 
     Attributes

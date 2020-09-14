@@ -19,7 +19,7 @@ Important tips
 
   where *APP_NAME* is the name of a text editor, e.g. TextEditor
 
-- To end the script :mod:`start_dv`, press ``ctrl`` + ``c``
+- To end the :mod:`start_dv` script, press ``ctrl`` + ``c``
 - When adding audio files, don't use *mp3* as the file format. Instead, use
   *ogg* (compressed) or *wav* (uncompressed). The reason is that *mp3* won't
   work well with pygame's simultaneous playback capability.
@@ -116,7 +116,7 @@ What each channel controls:
 
 Change closing sound
 ====================
-When the script :mod:`start_dv` is exiting after the user presses
+When the :mod:`start_dv` script is exiting after the user presses
 ``ctrl`` + ``c``, a sound is produced. By default, no closing sound is produced
 and if it were to play, it would be the `"Nooooo"`_ quote.
 
@@ -150,9 +150,9 @@ object. These are the properties you can modify for this object:
 
 .. note::
 
-   By default, the closing sound is not played at the end of the script
-   :mod:`start_dv`. Set its property ``mute`` to *true* in order to play the
-   closing sound when the script exits.
+   By default, the closing sound is not played at the end of the
+   :mod:`start_dv` script. Set its property ``mute`` to *true* in order to play
+   the closing sound when the script exits.
 
 .. seealso::
 
@@ -259,7 +259,7 @@ The names of keyboard keys that you can use are those specified in the
 .. note::
 
    On mac, I recommend using the following keyboard keys because they don't
-   require running the script :mod:`start_dv` with ``sudo``: *alt*, *alt_r*,
+   require running the :mod:`start_dv` script with ``sudo``: *alt*, *alt_r*,
    *cmd*, *cmd_r*, *ctrl*, *ctrl_r*, *media_play_pause*,
    *media_volume_down*, *media_volume_mute*, *media_volume_up*, *shift*,
    and *shift_r*.
@@ -327,7 +327,7 @@ in ``gpio_channels``.
 .. important::
 
    If you are having problems displaying the default LED symbols when running
-   the script :mod:`start_dv`, such as this error:
+   the :mod:`start_dv` script, such as this error:
 
    .. code-block:: console
 
@@ -385,7 +385,7 @@ filename for each audio file is defined with respect to the directory
 
 Change slot LEDs sequence
 =========================
-The setting `slot_leds`_ in the configuration file control the blinking
+The setting `slot_leds`_ in the configuration file controls the blinking
 pattern of the three slot LEDs in Darth Vader's control box.
 
 To change the default sequence, open the configuration file::
@@ -445,7 +445,7 @@ pressing ``ctrl`` + ``c``.
 Mute breathing sound
 ====================
 To mute Darth Vader's breathing sound which plays almost as soon as the
-script :mod:`start_dv` runs, edit the setting `sound_effects`_ in the
+:mod:`start_dv` script runs, edit the setting `sound_effects`_ in the
 configuration file which can be opened with::
 
    $ start_dv -e cfg
@@ -474,20 +474,20 @@ Set the *breathing_sound* object's ``mute`` to *false*.
 
 .. _run-script-as-quiet-or-verbose-label:
 
-Run script as quiet or verbose
-==============================
-To run the script :mod:`start_dv` as quiet or verbose, open the configuration
+Run the script as quiet or verbose
+==================================
+To run the :mod:`start_dv` script as quiet or verbose, open the configuration
 file with::
 
    $ start_dv -e cfg
 
 And set the setting `quiet`_ or `verbose`_ to *true*.
 
-When running the script :mod:`start_dv` as ``verbose``, the logging level is
+When running the :mod:`start_dv` script as ``verbose``, the logging level is
 set to *DEBUG*. Thus, all messages will be displayed and when there is an
 exception, the traceback will be shown.
 
-On the other hand, when running the script :mod:`start_dv` as ``quiet``,
+On the other hand, when running the :mod:`start_dv` script as ``quiet``,
 nothing will be printed to the terminal, not even error messages. However, you
 will still be able to hear sounds and interact with the push buttons or
 keyboard.
