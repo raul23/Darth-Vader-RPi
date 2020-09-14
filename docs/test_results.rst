@@ -10,8 +10,8 @@ environments based on different releases of the ``darth_vader_rpi`` package.
 
 Important tips
 ==============
-Tip: careful when uninstalling only ``SimulRPi``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Tip: careful when uninstalling ``SimulRPi``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 When uninstalling only ``SimulRPi`` with::
 
    $ pip uninstall simulrpi
