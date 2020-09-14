@@ -85,7 +85,7 @@ Python 3.7
 * ``pynput 1.7.1``
 * ``SimulRPi 0.1.0a0``
 
-**Result:** the ``start_dv -s`` command runs without errors.
+**Result:** the ``$ start_dv -s`` command runs without errors.
 
 Python 3.8
 """"""""""
