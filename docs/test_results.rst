@@ -27,6 +27,11 @@ Thus, you might get an old version of ``SimulRPi`` if you haven't yet
 published the latest version to PyPI. In the latter case, it is then preferable
 to uninstall all modules if you want the ``SimulRPi`` version from github.
 
+Tip: use ``pip3`` when working with RPi
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+When doing tests on the RPi's Debian OS, use ``pip3`` because ``pip`` points to
+Python 2.7
+
 ``darth_vader_rpi`` v0.1.0a0
 ============================
 
