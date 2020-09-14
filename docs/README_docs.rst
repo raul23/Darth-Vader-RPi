@@ -22,13 +22,13 @@ lightsaber, and by playing sounds such as some of his famous quotes.
 .. important::
 
    If you don't have an RPi, don't worry. You can still
-   `test the script on your own computer`_ because the package
-   ``darth_vader_rpi`` uses the library `SimulRPi`_ to simulate I/O devices
-   connected to an RPi such as LEDs and push buttons by blinking red dots in
-   the terminal and playing sounds when a keyboard key is pressed. Almost like
-   testing with a real RPi!
+   `test the script on your own computer`_ because the
+   ``darth_vader_rpi`` package uses the `SimulRPi`_ library to simulate I/O
+   devices connected to an RPi such as LEDs and push buttons by blinking red
+   dots in the terminal and playing sounds when a keyboard key is pressed.
+   Almost like testing with a real RPi!
 
-   **Disclaimer:** I also wrote the library `SimulRPi`_
+   **Disclaimer:** I also wrote the `SimulRPi`_ library
 
 .. contents:: **Table of contents**
    :depth: 3
@@ -80,7 +80,7 @@ Here's how the various LEDs and push buttons are connected to the Raspberry Pi:
   the *Quotes button* is playing audio since they use different audio channels.
 * The *Song button* plays the `Imperial March song by Jacob Townsend`_
 * The *Quotes button* plays famous Darth Vader quotes when pressed. For
-  testing purposes, the package ``darth_vader_rpi`` comes with two movie lines:
+  testing purposes, the ``darth_vader_rpi`` package comes with two movie lines:
 
   * `"I am your father"`_
   * `"Nooooo"`_: it is also used for the `closing sound`_ when the script
@@ -172,7 +172,7 @@ Usage
 =====
 Script ``start_dv``
 -------------------
-Once the package ``darth_vader_rpi`` is `installed`_, you should have access to
+Once the ``darth_vader_rpi`` package is `installed`_, you should have access to
 the script :mod:`start_dv` which turns on LEDs and plays sound effects on a
 Raspberry Pi (RPi).
 
@@ -226,7 +226,7 @@ Simulating on your computer
 ---------------------------
 If you don't have access to a Raspberry Pi (RPi) and want to try out the script
 :mod:`start_dv`, you can run the script with the flag **-s**. It will make use
-of the library `SimulRPi`_ to simulate LEDs and push buttons connected to an
+of the `SimulRPi`_ library to simulate LEDs and push buttons connected to an
 RPi by blinking red dots in the terminal and monitoring pressed keyboard keys::
 
    $ start_dv -s
@@ -270,7 +270,7 @@ want to uninstall.
 
 .. note::
 
-   When uninstalling the package ``darth_vader_rpi``, you might be informed
+   When uninstalling the ``darth_vader_rpi`` package, you might be informed
    that the configuration files *logging_cfg.json* and *main_cfg.json* won't be
    removed by *pip*. You can remove those files manually by noting their paths
    returned by *pip*. Or you can leave them so your saved settings can be
@@ -327,7 +327,7 @@ References
 * `pygame`_: a package used for playing sounds
 * `RPI.GPIO`_: a module to control RPi GPIO channels
 * `SimulRPi`_: a package that partly fakes ``RPi.GPIO`` and simulates some I/O
-  devices on a Raspberry Pi. It makes use of the library `pynput`_ for
+  devices on a Raspberry Pi. It makes use of the `pynput`_ library for
   monitoring the keyboard for any pressed key.
 
 .. URLs
