@@ -4,7 +4,7 @@ Test results for ``start_dv``
 We will present how the ``start_dv`` script performed on various platforms and
 environments based on different releases of the ``darth_vader_rpi`` package.
 
-.. contents:: **Contents**
+.. contents:: **Table of contents**
    :depth: 3
    :local:
 
