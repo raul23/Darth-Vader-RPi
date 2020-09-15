@@ -358,11 +358,11 @@ References
 .. _default values: https://github.com/raul23/archive/blob/master/SimulRPi/v0.1.0a0/default_main_cfg.json#L1
 
 .. 1. External links (darth-vader-rpi.readthedocs.io)
-.. _add more quotes: https://darth-vader-rpi.readthedocs.io/en/0.1.0a0/change_default_settings.html#add-darth-vader-quotes-label
-.. _closing sound: https://darth-vader-rpi.readthedocs.io/en/0.1.0a0/change_default_settings.html#change-closing-sound-label
-.. _Change default settings: https://darth-vader-rpi.readthedocs.io/en/0.1.0a0/change_default_settings.html
-.. _Change keymap: https://darth-vader-rpi.readthedocs.io/en/0.1.0a0/change_default_settings.html#change-keymap-label
-.. _Darth-Vader-RPi Changelog: https://darth-vader-rpi.readthedocs.io/en/0.1.0a0/changelog.html
+.. _add more quotes: https://darth-vader-rpi.readthedocs.io/en/v0.1.0a0/change_default_settings.html#add-darth-vader-quotes-label
+.. _closing sound: https://darth-vader-rpi.readthedocs.io/en/v0.1.0a0/change_default_settings.html#change-closing-sound-label
+.. _Change default settings: https://darth-vader-rpi.readthedocs.io/en/v0.1.0a0/change_default_settings.html
+.. _Change keymap: https://darth-vader-rpi.readthedocs.io/en/v0.1.0a0/change_default_settings.html#change-keymap-label
+.. _Darth-Vader-RPi Changelog: https://darth-vader-rpi.readthedocs.io/en/v0.1.0a0/changelog.html
 
 .. 2. External links (others)
 .. _article: https://docs.oracle.com/cd/E19062-01/sun.mgmt.ctr36/819-5418/gaznb/index.html
