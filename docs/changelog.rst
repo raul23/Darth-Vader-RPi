@@ -18,7 +18,7 @@ Version 0.1.0a0
     * On Python 3.5 and 3.6, I had to set my locale settings to
       ``LANG="en_US.UTF-8"`` to make the ``start_dv -s`` command work. Thus,
       it was not an error with the script but with how my system environment
-      was setup. Python 3.5 and 3.6 don't assume an **UTF-8** based local
+      was setup. Python 3.5 and 3.6 don't assume **UTF-8** based local
       settings like the other more recent Python versions.
 
   * Raspberry Pi (Python 3.5):
