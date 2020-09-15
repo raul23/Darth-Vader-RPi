@@ -130,7 +130,8 @@ Installation instructions
 
    $ pip install --upgrade pip
 
-2. Install the package ``darth_vader_rpi`` (latest release) with *pip*::
+2. Install the package ``darth_vader_rpi`` (released version **0.1.0a0**) with
+   *pip*::
 
    $ pip install git+https://github.com/raul23/Darth-Vader-RPi@v0.1.0a0#egg=Darth-Vader-RPi
 
