@@ -130,9 +130,9 @@ Installation instructions
 
    $ pip install --upgrade pip
 
-2. Install the package ``darth_vader_rpi`` with *pip*::
+2. Install the package ``darth_vader_rpi`` (latest release) with *pip*::
 
-   $ pip install git+https://github.com/raul23/Darth-Vader-RPi#egg=Darth-Vader-RPi
+   $ pip install pip install git+https://github.com/raul23/Darth-Vader-RPi@v0.1.0a0#egg=Darth-Vader-RPi
 
    It will install the dependencies if they are not already found in your system.
 
@@ -147,15 +147,14 @@ Installation instructions
    If *pip* is working with the wrong Python version, then try to use *pip3*
    which works with Python 3.x
 
-**Test installation**
+`:information_source:`
 
-1. Test your installation by importing ``darth_vader_rpi`` and printing its version::
+   To install the **bleeding-edge version** of the ``darth_vader_rpi`` package::
 
-   $ python -c "import darth_vader_rpi; print(darth_vader_rpi.__version__)"
+      $ pip install git+https://github.com/raul23/Darth-Vader-RPi#egg=Darth-Vader-RPi
 
-2. You can also test that the dependencies were installed correctly::
-
-   $ python -c "import dv_sounds, pygame, pynput, SimulRPi"
+   However, this latest version is not as stable as the released version but you
+   get the latest features being implemented.
 
 **Warning message**
 
@@ -167,6 +166,16 @@ not defined in your *PATH*::
 Add the directory mentioned in the warning to your *PATH* by editing your
 configuration file (e.g. *.bashrc*). See this `article`_ on how to set *PATH*
 on Linux and macOS.
+
+**Test installation**
+
+1. Test your installation by importing ``darth_vader_rpi`` and printing its version::
+
+   $ python -c "import darth_vader_rpi; print(darth_vader_rpi.__version__)"
+
+2. You can also test that the dependencies were installed correctly::
+
+   $ python -c "import dv_sounds, pygame, pynput, SimulRPi"
 
 Usage
 =====
