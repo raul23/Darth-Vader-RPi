@@ -4,7 +4,7 @@ Changelog
 
 Version 0.1.0a0
 ===============
-**September 14, 2020**
+**September 15, 2020**
 
 * Initial release
 * Tested the :mod:`start_dv` script on various platforms and environments.
