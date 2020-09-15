@@ -19,6 +19,15 @@ README
 activating a Darth Vader action figure by turning on LEDs on his suit and
 lightsaber, and by playing sounds such as some of his famous quotes.
 
+.. raw:: html
+
+   <div align="center">
+   <a href="https://www.youtube.com/embed/P631S1k1h_0">
+   <img src="https://raw.githubusercontent.com/raul23/images/master/Darth-Vader-RPi/darth_vader_lightsaber_2x_speed_smaller_version.gif"/>
+   </a>
+   <p><b>Turning on/off the lightsaber</b></p>
+   </div>
+
 `:star:`
 
    If you don't have an RPi, don't worry. You can still
