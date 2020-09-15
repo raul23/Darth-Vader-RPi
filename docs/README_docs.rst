@@ -132,7 +132,7 @@ Installation instructions
 
 2. Install the package ``darth_vader_rpi`` (latest release) with *pip*::
 
-   $ pip install pip install git+https://github.com/raul23/Darth-Vader-RPi@v0.1.0a0#egg=Darth-Vader-RPi
+   $ pip install git+https://github.com/raul23/Darth-Vader-RPi@v0.1.0a0#egg=Darth-Vader-RPi
 
    It will install the dependencies if they are not already found in your system.
 
