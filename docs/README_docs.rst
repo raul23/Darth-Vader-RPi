@@ -276,7 +276,7 @@ To uninstall the package ``darth_vader_rpi`` and its dependencies::
 
    $ pip uninstall darth_vader_rpi dv_sounds pygame pynput simulrpi
 
-You can remove from the previous command-line those dependencies that you don't
+You can exclude from the previous command-line those dependencies that you don't
 want to uninstall.
 
 .. note::
