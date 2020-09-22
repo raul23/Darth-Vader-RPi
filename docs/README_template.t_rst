@@ -97,7 +97,7 @@ Here's how the various LEDs and push buttons are connected to the Raspberry Pi:
    <img src="https://raw.githubusercontent.com/raul23/images/master/Darth-Vader-RPi/schematics.png"/>
    </div>
 
-* The lightsaber is illuminated by 3 LEDs connected in parallel
+* The lightsaber is illuminated by 3 LEDs connected in parallel.
 * The *Top*, *Middle*, and *Bottom* LEDs illuminate the slots in Darth Vader's
   chest control box. They blink in a specific sequence
   `as specified in the configuration file`_.
@@ -108,12 +108,12 @@ Here's how the various LEDs and push buttons are connected to the Raspberry Pi:
 
   **NOTE:** the *Lightsaber button* can be pressed while the *Song button* or
   the *Quotes button* is playing audio since they use different audio channels.
-* The *Song button* plays the `Imperial March song by Jacob Townsend`_
+* The *Song button* plays the `Imperial March song by Jacob Townsend`_.
 * The *Quotes button* plays famous Darth Vader quotes when pressed. For
   testing purposes, the ``darth_vader_rpi`` package comes with two movie lines:
 
-  * `"I am your father"`_
-  * `"Nooooo"`_: it is also used for the `closing sound`_ when the
+  * `"I am your father" (YouTube)`_
+  * `"Nooooo" (YouTube)`_: it is also used for the `closing sound`_ when the
 <host name="github">
     ``start_dv`` script exits
 </host>
@@ -407,10 +407,12 @@ want to uninstall.
 
 Credits
 =======
+Sounds
+------
 - **Darth Vader quotes:**
 
-  - `"I am your father"`_
-  - `"Nooooo"`_
+  - `"I am your father" (YouTube)`_
+  - `"Nooooo" (YouTube)`_
 - **Music:**
 
   - `Imperial March song by Jacob Townsend`_ is licensed under a
@@ -420,12 +422,20 @@ Credits
     first 7 seconds (no sound) and the last 2 minutes and 24 seconds.
 - **Sound effects:**
 
-  - `Darth Vader breathing sound`_
-  - `Darth Vader's lightsaber sound effect`_
-  - `Darth Vader's lightsaber retraction sound effect`_
+  - `Darth Vader breathing sound (YouTube)`_
+  - `Darth Vader's lightsaber sound effect (YouTube)`_
+  - `Darth Vader's lightsaber retraction sound effect (YouTube)`_
+
+Others
+------
+- **Schematics:**
+
+  - `Scheme-it`_ from *Digi-Key Electronics* is an online schematic and
+    diagramming tool that allows anyone to design and share electronic circuit
+    diagrams.
 - **Slot LEDs sequences:**
 
-  - `Empire Strikes Back chest box light sequence`_
+  - `Empire Strikes Back chest box light sequence (YouTube)`_
 
 Resources
 =========
@@ -441,9 +451,9 @@ Resources
 References
 ==========
 * `dv_sounds`_: a package for downloading the various sounds needed for the
-  project, e.g. ligthsaber sound effects
-* `pygame`_: a package used for playing sounds
-* `RPI.GPIO`_: a module to control RPi GPIO channels
+  project, e.g. ligthsaber sound effects.
+* `pygame`_: a package used for playing sounds.
+* `RPI.GPIO`_: a module to control RPi GPIO channels.
 * `SimulRPi`_: a package that partly fakes ``RPi.GPIO`` and simulates some I/O
   devices on a Raspberry Pi. It makes use of the `pynput`_ library for
   monitoring the keyboard for any pressed key.
@@ -480,15 +490,16 @@ References
 <host name="readthedocs">
 .. _Darth-Vader-RPi GitHub: https://github.com/raul23/Darth-Vader-RPi
 </host>
-.. _"I am your father": https://www.youtube.com/watch?v=xuJEYdOFEP4
+.. _"I am your father" (YouTube): https://www.youtube.com/watch?v=xuJEYdOFEP4
 .. _Creative Commons (CC BY-NC-SA 3.0) License: http://creativecommons.org/licenses/by-nc-sa/3.0/
-.. _Darth Vader breathing sound: https://www.youtube.com/watch?v=d28NrjMPERs
-.. _Darth Vader's lightsaber retraction sound effect: https://www.youtube.com/watch?v=m6buyGJF46k
-.. _Darth Vader's lightsaber sound effect: https://www.youtube.com/watch?v=bord-573NWY
-.. _Empire Strikes Back chest box light sequence: https://youtu.be/E2J_xl2MbGU?t=333
+.. _Darth Vader breathing sound (YouTube): https://www.youtube.com/watch?v=d28NrjMPERs
+.. _Darth Vader's lightsaber retraction sound effect (YouTube): https://www.youtube.com/watch?v=m6buyGJF46k
+.. _Darth Vader's lightsaber sound effect (YouTube): https://www.youtube.com/watch?v=bord-573NWY
+.. _Empire Strikes Back chest box light sequence (YouTube): https://youtu.be/E2J_xl2MbGU?t=333
 .. _Imperial March song by Jacob Townsend: https://soundcloud.com/jacobtownsend1/imperial-march
-.. _"Nooooo": https://www.youtube.com/watch?v=ZscVhFvD6iE
+.. _"Nooooo" (YouTube): https://www.youtube.com/watch?v=ZscVhFvD6iE
 .. _RPi.GPIO: https://pypi.org/project/RPi.GPIO/
+.. _Scheme-it: https://www.digikey.com/en/resources/design-tools/schemeit
 .. _SimulRPi: https://pypi.org/project/SimulRPi/
 <host name="readthedocs">
 
