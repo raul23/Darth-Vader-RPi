@@ -327,7 +327,7 @@ Sounds
 
 Others
 ------
-- **Schematics:**
+- **Schematic:**
 
   - `Scheme-it`_ from *Digi-Key Electronics* is an online schematic and
     diagramming tool that allows anyone to design and share electronic circuit
