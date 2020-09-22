@@ -122,7 +122,7 @@ Dependencies
 
 Installation instructions
 =========================
-.. TODO: IMPORTANT modify SimulRPi in requirements.txt to point to pypi
+.. TODO: IMPORTANT update released version in step 2
 .. highlight:: none
 
 1. Make sure to update pip::
@@ -149,7 +149,8 @@ Installation instructions
 
 .. note::
 
-   To install the **bleeding-edge version** of the ``darth_vader_rpi`` package::
+   To install the **bleeding-edge version** (|version|) of the
+   ``darth_vader_rpi`` package::
 
       $ pip install git+https://github.com/raul23/Darth-Vader-RPi#egg=Darth-Vader-RPi
 

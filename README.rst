@@ -131,7 +131,7 @@ Dependencies
 
 Installation instructions
 =========================
-.. TODO: IMPORTANT modify SimulRPi in requirements.txt to point to pypi
+.. TODO: IMPORTANT update released version in step 2
 .. highlight:: none
 
 1. Make sure to update pip::
