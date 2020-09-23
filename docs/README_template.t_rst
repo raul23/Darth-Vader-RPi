@@ -457,8 +457,9 @@ Resources
 References
 ==========
 * `dv_sounds`_: a package for downloading the various sounds needed for the
-  project, e.g. ligthsaber sound effects.
-* `pygame`_: a package used for playing sounds.
+  ``Darth-Vader-RPi`` project, e.g. ligthsaber sound effects.
+* `pygame`_: a Python library to write multimedia software, such as games,
+  built on top of the SDL library.
 * `RPI.GPIO`_: a module to control RPi GPIO channels.
 * `SimulRPi`_: a package that partly fakes ``RPi.GPIO`` and simulates some I/O
   devices on a Raspberry Pi. It makes use of the `pynput`_ library for
