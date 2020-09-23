@@ -175,7 +175,15 @@ Installation instructions
 
    $ pip install --upgrade pip
 
-2. Install the package ``darth_vader_rpi`` (released version **0.1.0a0**) with
+2. It is highly recommended to install ``darth_vader_rpi`` in a virtual environment using
+<host name="github, pypi">
+   for example `venv`_ or `conda`_.
+</host>
+<host name="readthedocs">
+   for example :mod:`venv` or `conda`_.
+</host>
+
+   Install the package ``darth_vader_rpi`` (released version **0.1.0a0**) with
    *pip*::
 
    $ pip install git+https://github.com/raul23/Darth-Vader-RPi@v0.1.0a0#egg=Darth-Vader-RPi
@@ -487,11 +495,13 @@ References
 .. 1. External links
 </host>
 .. _article: https://docs.oracle.com/cd/E19062-01/sun.mgmt.ctr36/819-5418/gaznb/index.html
+.. _conda: https://docs.conda.io/en/latest/
 .. _dv_sounds: https://github.com/raul23/DV-Sounds
 .. _pygame: https://www.pygame.org/
 .. _pynput: https://pynput.readthedocs.io
 .. _this one from Hasbro: https://amzn.to/3hIw0ou
 <host name="github">
+.. _venv: https://docs.python.org/3/library/venv.html#module-venv
 .. _Darth-Vader-RPi documentation: http://darth-vader-rpi.rtfd.io/
 </host>
 <host name="readthedocs">
