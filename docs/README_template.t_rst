@@ -171,19 +171,19 @@ Installation instructions
 .. TODO: IMPORTANT update released version in step 2
 .. highlight:: none
 
-1. Make sure to update pip::
+1. It is highly recommended to install ``darth_vader_rpi`` in a virtual
+<host name="github, pypi">
+   environment using for example `venv`_ or `conda`_.
+</host>
+<host name="readthedocs">
+   environment using for example :mod:`venv` or `conda`_.
+</host>
+
+2. Make sure to update pip::
 
    $ pip install --upgrade pip
 
-2. It is highly recommended to install ``darth_vader_rpi`` in a virtual environment using
-<host name="github, pypi">
-   for example `venv`_ or `conda`_.
-</host>
-<host name="readthedocs">
-   for example :mod:`venv` or `conda`_.
-</host>
-
-   Install the package ``darth_vader_rpi`` (released version **0.1.0a0**) with
+3. Install the package ``darth_vader_rpi`` (released version **0.1.0a0**) with
    *pip*::
 
    $ pip install git+https://github.com/raul23/Darth-Vader-RPi@v0.1.0a0#egg=Darth-Vader-RPi
