@@ -179,7 +179,7 @@ Installation instructions
    environment using for example :mod:`venv` or `conda`_.
 </host>
 
-2. Make sure to update pip::
+2. Make sure to update *pip*::
 
    $ pip install --upgrade pip
 

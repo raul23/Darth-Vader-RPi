@@ -128,7 +128,7 @@ Installation instructions
 1. It is highly recommended to install ``darth_vader_rpi`` in a virtual
    environment using for example :mod:`venv` or `conda`_.
 
-2. Make sure to update pip::
+2. Make sure to update *pip*::
 
    $ pip install --upgrade pip
 
