@@ -377,7 +377,7 @@ References
 .. _closing sound: https://darth-vader-rpi.readthedocs.io/en/v0.1.0a0/change_default_settings.html#change-closing-sound-label
 .. _Change default settings: https://darth-vader-rpi.readthedocs.io/en/v0.1.0a0/change_default_settings.html
 .. _Change keymap: https://darth-vader-rpi.readthedocs.io/en/v0.1.0a0/change_default_settings.html#change-keymap-label
-.. _Darth-Vader-RPi Changelog: https://darth-vader-rpi.readthedocs.io/en/v0.1.0a0/changelog.html
+.. _Darth-Vader-RPi Changelog: https://darth-vader-rpi.readthedocs.io/en/latest/changelog.html
 
 .. 2. External links (others)
 .. _article: https://docs.oracle.com/cd/E19062-01/sun.mgmt.ctr36/819-5418/gaznb/index.html
