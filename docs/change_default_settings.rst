@@ -17,7 +17,7 @@ Important tips
 
    $ start_dv -e cfg -a APP_NAME
 
-  where *APP_NAME* is the name of a text editor, e.g. TextEditor
+  where *APP_NAME* is the name of a text editor, e.g. TextEdit
 
 - To end the :mod:`start_dv` script, press ``ctrl`` + ``c``
 - When adding audio files, don't use *mp3* as the file format. Instead, use
