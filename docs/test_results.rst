@@ -12,7 +12,7 @@ Important tips
 ==============
 Careful when uninstalling only ``SimulRPi``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-When uninstalling **only** ``SimulRPi`` with::
+When **only** uninstalling ``SimulRPi`` with::
 
    $ pip uninstall simulrpi
 
