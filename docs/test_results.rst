@@ -25,7 +25,8 @@ github even though ``requirements.txt`` points to ``SimulRPi`` from github.
 
 Thus, you might get an old version of ``SimulRPi`` if its latest version has not
 yet been published to PyPI. In that case, it is then preferable
-to uninstall all packages if you want the ``SimulRPi`` version from github.
+to uninstall ``darth_vader_rpi`` and all its dependencies if you want the 
+``SimulRPi`` version from github.
 
 Use ``pip3`` when working with RPi
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
