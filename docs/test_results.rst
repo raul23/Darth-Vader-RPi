@@ -12,7 +12,7 @@ Important tips
 ==============
 Careful when uninstalling only ``SimulRPi``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-When uninstalling **only** ``SimulRPi`` with::
+When **only** uninstalling ``SimulRPi`` with::
 
    $ pip uninstall simulrpi
 
@@ -23,9 +23,10 @@ And then installing it with::
 You will get ``SimulRPi`` from PyPI instead of the bleeding-edge version from
 github even though ``requirements.txt`` points to ``SimulRPi`` from github.
 
-Thus, you might get an old version of ``SimulRPi`` if you haven't yet
-published the latest version to PyPI. In the latter case, it is then preferable
-to uninstall all modules if you want the ``SimulRPi`` version from github.
+Thus, you might get an old version of ``SimulRPi`` if its latest version has not
+yet been published to PyPI. In that case, it is then preferable
+to uninstall ``darth_vader_rpi`` and all its dependencies if you want the latest
+``SimulRPi`` version from github.
 
 Use ``pip3`` when working with RPi
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
