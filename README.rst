@@ -47,14 +47,14 @@ Introduction
 The Darth Vader action figure is 11.5 inches tall (which is
 `this one from Hasbro`_) and was modified to make it more lifelike by
 illuminating the lightsaber, chest control box, and belt. 3 push buttons
-control the following sounds and LEDs:
+are connected to an RPi and control the following sounds and LEDs:
 
 #. Some of his famous quotes
 #. The *Imperial march* theme song
 #. The lightsaber drawing, hum and retraction sounds
 #. The lightbsaber illumination (3 LEDs)
 
-His iconic breathing sound plays in the background indefinitely almost as soon
+His iconic breathing sound plays in the background almost as soon
 as the RPi is run with the ``start_dv`` script.
 
 .. raw:: html
