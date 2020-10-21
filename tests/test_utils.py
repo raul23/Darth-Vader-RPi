@@ -1,6 +1,6 @@
 import logging
 import os
-import unittest
+# import unittest
 from logging import NullHandler
 
 from darth_vader_rpi import utils, configs
@@ -27,15 +27,15 @@ class TestUtils(TestBase):
                                         "if they are <color>correctly filled"
                                         "</color>")
         msg = "Dictionary of config filenames not found"
-        self.assertTrue(isinstance(utils._cfg_filenames.default_cfg, dict), msg)
-        self.assertTrue(isinstance(utils._cfg_filenames.user_cfg, dict), msg)
+        self.assertTrue(isinstance(utils._CFG_FILENAMES.default_cfg, dict), msg)
+        self.assertTrue(isinstance(utils._CFG_FILENAMES.user_cfg, dict), msg)
         msg = "There should be {} types of config files".format(nb_config_types)
         self.assertTrue(
-            len(utils._cfg_filenames.default_cfg) == nb_config_types, msg)
+            len(utils._CFG_FILENAMES.default_cfg) == nb_config_types, msg)
         self.assertTrue(
-            len(utils._cfg_filenames.user_cfg) == nb_config_types, msg)
+            len(utils._CFG_FILENAMES.user_cfg) == nb_config_types, msg)
         startswith = "default"
-        for k, v in utils._cfg_filenames.default_cfg.items():
+        for k, v in utils._CFG_FILENAMES.default_cfg.items():
             msg = "Config file should start with {}".format(startswith)
             self.assertTrue(k.startswith(startswith), msg)
         logger.info("<color>RESULT:</color> The dictionaries of config "
@@ -61,7 +61,8 @@ class TestUtils(TestBase):
         self.log_main_message(extra_msg="Case where <color>config file types"
                                         "</color> return valid <color>file paths"
                                         "</color>")
-        file_types = ['default_log', 'default_main', 'log', 'main']
+        # TODO: test user log and main
+        file_types = ['default_log', 'default_main']
         for ft in file_types:
             try:
                 fp = utils.get_cfg_filepath(ft)
