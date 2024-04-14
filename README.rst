@@ -225,24 +225,18 @@ To display the script's list of options and their descriptions::
 
    $ start_dv -h
 
---version            show program's version number and exit
--q, --quiet          Enable quiet mode, i.e. nothing will be printed.
-                     (default: False)
--s, --simulation     Enable simulation mode, i.e. ``SimulRPi.GPIO`` will be
-                     used for simulating ``RPi.GPIO``. (default: False)
--v, --verbose        Print various debugging information, e.g. print
-                     traceback when there is an exception. (default: False)
+* ``--version``: show program's version number and exit
+* ``-q, --quiet``: Enable quiet mode, i.e. nothing will be printed. (default: False)
+* ``-s, --simulation``: Enable simulation mode, i.e. ``SimulRPi.GPIO`` will be used for simulating ``RPi.GPIO``. (default: False)
+* ``-v, --verbose``: rint various debugging information, e.g. print traceback when there is an exception. (default: False)
 
 Edit a configuration file:
 
--e cfg_name, --edit cfg_name   Edit a configuration file. Provide **log_cfg**
-                               for the logging config file or **cfg** for the
-                               main config file. (default: None)
+* ``-e cfg_name, --edit cfg_name``: Edit a configuration file. Provide **log_cfg** for the logging 
+  config file or **cfg** for the main config file. (default: None)
 
--a APP, --app-name APP   Name of the application to use for editing the file.
-                         If no name is given, then the default application for
-                         opening this type of file will be used. (default:
-                         None)
+* ``-a APP, --app-name APP``: Name of the application to use for editing the file. If no name is 
+  given, then the default application for opening this type of file will be used. (default: None)
 
 
 Simulating on your computer
