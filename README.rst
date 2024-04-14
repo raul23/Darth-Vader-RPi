@@ -38,10 +38,6 @@ lightsaber, and by playing sounds such as some of his famous quotes.
 
    **Disclaimer:** I also wrote the `SimulRPi`_ library
 
-.. contents:: **Table of contents**
-   :depth: 3
-   :local:
-
 Introduction
 ============
 The Darth Vader action figure is 11.5 inches tall (which is
